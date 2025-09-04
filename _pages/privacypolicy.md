@@ -1,60 +1,78 @@
 ---
 layout: page
 title: Privacy Policy
-include_in_header: false
+include_in_header: true
 ---
 
-**Last updated**  
-August 1 2019
+**Last updated:** August 29, 2025
 
-# Privacy Policy
-Submissive a when owing much far bawdy thanks impolitely alas overlaid one and this one chuckled darn on more due much misheard amused far far the much purposeful that wildebeest dalmatian and piranha bluebird this and much despite however much sincere nonsensical this paradoxically more.
+# Terms of Use & Privacy Policy — _Budget Your Budget_
 
-**Please note:** This is purely a dummy Privacy Policy that serves as an example for how you can use this app landing page generator. Please replace the contents with your own privacy policy.
+Welcome to **Budget Your Budget** (“the App”). By using this App, you agree to the following Terms of Use and Privacy Policy. If you do not agree, please discontinue use.
 
-<br>
-
-## 1.0 Information We Collect
-Far near but lighted walking far oyster hello kneeled flung and roadrunner and more witless narrowly flexed brokenly blandly much in famous jeez obsessive that.
-
-### 1.1 Information from third parties
-- Ouch until smirked some some newt that at frustrating.
-- Nimbly handsomely fabulously python.
-- Alas informally taped when a dear some.
-
-### 1.2 Information you provide to us 
-Menacingly much walrus far together derisive falcon the toneless unceremoniously yet yikes a hung when because far drooled cast amused naughtily quiet hare a thickly more dogged drank more this dismounted since hence nakedly jeez rolled far gerbil the hey puerilely where vociferously struck insane much twitched instead some beneath then wiped dull snuffed far jeez nightingale bit goodness obscurely quit that much yet nefarious careless some concrete shrewdly gull closed this hugged aboard.
+We may update these terms occasionally. Continued use of the App after updates means you accept the changes.
 
 <br>
 
-## 2.0 What Personal Information we collect about you and how we collect it
-Where cut one reproachful alas ambiguous helpful hen raucous editorial underwrote dubiously therefore this boastfully or possessively oh modest amidst some opposite far wasp grew emu snickered some jeepers and circa much that *equitable* foul camel caudally oh opossum far dear met far much close hello beheld facetious far goodness tidily reindeer that kiwi thus crud that paid and by titilatingly hey falcon lemming or well approving sympathetically groundhog mongoose and deeply peaceful wow ouch far regally this and near and badly fatal blunt mischievously and and the blew.
+## 1.0 Purpose of the App
 
-### 2.1 Third Parties we collect information from
-Various remotely save this querulously explicitly one this and far congenially broad grew said or abhorrently haltered darn beheld panther shrank and one goldfish the more away as much different moth.
+- Budget Your Budget is a **personal budgeting tool**.
+- The App is **not a bank, financial institution, or financial advisor**.
+- We do not provide investment, tax, accounting, or legal advice.
+- You are solely responsible for your financial decisions.
 
-| Third Party | What is it used for? |
-| :--- | :--- |
-| Falcon | Tidily reindeer that kiwi thus crud that paid and by titilatingly hey falcon lemming. |
-| Eagle | Juggled crud a however overslept vehemently kept indisputably anteater walked alas or into. |
+**Disclaimer:** We are not liable for any financial loss, damages, or decisions made using this App.
 
 <br>
 
-## 3.0 What rights do you, as the data subject, have
-This goodness well well and more cowardly lynx credibly more apart save and less oh examined ouch marginal growled and proper liberally salmon busy some while pointed far because understood.
+## 2.0 Data Collection & Privacy
 
-1. Boastfully or possessively oh modest amidst.
-2. Far far the much purposeful that wildebeest dalmatian.
-3. Adamant or pushed less far overthrew.
+- All information you enter (income, categories, expenses) is stored **locally on your device**.
+- We **do not collect, transmit, or store your personal or financial data on external servers**.
+- We cannot access, recover, or restore your data if you delete the App or reset your device. Please ensure you back up your device as needed.
 
-All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.
+### 2.1 Third-Party Services
+
+While the App itself does not collect data, third-party services may be used for:
+
+- **In-app purchases & subscriptions** → handled by Apple App Store or Google Play.
+- **Subscription management** → handled by RevenueCat.
+- **Advertisements** (for free users) → handled by Google AdMob.
+
+Each third party operates under its own privacy policy:
+
+- [Google Play Privacy Policy](https://policies.google.com/privacy)
+- [Apple Privacy Policy](https://www.apple.com/legal/privacy/)
+- [RevenueCat Privacy Policy](https://www.revenuecat.com/privacy)
 
 <br>
 
-## 4.0 How we store and secure the Personal Information we collect
-Worm where gravely behind logically far in tastefully as alas delicately before well darn then far the much pulled red-handed circa much much far pangolin spelled much clung dachshund smirked close some the adamant or pushed less far overthrew in moth begrudging warthog newt pragmatic bent darn and far needlessly notwithstanding angrily as celestially horse rebuking magnanimous dear inscrutably jeepers listless before saucy this much however and wolf dear cringed crab a wanton jeepers flatteringly characteristically a atrocious and returned more lemming robin let some crud that more secure nimble where soundly pitiful because bombastic much.
+## 3.0 Subscriptions & Premium Features
+
+- Some features (e.g., recurring categories and recurring expenses) require a **paid subscription**.
+- Payments are processed securely by Apple or Google; we never handle or store payment details.
+- Users are responsible for managing or canceling their subscriptions through App Store / Google Play settings.
+
+If your subscription lapses, premium features will no longer be available, and **new recurring categories or expenses will not be created**.
 
 <br>
 
-## 5.0 Information processing and transfers for EEA individuals
-Cracked a more and iguana a without some echidna a abnormal hello and beat thanks jeepers gnu jeepers until up depending for drooled awfully angelfish relentless much a well wasp some in impala darn and overate greedily wow kookaburra beneath much wistful fluid until and lemming less armadillo redoubtable after much capybara wow that hence interbred timorous loosely oh.
+## 4.0 Children’s Privacy
+
+- The App is not directed toward children under 13.
+- We do not knowingly collect data from children.
+- Since all data is local-only, parents remain responsible for supervising device use.
+
+<br>
+
+## 5.0 Limitation of Liability
+
+The App is provided **“as is” without any warranties**. To the maximum extent permitted by law, we disclaim all liability for damages, losses, or claims arising out of your use of the App.
+
+<br>
+
+## 6.0 Governing Law
+
+These Terms are governed by the laws of **Puerto Rico, United States** (or your local jurisdiction if different). Any disputes will be resolved in local courts of competent jurisdiction.
+
+<br>
