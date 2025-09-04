@@ -2,7 +2,7 @@
 page_title: Budget Your Budget # Automatically populates with app name if not set and if iOS app ID is set. Otherwise enter manually.
 
 # App Info
-ios_app_id: #6472663180 # Required. Enter iOS app ID to automatically populate name, price and icons (e.g. 718043190).
+ios_app_id: 1234793120 # Required. Enter iOS app ID to automatically populate name, price and icons (e.g. 718043190).
 ios_app_country: us # Required outside USA. Enter 2 letter country code as in https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
 
 appstore_link: # Automatically populates if not set and if iOS app ID is set. Otherwise enter manually.
@@ -83,7 +83,7 @@ topbar_color: "#000000"
 topbar_transparency: 0.1
 topbar_title_color: "#ffffff"
 
-cover_image: assets/headercolor.png # Replace with alternative image path or image URL.
+cover_image: assets/headericolor.png # Replace with alternative image path or image URL.
 cover_overlay_color: "#363b3d"
 cover_overlay_transparency: 0.8
 
