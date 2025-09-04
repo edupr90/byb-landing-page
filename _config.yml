@@ -34,45 +34,49 @@ mastodon_link: https://mastodon.social/@ebaehr
 
 # Feature List                            Edit, add or remove features to be presented.
 features:
-  - title: GitHub Pages Jekyll Theme
-    description: Designed for GitHub Pages. Fork. Edit _config.yml. Upload screenshot/video. Push to gh-pages branch. Voilá!
-    fontawesome_icon_name: magic
+  - title: Daily Budget Tracking
+    description: Easily track your daily spending and stay within your set limits for each category.
+    fontawesome_icon_name: calendar-day
 
-  - title: iPhone Device Preview
-    description: Preview your app in the context of an iPhone device. Five different device colors included.
-    fontawesome_icon_name: mobile
+  - title: Monthly Planning
+    description: Plan your monthly budget with recurring and custom categories, and adjust it anytime.
+    fontawesome_icon_name: calendar-alt
 
-  - title: Video Support
-    description: Preview app video on the iPhone device simply by placing your video files in the videos folder.
-    fontawesome_icon_name: play-circle
+  - title: Add Income Easily
+    description: Add your income after taxes and immediately start planning your spending.
+    fontawesome_icon_name: wallet
 
-  - title: Automatic Icon and Metadata
-    description: Enter iOS app ID in the _config.yml file to automatically fetch app icon, price and App Store Link.
-    fontawesome_icon_name: sync
+  - title: Custom Categories
+    description: Create custom categories with your own name, emoji, and color.
+    fontawesome_icon_name: tags
 
-  - title: Easy to Tweak
-    description: Tweak accent color, images, icons and transparency via the _config.yml file. No HTML/CSS needed.
-    fontawesome_icon_name: adjust
+  - title: One-Tap Transactions
+    description: Add your expenses in seconds with simple inputs, auto date selection, and validation.
+    fontawesome_icon_name: plus-circle
 
-  - title: Feature List
-    description: Add features (like this one) to your site via the _config.yml file. No HTML/CSS needed.
-    fontawesome_icon_name: star
+  - title: Real-Time Budget Left
+    description: See how much income is left to budget at a glance after every change.
+    fontawesome_icon_name: eye
 
-  - title: Smart App Banner
-    description: Display a smart app banner on iOS devices.
-    fontawesome_icon_name: arrow-alt-circle-down
+  - title: Recurring Categories
+    description: Set up recurring categories once and have them automatically apply every month.
+    fontawesome_icon_name: sync-alt
 
-  - title: Social Links
-    description: Easily add social media accounts and contact info in the footer via the _config.yml file. No HTML/CSS needed.
-    fontawesome_icon_name: link
+  - title: Recurring Expenses
+    description: Track subscriptions and bills with recurring expenses that repeat each month.
+    fontawesome_icon_name: redo-alt
 
-  - title: FontAwesome Support
-    description: Pick custom Font Awesome icons for the feature list via the _config.yml file. No HTML/CSS needed.
-    fontawesome_icon_name: info-circle
+  - title: Reports & Insights
+    description: View simple reports to see where your money goes and how your budget is doing.
+    fontawesome_icon_name: chart-pie
 
-  - title: # New Feature Title
-    description: # New Feature Description
-    fontawesome_icon_name: # Enter Font Awesome icon name (e.g. star). Find icons on fontawesome.com/icons.
+  - title: Motivation Boosters
+    description: Get daily financial affirmation quotes to keep you inspired and mindful.
+    fontawesome_icon_name: heart
+
+  - title: Dark Mode Ready
+    description: Enjoy a clean, easy-on-the-eyes interface with full dark mode support.
+    fontawesome_icon_name: moon
 
 # Theme Settings
 topbar_color: "#000000"
@@ -85,7 +89,7 @@ cover_overlay_transparency: 0.8
 
 device_color: blue # Set to: blue, black, yellow, coral or white.
 
-body_background_color: "#00687a"
+body_background_color: "#ffffff"
 
 link_color: "#1d63ea"
 
