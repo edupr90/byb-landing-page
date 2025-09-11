@@ -16,7 +16,7 @@ presskit_download_link:# Enter a link to downloadable file or (e.g. public Dropb
 app_icon: # assets/appicon.png                      # Automatically populates if not set and if iOS app ID is set.  Otherwise enter path to icon file manually.
 app_name: # Automatically populates if not set and if iOS app ID is set.  Otherwise enter manually.
 app_price: # Automatically populates if not set and if iOS app ID is set.  Otherwise enter manually.
-app_description: A friendly daily budgeting app that helps you track spending, plan monthly expenses, and stay on top of your goals. Add income, set limits, create custom categories, and see how much you have left—all in a fun, simple, and motivating experience.
+app_description: Friendly daily budgeting app that helps you track spending, plan monthly expenses, and stay on top of your goals. Add income, set limits, create custom categories, and see how much you have left—all in a fun, simple, and motivating experience.
 
 enable_smart_app_banner: true # Set to true to show a smart app banner at top of page on mobile devices.
 
