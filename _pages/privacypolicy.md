@@ -76,3 +76,9 @@ The App is provided **“as is” without any warranties**. To the maximum exten
 These Terms are governed by the laws of **Puerto Rico, United States** (or your local jurisdiction if different). Any disputes will be resolved in local courts of competent jurisdiction.
 
 <br>
+
+## 7.0 Contact & Support
+
+If you have any questions about these Terms or the Privacy Policy, please contact us at:
+
+📧 **bybsupport@budgetyourbudget.com**
