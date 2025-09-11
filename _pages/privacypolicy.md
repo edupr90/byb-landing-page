@@ -72,8 +72,6 @@ The App is provided **“as is” without any warranties**. To the maximum exten
 
 <br>
 
-<br>
-
 ## 6.0 Contact & Support
 
 If you have any questions about these Terms or the Privacy Policy, please contact us at:
