@@ -19,9 +19,9 @@ app_description: A friendly daily budgeting app that helps you track spending, p
 enable_smart_app_banner: true # Set to true to show a smart app banner at top of page on mobile devices.
 
 # Information About Yourself
-your_name: Eduardo Velez
-your_link: https://www.linkedin.com/in/eduardo-velez-bb108976/
-your_city: Puerto Rico
+your_name: Tesoro
+your_link: https://www.instagram.com/budgetyourbudget/
+your_city: United States
 email_address: bybsupport@budgetyourbudget.com
 linkedin_username:
 linkedin_company:
@@ -30,7 +30,7 @@ instagram_username: https://www.instagram.com/budgetyourbudget/
 twitter_username:
 github_username: edupr90
 youtube_username:
-mastodon_link: https://mastodon.social/@ebaehr
+mastodon_link:
 
 # Feature List                            Edit, add or remove features to be presented.
 features:
