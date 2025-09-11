@@ -29,7 +29,8 @@ We may update these terms occasionally. Continued use of the App after updates m
 
 - All information you enter (income, categories, expenses) is stored **locally on your device**.
 - We **do not collect, transmit, or store your personal or financial data on external servers**.
-- We cannot access, recover, or restore your data if you delete the App or reset your device. Please ensure you back up your device as needed.
+- You are fully in control of your information. If you delete the App or reset your device, we cannot access, recover, or restore your data on your behalf.
+- The App provides a built-in **backup and restore feature**, allowing you to export your data and re-import it when needed. We strongly recommend making regular backups to avoid data loss.
 
 ### 2.1 Third-Party Services
 
