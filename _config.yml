@@ -1,6 +1,3 @@
-url: "https://budgetyourbudget.com"   # your domain
-baseurl: ""                           # empty for root
-
 #page title
 page_title: Budget Your Budget # Automatically populates with app name if not set and if iOS app ID is set. Otherwise enter manually.
 
@@ -10,13 +7,14 @@ ios_app_country: us # Required outside USA. Enter 2 letter country code as in ht
 
 appstore_link: # Automatically populates if not set and if iOS app ID is set. Otherwise enter manually.
 playstore_link: https://play.google.com/store/apps/details?id=com.evelez.byb # Enter Google Play Store URL.
-presskit_download_link:# Enter a link to downloadable file or (e.g. public Dropbox link to a .zip file).
+presskit_download_link:
+  https://emilbaehr.com # Enter a link to downloadable file or (e.g. public Dropbox link to a .zip file).
   # Or upload your press kit file to assets and set path accordingly (e.g. "assets/your_press_kit.zip").
 
 app_icon: # assets/appicon.png                      # Automatically populates if not set and if iOS app ID is set.  Otherwise enter path to icon file manually.
 app_name: # Automatically populates if not set and if iOS app ID is set.  Otherwise enter manually.
 app_price: # Automatically populates if not set and if iOS app ID is set.  Otherwise enter manually.
-app_description: Friendly daily budgeting app that helps you track spending, plan monthly expenses, and stay on top of your goals. Add income, set limits, create custom categories, and see how much you have left—all in a fun, simple, and motivating experience.
+app_description: A friendly daily budgeting app that helps you track spending, plan monthly expenses, and stay on top of your goals. Add income, set limits, create custom categories, and see how much you have left—all in a fun, simple, and motivating experience.
 
 enable_smart_app_banner: true # Set to true to show a smart app banner at top of page on mobile devices.
 
@@ -32,7 +30,7 @@ instagram_username: edvelezpr
 twitter_username:
 github_username: edupr90
 youtube_username:
-mastodon_link: ""
+mastodon_link: https://mastodon.social/@ebaehr
 
 # Feature List                            Edit, add or remove features to be presented.
 features:
@@ -122,7 +120,7 @@ sass:
 exclude:
   - LICENSE
   - README.md
-  #- CNAME
+  - CNAME
 
 collections:
   pages:
