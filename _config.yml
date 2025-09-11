@@ -1,3 +1,6 @@
+url: "https://budgetyourbudget.com"   # your domain
+baseurl: ""                           # empty for root
+
 #page title
 page_title: Budget Your Budget # Automatically populates with app name if not set and if iOS app ID is set. Otherwise enter manually.
 
@@ -119,7 +122,7 @@ sass:
 exclude:
   - LICENSE
   - README.md
-  - CNAME
+  #- CNAME
 
 collections:
   pages:
