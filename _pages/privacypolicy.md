@@ -66,7 +66,6 @@ Each third party operates under its own privacy policy:
 - **Reports & Insights** – Compare months, view trends, and see exactly where your money goes.
 - **Export to PDF or Excel** – Keep records or share your budget anytime.
 - **Ad-Free Experience** – Enjoy a clean, distraction-free interface.
-- **Backup & Restore** – Export your data from the app and re-import it whenever you need.
 
 ### How Subscriptions Work
 
