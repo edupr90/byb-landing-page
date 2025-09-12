@@ -53,8 +53,12 @@ Each third party operates under its own privacy policy:
 - Some features (e.g., recurring categories and recurring expenses) require a **paid subscription**.
 - Payments are processed securely by Apple or Google; we never handle or store payment details.
 - Users are responsible for managing or canceling their subscriptions through App Store / Google Play settings.
+- If your subscription lapses, premium features will no longer be available, and **new recurring categories or expenses will not be created**.
 
-If your subscription lapses, premium features will no longer be available, and **new recurring categories or expenses will not be created**.
+### Terms of Use (EULA)
+
+For apps distributed on the Apple App Store, your use of subscriptions is also governed by the  
+[**Apple Standard End User License Agreement (EULA)**](https://www.apple.com/legal/internet-services/itunes/dev/stdeula/).
 
 <br>
 
