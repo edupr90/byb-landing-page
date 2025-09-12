@@ -48,16 +48,37 @@ Each third party operates under its own privacy policy:
 
 <br>
 
-## 3.0 Subscriptions & Premium Features
+## 3.1 Subscription Options
 
-- Some features (e.g., recurring categories and recurring expenses) require a **paid subscription**.
-- Payments are processed securely by Apple or Google; we never handle or store payment details.
-- Users are responsible for managing or canceling their subscriptions through App Store / Google Play settings.
+> Pricing shown for the U.S. store; **prices may vary by region and currency**. Subscriptions **auto-renew** unless canceled. You can cancel anytime in your App Store / Google Play settings.
+
+### Premium Plans
+
+| Plan                |      Price | Billing   | Trial | Cancel Anytime    |
+| ------------------- | ---------: | --------- | ----- | ----------------- |
+| **Premium Monthly** |  **$4.99** | Per month | —     | ✅                |
+| **Premium Annual**  | **$29.99** | Per year  | —     | ✅ _(Best value)_ |
+
+### What You Get with Premium
+
+- **Custom Categories** – Create your own categories with names and emojis that fit your lifestyle.
+- **Recurring Budgets & Expenses** – Automate repeating items so you never miss a payment.
+- **Reports & Insights** – Compare months, view trends, and see exactly where your money goes.
+- **Export to PDF or Excel** – Keep records or share your budget anytime.
+- **Ad-Free Experience** – Enjoy a clean, distraction-free interface.
+- **Backup & Restore** – Export your data from the app and re-import it whenever you need.
+
+### How Subscriptions Work
+
+- Payment is charged to your **Apple ID** or **Google Play** account at confirmation of purchase.
+- Subscriptions **renew automatically** unless you turn off auto-renew at least 24 hours before the end of the current period.
+- Your account will be charged for renewal within 24 hours prior to the end of the current period.
+- Manage or cancel your subscription in **App Store** / **Google Play** account settings after purchase.
 - If your subscription lapses, premium features will no longer be available, and **new recurring categories or expenses will not be created**.
 
 ### Terms of Use (EULA)
 
-For apps distributed on the Apple App Store, your use of subscriptions is also governed by the  
+For iOS users, your use of subscriptions is also governed by the  
 [**Apple Standard End User License Agreement (EULA)**](https://www.apple.com/legal/internet-services/itunes/dev/stdeula/).
 
 <br>
