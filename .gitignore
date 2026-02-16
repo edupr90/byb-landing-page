@@ -1,4 +1,28 @@
+# Jekyll (legacy)
 .bundle
 .sass-cache
 _site
 Gemfile.lock
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.local
+
+# Logs
+*.log
+npm-debug.log*

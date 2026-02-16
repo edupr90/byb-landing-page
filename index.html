@@ -1,9 +1,37 @@
----
-layout: default
----
-<!-- Page content goes here
-<div class="home">
-  {% include header.html %}
-  {% include features.html %}
-  {% include footer.html %}
-</div> -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Budget Your Budget — Smart Budgeting Made Simple</title>
+    <meta name="description" content="A friendly daily budgeting app that helps you track spending, plan monthly expenses, and stay on top of your goals. Available on iOS and Android." />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Budget Your Budget — Smart Budgeting Made Simple" />
+    <meta property="og:description" content="Track spending, plan monthly expenses, and crush your financial goals — all from your phone." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://budgetyourbudget.com" />
+    <meta property="og:image" content="https://budgetyourbudget.com/og-image.png" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Budget Your Budget" />
+    <meta name="twitter:description" content="Track spending, plan monthly expenses, and crush your financial goals." />
+
+    <!-- Smart App Banner -->
+    <meta name="apple-itunes-app" content="app-id=6472663180" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
