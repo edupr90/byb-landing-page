@@ -14,9 +14,8 @@ function PhoneMockup() {
           className="absolute left-0 lg:left-8 w-44 sm:w-48 lg:w-56 z-10"
           style={{ transform: 'rotate(-8deg)' }}
         >
-          <div className="relative bg-slate-900 rounded-[2rem] p-2 shadow-2xl shadow-black/40 ring-1 ring-white/10">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-5 bg-slate-900 rounded-b-2xl z-10" />
-            <div className="rounded-[1.5rem] overflow-hidden aspect-[9/19.5]">
+          <div className="relative bg-slate-900 rounded-[1.8rem] p-1 shadow-2xl shadow-black/40 ring-1 ring-white/10">
+            <div className="rounded-[1.3rem] overflow-hidden aspect-[9/19.5]">
               {/* Light mode: show dark image */}
               <img
                 src="/screenshots/Budget.png"
@@ -39,9 +38,8 @@ function PhoneMockup() {
           transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
           className="relative z-20 w-56 sm:w-64 lg:w-72"
         >
-          <div className="relative bg-slate-900 rounded-[2.5rem] p-2.5 shadow-2xl shadow-black/40 ring-1 ring-white/10">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-slate-900 rounded-b-2xl z-10" />
-            <div className="rounded-[2rem] overflow-hidden aspect-[9/19.5]">
+          <div className="relative bg-slate-900 rounded-[2rem] p-1.5 shadow-2xl shadow-black/40 ring-1 ring-white/10">
+            <div className="rounded-[1.5rem] overflow-hidden aspect-[9/19.5]">
               {/* Light mode: show dark image */}
               <img
                 src="/screenshots/Expenses.png"
@@ -67,9 +65,8 @@ function PhoneMockup() {
           className="absolute right-0 lg:right-8 w-44 sm:w-48 lg:w-56 z-10"
           style={{ transform: 'rotate(8deg)' }}
         >
-          <div className="relative bg-slate-900 rounded-[2rem] p-2 shadow-2xl shadow-black/40 ring-1 ring-white/10">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-5 bg-slate-900 rounded-b-2xl z-10" />
-            <div className="rounded-[1.5rem] overflow-hidden aspect-[9/19.5]">
+          <div className="relative bg-slate-900 rounded-[1.8rem] p-1 shadow-2xl shadow-black/40 ring-1 ring-white/10">
+            <div className="rounded-[1.3rem] overflow-hidden aspect-[9/19.5]">
               {/* Light mode: show dark image */}
               <img
                 src="/screenshots/Report.png"
