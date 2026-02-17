@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Sun, Moon, Download } from 'lucide-react';
+import { Menu, X, Sun, Moon } from 'lucide-react';
 
 const NAV_LINKS = [
   { label: 'Features', href: '#features' },
-  { label: 'Pricing', href: '#pricing' },
   { label: 'FAQ', href: '#faq' },
 ];
 
@@ -59,9 +58,11 @@ export default function Navbar({ dark, setDark }) {
               className="flex items-center gap-2 group"
               onClick={() => setMobileOpen(false)}
             >
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/25 group-hover:shadow-indigo-500/40 transition-shadow">
-                <span className="text-white font-bold text-sm">B</span>
-              </div>
+              <img
+                src="/screenshots/byb.png"
+                alt="BYB Logo"
+                className="w-9 h-9 rounded-xl shadow-lg shadow-teal-500/25 group-hover:shadow-teal-500/40 transition-shadow"
+              />
               <span
                 className={`font-bold text-lg transition-colors ${
                   scrolled || !isHome
@@ -103,15 +104,6 @@ export default function Navbar({ dark, setDark }) {
               >
                 {dark ? <Sun size={18} /> : <Moon size={18} />}
               </button>
-              <a
-                href="https://apps.apple.com/us/app/id6472663180"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-sm font-semibold shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
-              >
-                <Download size={16} />
-                Download
-              </a>
             </div>
 
             {/* Mobile Burger */}
@@ -181,18 +173,25 @@ export default function Navbar({ dark, setDark }) {
                 href="https://apps.apple.com/us/app/id6472663180"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold shadow-lg shadow-indigo-500/25 transition-all"
+                className="block hover:scale-[1.02] active:scale-[0.98] transition-transform"
               >
-                <Download size={16} />
-                Download App
+                <img
+                  src="/screenshots/appstore.png"
+                  alt="Download on the App Store"
+                  className="h-10 w-auto"
+                />
               </a>
               <a
                 href="https://play.google.com/store/apps/details?id=com.evelez.byb"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-semibold transition-all"
+                className="block hover:scale-[1.02] active:scale-[0.98] transition-transform"
               >
-                Get on Google Play
+                <img
+                  src="/screenshots/playstore.png"
+                  alt="Get it on Google Play"
+                  className="h-10 w-auto"
+                />
               </a>
             </div>
           </motion.div>

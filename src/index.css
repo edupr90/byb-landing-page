@@ -23,20 +23,20 @@
 @layer utilities {
   .text-gradient {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a78bfa 100%);
+    background-image: linear-gradient(135deg, #00687a 0%, #40B5AD 50%, #5ECCC3 100%);
   }
 
   .text-gradient-accent {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+    background-image: linear-gradient(135deg, #40B5AD 0%, #5ECCC3 100%);
   }
 
   .bg-hero {
-    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 25%, #4338ca 50%, #6366f1 75%, #818cf8 100%);
+    background: linear-gradient(135deg, #003940 0%, #00687a 25%, #1B8A7E 50%, #40B5AD 75%, #5ECCC3 100%);
   }
 
   .bg-hero-dark {
-    background: linear-gradient(135deg, #0f0a2e 0%, #1e1b4b 25%, #312e81 50%, #3730a3 75%, #4338ca 100%);
+    background: linear-gradient(135deg, #001D23 0%, #003940 25%, #00687a 50%, #1B8A7E 75%, #40B5AD 100%);
   }
 
   .glass {
@@ -48,11 +48,11 @@
   }
 
   .shadow-glow {
-    box-shadow: 0 0 40px -10px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 0 40px -10px rgba(0, 104, 122, 0.3);
   }
 
   .shadow-glow-accent {
-    box-shadow: 0 0 40px -10px rgba(16, 185, 129, 0.3);
+    box-shadow: 0 0 40px -10px rgba(64, 181, 173, 0.3);
   }
 }
 

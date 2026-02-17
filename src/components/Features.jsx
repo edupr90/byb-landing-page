@@ -15,8 +15,8 @@ const FEATURES = [
     title: 'Budget Planning',
     description:
       'Plan your monthly budget with recurring and custom categories. Set limits, adjust anytime, and always know where you stand.',
-    color: 'from-indigo-500 to-blue-500',
-    bgLight: 'bg-indigo-50 dark:bg-indigo-950/30',
+    color: 'from-teal-600 to-cyan-500',
+    bgLight: 'bg-teal-50 dark:bg-teal-950/30',
   },
   {
     icon: Receipt,
@@ -65,7 +65,7 @@ export default function Features() {
     <section id="features" className="py-20 sm:py-28 bg-slate-50/50 dark:bg-slate-900/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
-          <span className="inline-block px-4 py-1.5 rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-sm font-semibold mb-4">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-teal-100 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 text-sm font-semibold mb-4">
             Features
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white">
@@ -107,8 +107,8 @@ export default function Features() {
         <svg className="absolute w-0 h-0">
           <defs>
             <linearGradient id="icon-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#6366f1" />
-              <stop offset="100%" stopColor="#8b5cf6" />
+              <stop offset="0%" stopColor="#00687a" />
+              <stop offset="100%" stopColor="#40B5AD" />
             </linearGradient>
           </defs>
         </svg>

@@ -45,17 +45,17 @@ export default function HowItWorks() {
           staggerDelay={0.15}
         >
           {/* Connecting line (desktop only) */}
-          <div className="hidden md:block absolute top-24 left-[20%] right-[20%] h-px bg-gradient-to-r from-indigo-200 via-purple-200 to-emerald-200 dark:from-indigo-800 dark:via-purple-800 dark:to-emerald-800" />
+          <div className="hidden md:block absolute top-24 left-[20%] right-[20%] h-px bg-gradient-to-r from-teal-200 via-cyan-200 to-teal-300 dark:from-teal-800 dark:via-cyan-800 dark:to-teal-700" />
 
           {STEPS.map((step, i) => (
             <StaggerItem key={step.number}>
               <div className="relative text-center">
                 {/* Number badge */}
                 <div className="relative inline-flex items-center justify-center mb-6">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/25">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-600 to-cyan-500 flex items-center justify-center shadow-lg shadow-teal-500/25">
                     <step.icon className="w-7 h-7 text-white" />
                   </div>
-                  <span className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-emerald-500 text-white text-xs font-bold flex items-center justify-center shadow-lg">
+                  <span className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-cyan-500 text-white text-xs font-bold flex items-center justify-center shadow-lg">
                     {step.number}
                   </span>
                 </div>

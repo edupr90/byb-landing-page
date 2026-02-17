@@ -1,113 +1,96 @@
 import { motion } from 'framer-motion';
-import { ArrowDown, Apple, Play } from 'lucide-react';
+import { ArrowDown } from 'lucide-react';
 
 /* ── Phone Mockup ────────────────────────────────────────── */
 function PhoneMockup() {
   return (
-    <motion.div
-      animate={{ y: [0, -16, 0] }}
-      transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-      className="relative mx-auto w-56 sm:w-64 lg:w-72"
-    >
-      {/* Phone Frame */}
-      <div className="relative bg-slate-900 rounded-[2.5rem] p-2.5 shadow-2xl shadow-black/40 ring-1 ring-white/10">
-        {/* Notch */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-slate-900 rounded-b-2xl z-10" />
-        {/* Screen */}
-        <div className="rounded-[2rem] overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-violet-700 aspect-[9/19.5] relative">
-          {/* Placeholder App UI */}
-          <div className="p-5 pt-10 space-y-4">
-            {/* Status bar mockup */}
-            <div className="flex justify-between text-white/50 text-[10px]">
-              <span>9:41</span>
-              <div className="flex gap-1">
-                <div className="w-4 h-1.5 bg-white/30 rounded-full" />
-                <div className="w-4 h-1.5 bg-white/30 rounded-full" />
-                <div className="w-6 h-1.5 bg-white/50 rounded-full" />
-              </div>
+    <div className="relative mx-auto w-full max-w-4xl">
+      {/* Three phones container */}
+      <div className="relative flex items-center justify-center">
+        {/* Left Phone - Budget (angled) */}
+        <motion.div
+          animate={{ y: [0, -16, 0] }}
+          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
+          className="absolute left-0 lg:left-8 w-44 sm:w-48 lg:w-56 z-10"
+          style={{ transform: 'rotate(-8deg)' }}
+        >
+          <div className="relative bg-slate-900 rounded-[2rem] p-2 shadow-2xl shadow-black/40 ring-1 ring-white/10">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-5 bg-slate-900 rounded-b-2xl z-10" />
+            <div className="rounded-[1.5rem] overflow-hidden aspect-[9/19.5]">
+              {/* Light mode: show dark image */}
+              <img
+                src="/screenshots/Budget.png"
+                alt="Budget screen"
+                className="w-full h-full object-cover dark:hidden"
+              />
+              {/* Dark mode: show light image */}
+              <img
+                src="/screenshots/BudgetDark.png"
+                alt="Budget screen"
+                className="w-full h-full object-cover hidden dark:block"
+              />
             </div>
-
-            {/* Greeting */}
-            <div className="space-y-1">
-              <div className="w-20 h-2.5 bg-white/20 rounded-full" />
-              <div className="w-32 h-3.5 bg-white/30 rounded-full" />
-            </div>
-
-            {/* Balance card */}
-            <div className="bg-white/10 backdrop-blur rounded-2xl p-4 space-y-3">
-              <div className="w-16 h-2 bg-white/20 rounded-full" />
-              <div className="w-24 h-5 bg-white/30 rounded-full" />
-              {/* Progress bar */}
-              <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
-                <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: '68%' }}
-                  transition={{ duration: 2, delay: 1, ease: 'easeOut' }}
-                  className="h-full bg-gradient-to-r from-emerald-400 to-emerald-300 rounded-full"
-                />
-              </div>
-              <div className="flex justify-between">
-                <div className="w-12 h-1.5 bg-white/15 rounded-full" />
-                <div className="w-8 h-1.5 bg-emerald-400/40 rounded-full" />
-              </div>
-            </div>
-
-            {/* Category items */}
-            {[0.6, 0.45, 0.8, 0.3].map((width, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 1.2 + i * 0.15 }}
-                className="flex items-center gap-3"
-              >
-                <div className="w-8 h-8 rounded-xl bg-white/10 flex-shrink-0" />
-                <div className="flex-1 space-y-1.5">
-                  <div className="w-16 h-2 bg-white/15 rounded-full" />
-                  <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-white/25 rounded-full"
-                      style={{ width: `${width * 100}%` }}
-                    />
-                  </div>
-                </div>
-                <div className="w-10 h-2 bg-white/15 rounded-full" />
-              </motion.div>
-            ))}
           </div>
-        </div>
-      </div>
+        </motion.div>
 
-      {/* Glow effect behind phone */}
-      <div className="absolute -inset-8 -z-10 bg-gradient-to-b from-indigo-500/20 via-purple-500/10 to-transparent rounded-full blur-3xl" />
-    </motion.div>
+        {/* Center Phone - Expenses (main, floating) */}
+        <motion.div
+          animate={{ y: [0, -16, 0] }}
+          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+          className="relative z-20 w-56 sm:w-64 lg:w-72"
+        >
+          <div className="relative bg-slate-900 rounded-[2.5rem] p-2.5 shadow-2xl shadow-black/40 ring-1 ring-white/10">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-slate-900 rounded-b-2xl z-10" />
+            <div className="rounded-[2rem] overflow-hidden aspect-[9/19.5]">
+              {/* Light mode: show dark image */}
+              <img
+                src="/screenshots/Expenses.png"
+                alt="Expenses screen"
+                className="w-full h-full object-cover dark:hidden"
+              />
+              {/* Dark mode: show light image */}
+              <img
+                src="/screenshots/ExpensesDark.png"
+                alt="Expenses screen"
+                className="w-full h-full object-cover hidden dark:block"
+              />
+            </div>
+          </div>
+          {/* Glow effect behind center phone */}
+          <div className="absolute -inset-8 -z-10 bg-gradient-to-b from-teal-500/20 via-cyan-500/10 to-transparent rounded-full blur-3xl" />
+        </motion.div>
+
+        {/* Right Phone - Report (angled) */}
+        <motion.div
+          animate={{ y: [0, -16, 0] }}
+          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 0.4 }}
+          className="absolute right-0 lg:right-8 w-44 sm:w-48 lg:w-56 z-10"
+          style={{ transform: 'rotate(8deg)' }}
+        >
+          <div className="relative bg-slate-900 rounded-[2rem] p-2 shadow-2xl shadow-black/40 ring-1 ring-white/10">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-5 bg-slate-900 rounded-b-2xl z-10" />
+            <div className="rounded-[1.5rem] overflow-hidden aspect-[9/19.5]">
+              {/* Light mode: show dark image */}
+              <img
+                src="/screenshots/Report.png"
+                alt="Report screen"
+                className="w-full h-full object-cover dark:hidden"
+              />
+              {/* Dark mode: show light image */}
+              <img
+                src="/screenshots/ReportDark.png"
+                alt="Report screen"
+                className="w-full h-full object-cover hidden dark:block"
+              />
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </div>
   );
 }
 
-/* ── Progress Bar Motif ──────────────────────────────────── */
-function ProgressMotif() {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 1.5 }}
-      className="absolute bottom-8 left-1/2 -translate-x-1/2 w-48 sm:w-64"
-    >
-      <div className="flex items-center gap-2 text-white/40 text-xs">
-        <span>$0</span>
-        <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
-          <motion.div
-            initial={{ width: 0 }}
-            animate={{ width: '75%' }}
-            transition={{ duration: 2.5, delay: 2, ease: 'easeOut' }}
-            className="h-full bg-gradient-to-r from-emerald-400 to-emerald-300 rounded-full"
-          />
-        </div>
-        <span>Goal</span>
-      </div>
-    </motion.div>
-  );
-}
+
 
 /* ── Hero Section ────────────────────────────────────────── */
 export default function Hero() {
@@ -126,8 +109,8 @@ export default function Hero() {
       </div>
 
       {/* Gradient orbs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl" />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 sm:pt-32 sm:pb-24 w-full">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
@@ -139,7 +122,7 @@ export default function Hero() {
               transition={{ duration: 0.6, delay: 0.2 }}
             >
               <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur text-white/80 text-sm font-medium border border-white/10 mb-6">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
                 Free on iOS & Android
               </span>
             </motion.div>
@@ -159,7 +142,7 @@ export default function Hero() {
                     initial={{ width: 0 }}
                     animate={{ width: '100%' }}
                     transition={{ duration: 0.8, delay: 1.2, ease: 'easeOut' }}
-                    className="absolute bottom-1 left-0 h-3 bg-emerald-400/30 rounded-full -z-0"
+                    className="absolute bottom-1 left-0 h-3 bg-cyan-400/30 rounded-full -z-0"
                   />
                 </span>
               </span>
@@ -186,19 +169,25 @@ export default function Hero() {
                 href="https://apps.apple.com/us/app/id6472663180"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-2xl bg-white text-slate-900 font-semibold shadow-xl shadow-black/10 hover:shadow-black/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                className="inline-block hover:scale-[1.02] active:scale-[0.98] transition-transform"
               >
-                <Apple size={22} className="group-hover:scale-110 transition-transform" />
-                Download on App Store
+                <img
+                  src="/screenshots/appstore.png"
+                  alt="Download on the App Store"
+                  className="h-12 sm:h-14 w-auto"
+                />
               </a>
               <a
                 href="https://play.google.com/store/apps/details?id=com.evelez.byb"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-2xl bg-white/10 backdrop-blur text-white font-semibold border border-white/20 hover:bg-white/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                className="inline-block hover:scale-[1.02] active:scale-[0.98] transition-transform"
               >
-                <Play size={20} className="group-hover:scale-110 transition-transform" />
-                Get on Google Play
+                <img
+                  src="/screenshots/playstore.png"
+                  alt="Get it on Google Play"
+                  className="h-12 sm:h-14 w-auto"
+                />
               </a>
             </motion.div>
 
@@ -247,8 +236,6 @@ export default function Hero() {
           <ArrowDown size={20} />
         </motion.div>
       </motion.div>
-
-      <ProgressMotif />
     </section>
   );
 }

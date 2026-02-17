@@ -96,7 +96,7 @@ export default function Pricing() {
               }`}
             >
               Annual
-              <span className="px-2 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 text-xs font-bold">
+              <span className="px-2 py-0.5 rounded-md bg-cyan-100 dark:bg-cyan-900/40 text-cyan-600 dark:text-cyan-400 text-xs font-bold">
                 Save 50%
               </span>
             </button>
@@ -158,7 +158,7 @@ export default function Pricing() {
 
           {/* Premium Card */}
           <AnimatedSection delay={0.25}>
-            <div className="h-full p-8 rounded-3xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-xl shadow-indigo-500/25 relative overflow-hidden">
+            <div className="h-full p-8 rounded-3xl bg-gradient-to-br from-teal-600 to-cyan-500 text-white shadow-xl shadow-teal-500/25 relative overflow-hidden">
               {/* Glow */}
               <div className="absolute -top-24 -right-24 w-48 h-48 bg-white/10 rounded-full blur-3xl" />
               <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-purple-400/10 rounded-full blur-3xl" />
@@ -171,7 +171,7 @@ export default function Pricing() {
                     animate={{ scale: 1 }}
                     className="absolute -top-2 -right-2"
                   >
-                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-400 text-emerald-950 text-xs font-bold shadow-lg">
+                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-cyan-400 text-cyan-950 text-xs font-bold shadow-lg">
                       <Sparkles size={12} />
                       Best Value
                     </span>
@@ -203,7 +203,7 @@ export default function Pricing() {
                 <ul className="space-y-3 mb-8">
                   {(billing === 'annual' ? PLANS.annual : PLANS.monthly).features.map((f) => (
                     <li key={f.text} className="flex items-start gap-3">
-                      <Check size={18} className="text-emerald-300 flex-shrink-0 mt-0.5" />
+                      <Check size={18} className="text-cyan-300 flex-shrink-0 mt-0.5" />
                       <span className="text-sm text-white/90">{f.text}</span>
                     </li>
                   ))}
@@ -212,7 +212,7 @@ export default function Pricing() {
                   href="https://apps.apple.com/us/app/id6472663180"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block w-full text-center px-6 py-3.5 rounded-2xl bg-white text-indigo-600 font-bold shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all"
+                  className="block w-full text-center px-6 py-3.5 rounded-2xl bg-white text-teal-600 font-bold shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all"
                 >
                   Upgrade to Premium
                 </a>
