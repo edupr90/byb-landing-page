@@ -1,6 +1,6 @@
 import {
   CalendarDays,
-  Receipt,
+  Scan,
   TrendingDown,
   Smile,
   FileBarChart,
@@ -19,10 +19,10 @@ const FEATURES = [
     bgLight: 'bg-teal-50 dark:bg-teal-950/30',
   },
   {
-    icon: Receipt,
-    title: 'Expense Tracking',
+    icon: Scan,
+    title: 'AI Receipt Scanner',
     description:
-      'Add expenses in seconds with simple inputs and auto-date selection. See your daily spending at a glance.',
+      'Scan receipts with your camera and let AI automatically extract expenses. No more manual typing - just snap, scan, and save.',
     color: 'from-emerald-500 to-teal-500',
     bgLight: 'bg-emerald-50 dark:bg-emerald-950/30',
   },
