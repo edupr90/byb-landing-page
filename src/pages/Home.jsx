@@ -3,7 +3,7 @@ import Hero from '../components/Hero';
 import Features from '../components/Features';
 import HowItWorks from '../components/HowItWorks';
 import PrivacyFirst from '../components/PrivacyFirst';
-import Testimonials from '../components/Testimonials';
+// import Testimonials from '../components/Testimonials';
 import FAQ from '../components/FAQ';
 
 export default function Home() {
@@ -18,7 +18,7 @@ export default function Home() {
       <Features />
       <HowItWorks />
       <PrivacyFirst />
-      <Testimonials />
+      {/* <Testimonials /> */}
       <FAQ />
     </motion.div>
   );
