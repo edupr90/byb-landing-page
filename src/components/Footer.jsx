@@ -56,9 +56,11 @@ export default function Footer() {
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-600 to-cyan-500 flex items-center justify-center">
-                <span className="text-white font-bold text-sm">B</span>
-              </div>
+              <img
+                src="/screenshots/byb.png"
+                alt="BYB Logo"
+                className="w-9 h-9 rounded-xl"
+              />
               <span className="font-bold text-lg text-white">Budget Your Budget</span>
             </Link>
             <p className="text-slate-400 text-sm leading-relaxed max-w-xs">
