@@ -286,6 +286,272 @@ export default function PrivacyPolicy() {
             </strong>
           </p>
         </article>
+
+        {/* ── Divider ──────────────────────────────────────── */}
+        <hr className="my-16 border-slate-300 dark:border-slate-700" />
+
+        {/* ── Spanish Version ──────────────────────────────── */}
+        <article className="prose prose-slate dark:prose-invert prose-headings:font-bold prose-a:text-indigo-600 dark:prose-a:text-indigo-400 max-w-none">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            <strong>Última actualización:</strong> 29 de agosto de 2025
+          </p>
+
+          <h1>Términos de Uso y Política de Privacidad — <em>Budget Your Budget</em></h1>
+
+          <p>
+            Bienvenido a <strong>Budget Your Budget</strong> (&ldquo;la App&rdquo;). Al usar esta
+            App, usted acepta los siguientes Términos de Uso y Política de Privacidad. Si no está de
+            acuerdo, por favor deje de usarla.
+          </p>
+          <p>
+            Podemos actualizar estos términos ocasionalmente. El uso continuado de la App después de
+            las actualizaciones significa que acepta los cambios.
+          </p>
+
+          <br />
+
+          <h2>1.0 Propósito de la App</h2>
+          <ul>
+            <li>
+              Budget Your Budget es una <strong>herramienta de presupuesto personal</strong>.
+            </li>
+            <li>
+              La App <strong>no es un banco, institución financiera ni asesor financiero</strong>.
+            </li>
+            <li>No proporcionamos asesoramiento de inversión, fiscal, contable ni legal.</li>
+            <li>Usted es el único responsable de sus decisiones financieras.</li>
+          </ul>
+          <p>
+            <strong>Aviso legal:</strong> No somos responsables de ninguna pérdida financiera, daños
+            o decisiones tomadas usando esta App.
+          </p>
+
+          <br />
+
+          <h2>2.0 Recopilación de Datos y Privacidad</h2>
+          <ul>
+            <li>
+              Toda la información que ingresa (ingresos, categorías, gastos) se almacena{' '}
+              <strong>localmente en su dispositivo</strong>.
+            </li>
+            <li>
+              <strong>
+                No recopilamos, transmitimos ni almacenamos sus datos personales o financieros en
+                servidores externos
+              </strong>
+              .
+            </li>
+            <li>
+              Usted tiene el control total de su información. Si elimina la App o restablece su
+              dispositivo, no podemos acceder, recuperar ni restaurar sus datos en su nombre.
+            </li>
+            <li>
+              La App proporciona una función integrada de{' '}
+              <strong>copia de seguridad y restauración</strong>, que le permite exportar sus datos y
+              reimportarlos cuando sea necesario. Recomendamos encarecidamente realizar copias de
+              seguridad periódicas para evitar la pérdida de datos.
+            </li>
+          </ul>
+
+          <h3>2.1 Servicios de Terceros</h3>
+          <p>
+            Si bien la App en sí no recopila datos, se pueden utilizar servicios de terceros para:
+          </p>
+          <ul>
+            <li>
+              <strong>Compras dentro de la app y suscripciones</strong> → gestionadas por Apple App
+              Store o Google Play.
+            </li>
+            <li>
+              <strong>Gestión de suscripciones</strong> → gestionada por RevenueCat.
+            </li>
+            <li>
+              <strong>Anuncios</strong> (para usuarios gratuitos) → gestionados por Google AdMob.
+            </li>
+          </ul>
+          <p>Cada tercero opera bajo su propia política de privacidad:</p>
+          <ul>
+            <li>
+              <a
+                href="https://policies.google.com/privacy"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Política de Privacidad de Google Play
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.apple.com/legal/privacy/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Política de Privacidad de Apple
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.revenuecat.com/privacy"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Política de Privacidad de RevenueCat
+              </a>
+            </li>
+          </ul>
+
+          <br />
+
+          <h2>3.1 Opciones de Suscripción</h2>
+          <blockquote>
+            <p>
+              Los precios mostrados corresponden a la tienda de EE. UU.;{' '}
+              <strong>los precios pueden variar según la región y la moneda</strong>. Las
+              suscripciones <strong>se renuevan automáticamente</strong> a menos que se cancelen.
+              Puede cancelar en cualquier momento en la configuración de App Store / Google Play.
+            </p>
+          </blockquote>
+
+          <h3>Planes Premium</h3>
+          <div className="overflow-x-auto">
+            <table>
+              <thead>
+                <tr>
+                  <th>Plan</th>
+                  <th className="text-right">Precio</th>
+                  <th>Facturación</th>
+                  <th>Prueba</th>
+                  <th>Cancelar en cualquier momento</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <strong>Premium Mensual</strong>
+                  </td>
+                  <td className="text-right">
+                    <strong>$4.99</strong>
+                  </td>
+                  <td>Por mes</td>
+                  <td>—</td>
+                  <td>✅</td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>Premium Anual</strong>
+                  </td>
+                  <td className="text-right">
+                    <strong>$29.99</strong>
+                  </td>
+                  <td>Por año</td>
+                  <td>—</td>
+                  <td>
+                    ✅ <em>(Mejor valor)</em>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Lo que obtiene con Premium</h3>
+          <ul>
+            <li>
+              <strong>Categorías Personalizadas</strong> – Cree sus propias categorías con nombres y
+              emojis que se adapten a su estilo de vida.
+            </li>
+            <li>
+              <strong>Presupuestos y Gastos Recurrentes</strong> – Automatice elementos repetitivos
+              para que nunca se pierda un pago.
+            </li>
+            <li>
+              <strong>Reportes e Información</strong> – Compare meses, vea tendencias y sepa
+              exactamente a dónde va su dinero.
+            </li>
+            <li>
+              <strong>Exportar a PDF o Excel</strong> – Mantenga registros o comparta su presupuesto
+              en cualquier momento.
+            </li>
+            <li>
+              <strong>Experiencia sin Anuncios</strong> – Disfrute de una interfaz limpia y sin
+              distracciones.
+            </li>
+          </ul>
+
+          <h3>Cómo Funcionan las Suscripciones</h3>
+          <ul>
+            <li>
+              El pago se cobra a su cuenta de <strong>Apple ID</strong> o{' '}
+              <strong>Google Play</strong> al confirmar la compra.
+            </li>
+            <li>
+              Las suscripciones <strong>se renuevan automáticamente</strong> a menos que desactive la
+              renovación automática al menos 24 horas antes del final del período actual.
+            </li>
+            <li>
+              Se cobrará a su cuenta la renovación dentro de las 24 horas previas al final del
+              período actual.
+            </li>
+            <li>
+              Administre o cancele su suscripción en la configuración de su cuenta de{' '}
+              <strong>App Store</strong> / <strong>Google Play</strong> después de la compra.
+            </li>
+            <li>
+              Si su suscripción caduca, las funciones premium ya no estarán disponibles y{' '}
+              <strong>
+                no se crearán nuevas categorías o gastos recurrentes
+              </strong>
+              .
+            </li>
+          </ul>
+
+          <h3>Términos de Uso (EULA)</h3>
+          <p>
+            Para usuarios de iOS, el uso de suscripciones también se rige por el{' '}
+            <a
+              href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <strong>Acuerdo de Licencia de Usuario Final Estándar de Apple (EULA)</strong>
+            </a>
+            .
+          </p>
+
+          <br />
+
+          <h2>4.0 Privacidad de los Niños</h2>
+          <ul>
+            <li>La App no está dirigida a niños menores de 13 años.</li>
+            <li>No recopilamos datos de niños de manera consciente.</li>
+            <li>
+              Dado que todos los datos son solo locales, los padres siguen siendo responsables de
+              supervisar el uso del dispositivo.
+            </li>
+          </ul>
+
+          <br />
+
+          <h2>5.0 Limitación de Responsabilidad</h2>
+          <p>
+            La App se proporciona <strong>&ldquo;tal cual&rdquo; sin garantías de ningún tipo</strong>
+            . En la máxima medida permitida por la ley, rechazamos toda responsabilidad por daños,
+            pérdidas o reclamaciones que surjan del uso de la App.
+          </p>
+
+          <br />
+
+          <h2>6.0 Contacto y Soporte</h2>
+          <p>
+            Si tiene alguna pregunta sobre estos Términos o la Política de Privacidad, contáctenos
+            en:
+          </p>
+          <p>
+            📧{' '}
+            <strong>
+              <a href="mailto:bybsupport@budgetyourbudget.com">bybsupport@budgetyourbudget.com</a>
+            </strong>
+          </p>
+        </article>
       </div>
     </motion.div>
   );
