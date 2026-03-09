@@ -57,7 +57,7 @@ export default function Footer() {
           <div className="sm:col-span-2 lg:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-4">
               <img
-                src="/screenshots/byb.png"
+                src="/screenshots/byblogo.png"
                 alt="BYB Logo"
                 className="w-9 h-9 rounded-xl"
               />

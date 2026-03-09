@@ -59,7 +59,7 @@ export default function Navbar({ dark, setDark }) {
               onClick={() => setMobileOpen(false)}
             >
               <img
-                src="/screenshots/byb.png"
+                src="/screenshots/byblogo.png"
                 alt="BYB Logo"
                 className="w-9 h-9 rounded-xl shadow-lg shadow-teal-500/25 group-hover:shadow-teal-500/40 transition-shadow"
               />
