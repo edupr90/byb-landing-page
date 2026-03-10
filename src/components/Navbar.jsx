@@ -44,9 +44,9 @@ export default function Navbar({ dark, setDark }) {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled
-            ? 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-lg shadow-slate-900/5 dark:shadow-slate-900/30'
+            ? 'bg-white/75 dark:bg-surface-950/75 backdrop-blur-2xl shadow-lg shadow-black/[0.04] dark:shadow-black/30 border-b border-surface-200/50 dark:border-surface-800/50'
             : 'bg-transparent'
         }`}
       >
@@ -55,18 +55,18 @@ export default function Navbar({ dark, setDark }) {
             {/* Logo */}
             <Link
               to="/"
-              className="flex items-center gap-2 group"
+              className="flex items-center gap-2.5 group"
               onClick={() => setMobileOpen(false)}
             >
               <img
                 src="/screenshots/byblogo.png"
                 alt="BYB Logo"
-                className="w-9 h-9 rounded-xl shadow-lg shadow-teal-500/25 group-hover:shadow-teal-500/40 transition-shadow"
+                className="w-9 h-9 rounded-xl shadow-lg shadow-brand-500/20 group-hover:shadow-brand-500/40 transition-shadow duration-300"
               />
               <span
-                className={`font-bold text-lg transition-colors ${
+                className={`font-display font-bold text-lg tracking-tight transition-colors duration-300 ${
                   scrolled || !isHome
-                    ? 'text-slate-900 dark:text-white'
+                    ? 'text-surface-900 dark:text-white'
                     : 'text-white'
                 }`}
               >
@@ -80,10 +80,10 @@ export default function Navbar({ dark, setDark }) {
                 <button
                   key={link.label}
                   onClick={() => handleNavClick(link.href)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
                     scrolled || !isHome
-                      ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800'
-                      : 'text-white/80 hover:text-white hover:bg-white/10'
+                      ? 'text-surface-500 hover:text-surface-900 hover:bg-surface-100 dark:text-surface-400 dark:hover:text-white dark:hover:bg-surface-800'
+                      : 'text-white/75 hover:text-white hover:bg-white/10'
                   }`}
                 >
                   {link.label}
@@ -95,10 +95,10 @@ export default function Navbar({ dark, setDark }) {
             <div className="hidden md:flex items-center gap-3">
               <button
                 onClick={() => setDark(!dark)}
-                className={`p-2 rounded-lg transition-colors ${
+                className={`p-2.5 rounded-xl transition-all duration-200 ${
                   scrolled || !isHome
-                    ? 'text-slate-500 hover:text-slate-700 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800'
-                    : 'text-white/70 hover:text-white hover:bg-white/10'
+                    ? 'text-surface-400 hover:text-surface-700 hover:bg-surface-100 dark:text-surface-500 dark:hover:text-surface-200 dark:hover:bg-surface-800'
+                    : 'text-white/60 hover:text-white hover:bg-white/10'
                 }`}
                 aria-label="Toggle dark mode"
               >
@@ -110,10 +110,10 @@ export default function Navbar({ dark, setDark }) {
             <div className="flex md:hidden items-center gap-2">
               <button
                 onClick={() => setDark(!dark)}
-                className={`p-2 rounded-lg transition-colors ${
+                className={`p-2 rounded-xl transition-colors ${
                   scrolled || !isHome
-                    ? 'text-slate-500 dark:text-slate-400'
-                    : 'text-white/70'
+                    ? 'text-surface-500 dark:text-surface-400'
+                    : 'text-white/60'
                 }`}
                 aria-label="Toggle dark mode"
               >
@@ -121,9 +121,9 @@ export default function Navbar({ dark, setDark }) {
               </button>
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className={`p-2 rounded-lg transition-colors ${
+                className={`p-2 rounded-xl transition-colors ${
                   scrolled || !isHome
-                    ? 'text-slate-700 dark:text-slate-200'
+                    ? 'text-surface-700 dark:text-surface-200'
                     : 'text-white'
                 }`}
                 aria-label="Toggle menu"
@@ -143,7 +143,7 @@ export default function Navbar({ dark, setDark }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm md:hidden"
+            className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm md:hidden"
             onClick={() => setMobileOpen(false)}
           />
         )}
@@ -156,19 +156,19 @@ export default function Navbar({ dark, setDark }) {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed top-0 right-0 bottom-0 w-72 z-50 bg-white dark:bg-slate-900 shadow-2xl p-6 pt-20 md:hidden"
+            className="fixed top-0 right-0 bottom-0 w-72 z-50 bg-white dark:bg-surface-900 shadow-2xl p-6 pt-20 md:hidden border-l border-surface-200 dark:border-surface-800"
           >
             <div className="flex flex-col gap-2">
               {NAV_LINKS.map((link) => (
                 <button
                   key={link.label}
                   onClick={() => handleNavClick(link.href)}
-                  className="w-full text-left px-4 py-3 rounded-xl text-slate-700 dark:text-slate-200 font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  className="w-full text-left px-4 py-3 rounded-xl text-surface-700 dark:text-surface-200 font-medium hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors"
                 >
                   {link.label}
                 </button>
               ))}
-              <hr className="my-3 border-slate-200 dark:border-slate-700" />
+              <hr className="my-4 border-surface-200 dark:border-surface-700" />
               <a
                 href="https://apps.apple.com/us/app/id6472663180"
                 target="_blank"

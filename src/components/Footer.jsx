@@ -50,20 +50,20 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-slate-900 dark:bg-slate-950 border-t border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+    <footer className="bg-surface-950 border-t border-surface-800/50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <Link to="/" className="flex items-center gap-2 mb-4">
+            <Link to="/" className="flex items-center gap-2.5 mb-5">
               <img
                 src="/screenshots/byblogo.png"
                 alt="BYB Logo"
                 className="w-9 h-9 rounded-xl"
               />
-              <span className="font-bold text-lg text-white">Budget Your Budget</span>
+              <span className="font-display font-bold text-lg text-white tracking-tight">Budget Your Budget</span>
             </Link>
-            <p className="text-slate-400 text-sm leading-relaxed max-w-xs">
+            <p className="text-surface-400 text-sm leading-relaxed max-w-xs">
               A friendly daily budgeting app that helps you track spending, plan monthly expenses,
               and stay on top of your goals.
             </p>
@@ -76,7 +76,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
-                  className="w-10 h-10 rounded-xl bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all"
+                  className="w-10 h-10 rounded-xl bg-surface-800/60 hover:bg-surface-700 flex items-center justify-center text-surface-400 hover:text-white transition-all duration-200"
                 >
                   <social.icon size={18} />
                 </a>
@@ -87,7 +87,7 @@ export default function Footer() {
           {/* Link Groups */}
           {Object.entries(FOOTER_LINKS).map(([group, links]) => (
             <div key={group}>
-              <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
+              <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-5">
                 {group}
               </h4>
               <ul className="space-y-3">
@@ -96,7 +96,7 @@ export default function Footer() {
                     {link.href.startsWith('/') ? (
                       <Link
                         to={link.href}
-                        className="text-slate-400 hover:text-white text-sm transition-colors"
+                        className="text-surface-400 hover:text-white text-sm transition-colors duration-200"
                       >
                         {link.label}
                       </Link>
@@ -105,7 +105,7 @@ export default function Footer() {
                         href={link.href}
                         target={link.href.startsWith('http') ? '_blank' : undefined}
                         rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                        className="text-slate-400 hover:text-white text-sm transition-colors flex items-center gap-2"
+                        className="text-surface-400 hover:text-white text-sm transition-colors duration-200 flex items-center gap-2"
                       >
                         {link.href.startsWith('mailto:') && <Mail size={14} />}
                         {link.label}
@@ -114,7 +114,7 @@ export default function Footer() {
                       <a
                         href={link.href}
                         onClick={(e) => handleClick(link.href, e)}
-                        className="text-slate-400 hover:text-white text-sm transition-colors cursor-pointer"
+                        className="text-surface-400 hover:text-white text-sm transition-colors duration-200 cursor-pointer"
                       >
                         {link.label}
                       </a>
@@ -127,13 +127,13 @@ export default function Footer() {
         </div>
 
         {/* Store buttons */}
-        <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="mt-14 pt-8 border-t border-surface-800/50 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex flex-wrap gap-3 justify-center">
             <a
               href="https://apps.apple.com/us/app/id6472663180"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block hover:scale-[1.02] active:scale-[0.98] transition-transform"
+              className="inline-block hover:scale-[1.03] active:scale-[0.97] transition-transform duration-200"
             >
               <img
                 src="/screenshots/appstore.png"
@@ -145,7 +145,7 @@ export default function Footer() {
               href="https://play.google.com/store/apps/details?id=com.evelez.byb"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block hover:scale-[1.02] active:scale-[0.98] transition-transform"
+              className="inline-block hover:scale-[1.03] active:scale-[0.97] transition-transform duration-200"
             >
               <img
                 src="/screenshots/playstore.png"
@@ -155,8 +155,8 @@ export default function Footer() {
             </a>
           </div>
 
-          <p className="text-slate-500 text-sm flex items-center gap-1">
-            Made with <Heart size={14} className="text-red-400" /> &copy; {new Date().getFullYear()} Budget Your Budget
+          <p className="text-surface-500 text-sm flex items-center gap-1.5">
+            Made with <Heart size={14} className="text-rose-400" /> &copy; {new Date().getFullYear()} Budget Your Budget
           </p>
         </div>
       </div>
