@@ -5,6 +5,9 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import Terms from './pages/Terms';
+import Shared from './pages/Shared';
+import { LanguageProvider } from './i18n';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -31,6 +34,7 @@ export default function App() {
   }, [dark]);
 
   return (
+    <LanguageProvider>
     <div className="min-h-screen flex flex-col">
       <Navbar dark={dark} setDark={setDark} />
       <ScrollToTop />
@@ -40,10 +44,15 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/privacypolicy" element={<PrivacyPolicy />} />
             <Route path="/privacypolicy/" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/terms/" element={<Terms />} />
+            <Route path="/shared" element={<Shared />} />
+            <Route path="/shared/" element={<Shared />} />
           </Routes>
         </AnimatePresence>
       </main>
       <Footer />
     </div>
+    </LanguageProvider>
   );
 }

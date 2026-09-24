@@ -1,0 +1,53 @@
+/* New expense (app/screens/expense-form.js) — AddTransactionPage on RevampScaffold (lib/ui/widgets/common/revamp_form.dart).
+   The revamp ground: RevampTokens.page / text. */
+
+.scr-expense-form { --app-page: var(--r-page); --app-ink: var(--r-text); }
+
+/* RevampScaffold: SafeArea + the 52pt bar pinned on top; the scroll body between it and the pinned action bar
+   (1 hairline + 12 + 52 button + 20 + 34 home indicator = 119) */
+.scr-expense-form .xf-top { position: absolute; left: 0; top: 0; width: 440px; z-index: 20; }
+.scr-expense-form .xf-viewport { position: absolute; left: 0; right: 0; top: 114px; bottom: 119px; overflow: hidden; }
+.scr-expense-form .xf-actions {
+  position: absolute; left: 0; bottom: 0; width: 440px; z-index: 20;
+  padding: 12px 20px 54px; background: var(--r-page); border-top: 1px solid var(--r-hairline);
+}
+
+/* RevampAmountBlock: page ground, padding 20 22 20 20 (LTRB), bottom hairline; label · 6 · baseline row */
+.scr-expense-form .xf-amount { padding: 22px 20px 20px; background: var(--r-page); border-bottom: 1px solid var(--r-hairline); }
+.scr-expense-form .xf-amount-row { margin-top: 6px; display: flex; align-items: baseline; color: var(--r-text); }
+.scr-expense-form .xf-amount-row > .xf-symbol { flex: none; margin-right: 6px; }
+.scr-expense-form .xf-amount-row > .xf-digits { flex: 1 1 auto; min-width: 0; }
+
+/* the groups: Padding(all: screenPad 20) */
+.scr-expense-form .xf-groups { padding: 20px; }
+
+/* RevampFieldRow's TextField: the M3 input style is bodyLarge, whose geometry carries letterSpacing 0.5 */
+/* … and RenderEditable keeps a caret margin (_kCaretGap 1 + cursorWidth 2) at the end of the line: a right-aligned
+   value ends 3pt short of the row's trailing edge */
+.scr-expense-form .xf-field .k-row-value { --ls: 0.5px; margin-right: 3px; }
+
+/* RevampTextArea: min 56, padding 16 × 14; the hint 14.5 / 400 placeholder, height 1.45 */
+.scr-expense-form .xf-textarea { min-height: 56px; padding: 14px 16px; }
+.scr-expense-form .xf-textarea .xf-hint { color: var(--r-placeholder); }
+
+/* RevampPremiumTag (only when not premium): padding 7 × 3 inside a 1px border (pads by 1), radius 4,
+   accentText at 7% (dark 14%) with a 30% border; 9.5 / 600 / +0.6 uppercase accent */
+.scr-expense-form .xf-premium {
+  flex: none; padding: 4px 8px; border-radius: 4px; color: var(--accent-text);
+  background: color-mix(in srgb, var(--accent-text) 7%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-text) 30%, transparent);
+}
+.scr-expense-form.mode-dark .xf-premium { background: color-mix(in srgb, var(--accent-text) 14%, transparent); }
+
+/* LOCAL FALLBACK (requested for kit.identityTile): RevampIdentityTile's emoji (emojiTextStyle 13.2, proportional) is drawn
+   3 raw px (1 pt) left of and 1 raw px lower than Chrome puts it — raw/en and raw/es-419 07_expenses_new_form, residual
+   0.00 once moved. */
+.scr-expense-form .k-row-lead > .k-badge > .k-emoji { translate: -1px 0.3333px; }
+
+/* LOCAL FALLBACK (requested for kit.row): every 14.5 pt row text on the theme's 1.5 height (label, value, the date, the
+   typed name, "Scan receipt", "Save as recurring") sits 1 raw px above the capture — a 21.75 pt line in a 22 pt box: k-line
+   rounds its baseline to 16 pt, the app draws it at 16.27 pt (CSS half-leading in the rounded box, unrounded). The 12 pt subtitles, the 11 pt
+   section labels, the title and the 14.5 / 1.45 notes hint are exact and stay put. insights.css applies the same 0.2727 to
+   the same rows. Form mean |Δ| 0.48 → 0.21 (en), 0.52 → 0.22 (es-419). */
+.scr-expense-form .k-row-label > .k-t,
+.scr-expense-form .k-row-value { translate: 0 0.2727px; }

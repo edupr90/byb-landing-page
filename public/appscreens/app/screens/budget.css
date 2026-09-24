@@ -1,0 +1,113 @@
+/* Budget (planner) screen — app/screens/budget.js. Everything scoped under .scr-budget; sizes from
+   lib/ui/views/planner_view.dart and lib/ui/widgets/Planning/*. */
+
+.scr-budget {
+  /* _tooltip (planning_pie_chart.dart): white / #1C1C24, border black 6% / white 8%, shadow black 12% / 45% */
+  --bud-tip-bg: #FFFFFF;
+  --bud-tip-border: rgba(0, 0, 0, 0.06);
+  --bud-tip-shadow: rgba(0, 0, 0, 0.12);
+}
+.scr-budget.mode-dark {
+  --bud-tip-bg: #1C1C24;
+  --bud-tip-border: rgba(255, 255, 255, 0.08);
+  --bud-tip-shadow: rgba(0, 0, 0, 0.45);
+}
+
+/* ---- app bar: pinned over the scroll body, on the page colour */
+.scr-budget .bud-bar { position: absolute; left: 0; top: 0; width: 440px; z-index: 5; background: var(--page); }
+
+/* ---- the SingleChildScrollView: starts under the 118pt bar and clips there */
+.scr-budget .bud-viewport { position: absolute; left: 0; top: 118px; width: 440px; bottom: 0; overflow: hidden; }
+.scr-budget .bud-viewport > .app-scroll { width: 440px; }
+
+/* ---- hero: Padding(20, 10, 20, 4) */
+.scr-budget .bud-hero { padding: 10px 20px 4px; }
+/* MonthPickerButton(child): ConstrainedBox(minHeight 44) + Align.centerLeft */
+.scr-budget .bud-month { min-height: 44px; display: flex; align-items: center; }
+.scr-budget .bud-hero-row { margin-top: 6px; display: flex; align-items: center; }
+.scr-budget .bud-total-box { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; }
+/* the FittedBox (kit.fitText's .k-fit, a size container) takes the Expanded's whole width: 100cqi is what the badge leaves */
+.scr-budget .bud-total-box > .k-fit { flex: 1 1 auto; }
+.scr-budget .bud-total { white-space: nowrap; color: var(--ink); }
+.scr-budget .bud-badge-gap { width: 14px; flex: none; }
+.scr-budget .bud-subtitle { margin-top: 8px; color: var(--ink-sub); }
+/* a Text in a Column(crossAxisAlignment.start) sizes to its text (TextWidthBasis.parent: one line shrinks, a wrapped
+   one takes the column), so the pop-out rects of the subtitle and the two section labels fit their text */
+.scr-budget .bud-subtitle,
+.scr-budget .bud-members-label > .k-label,
+.scr-budget .bud-cats-label > .k-label { width: fit-content; max-width: 100%; }
+.scr-budget .bud-progress { margin-top: 14px; }
+
+/* ---- stat tiles: Padding(20, 14, 20, 4), 12 apart */
+.scr-budget .bud-stats { padding: 14px 20px 4px; }
+.scr-budget .bud-stats-row { display: flex; align-items: flex-start; }
+.scr-budget .bud-tile { flex: 1 1 0; min-width: 0; }
+.scr-budget .bud-stats-gap { width: 12px; flex: none; }
+.scr-budget .bud-tile-value { margin-top: 5px; display: flex; }
+
+/* ---- who's spending what: Padding(top 18); label (20, 4, 20, 12); rows (16, 0, 16, 10); 10 after.
+   The same spacing, regrouped so the who-spending box is tight: 18 + the label's 4 above it, the 16 row inset as the
+   box's margin (label 20 = 16 + 4), and the last row's 10 moved below it (10 + 10) */
+.scr-budget .bud-members-wrap { padding-top: 22px; }
+.scr-budget .bud-members { margin: 0 16px; }
+.scr-budget .bud-members-label { padding: 0 4px 12px; }
+.scr-budget .bud-member-row { padding: 0 0 10px; }
+.scr-budget .bud-member-row:last-child { padding-bottom: 0; }
+.scr-budget .bud-members-after { height: 20px; }
+
+/* ---- where it goes: Padding(20, 22, 20, 4); header row; 14; the ring box */
+.scr-budget .bud-alloc { padding: 22px 20px 4px; }
+.scr-budget .bud-alloc-head { position: relative; display: flex; align-items: center; }
+/* the ring states' scroll target: the label row's top, moved only for a compare render (budget.js CAPTURE_ES_RING) —
+   with translate, not top: a layout offset snaps to 1/64 px and the scroll would miss the device pixel */
+.scr-budget .bud-scroll-mark { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; }
+.scr-budget .bud-alloc-head > .k-label { flex: 1 1 auto; min-width: 0; }
+.scr-budget .bud-ring { position: relative; margin-top: 14px; width: 400px; }
+.scr-budget .bud-ring-svg { position: absolute; left: 0; top: 0; overflow: visible; }
+.scr-budget .bud-ring-square { position: absolute; }
+/* a pop-out isolates one element (app.css .isolate): clip paths whose children are visibility: hidden clip
+   everything away, so the ring's defs stay visible (they never paint themselves) */
+.scr-budget.isolate .bud-ring-svg defs,
+.scr-budget.isolate .bud-ring-svg defs * { visibility: visible; }
+.scr-budget .bud-glyph { letter-spacing: 0; }
+
+/* _tooltip: Container(padding 8, 8, 12, 8; radius 14; 1px border; shadow blur 18 → 21.78, y 6) */
+.scr-budget .bud-tip-layer { position: absolute; z-index: 2; }
+.scr-budget .bud-tip {
+  display: flex; align-items: center; width: max-content; max-width: 300px;
+  padding: 8px 12px 8px 8px; border-radius: 14px;
+  background: var(--bud-tip-bg); border: 1px solid var(--bud-tip-border);
+  box-shadow: 0 6px 21.78px var(--bud-tip-shadow);
+}
+/* the petal in miniature: 28 square, radius 8, the emoji as a white silhouette (ColorFiltered srcIn) */
+.scr-budget .bud-tip-badge { width: 28px; height: 28px; border-radius: 8px; flex: none; display: flex; align-items: center; justify-content: center; }
+.scr-budget .bud-tip-badge .k-emoji { filter: brightness(0) invert(1); }
+.scr-budget .bud-tip-col { margin-left: 9px; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; }
+/* Wrap(spacing 6, crossAxisAlignment center) */
+.scr-budget .bud-tip-wrap { margin-top: 2px; display: flex; flex-wrap: wrap; column-gap: 6px; align-items: center; }
+.scr-budget .bud-tip-amount, .scr-budget .bud-tip-share { white-space: nowrap; }
+
+/* ---- budget by category: Padding(top 22); label (20, 0, 20, 14); grid in 16, rows 10 apart; 100 below.
+   The 16 grid inset is the section box's margin (label 20 = 16 + 4), so budget-by-category is tight to its content */
+.scr-budget .bud-cats-wrap { padding-top: 22px; }
+.scr-budget .bud-cats { margin: 0 16px; }
+.scr-budget .bud-cats-label { padding: 0 4px 14px; }
+.scr-budget .bud-cat-row + .bud-cat-row { margin-top: 10px; }
+.scr-budget .bud-bottom { height: 100px; }
+
+/* Text snapping residue, fitted (0.5 device px down): Skia rounds a text baseline to the device pixel, Chrome lands
+   these lines a device pixel higher — the stat tile values (height 1.1) and the category cards' title, amount and
+   plan lines below the ring's fractional 322.56 box. Not the card's bold last line (.k-em, "$103.38 left"): Chrome
+   already lands that one where Skia does, and the shift would push it a device pixel low. Measured on
+   01_budget_top / 01_budget_ring (EN + ES). */
+.scr-budget .bud-cat-grid .k-line:not(.k-em),
+.scr-budget .bud-tile-value .k-line { translate: 0 0.1667px; }
+/* kit residue (kit.js header: "a centred 24pt emoji sits 0.67pt left of the capture"): the category disc emoji */
+.scr-budget .bud-cat-grid .k-ringcard .k-badge > .k-emoji { translate: 0.6667px 0; }
+/* the tooltip's Text(emoji, height 1) in its 28pt tile: the icon's INK is centred, on purpose unlike the capture.
+   iOS draws it 1.3pt left and 1.2pt low (01_budget_ring_tooltip), which the enlarged store pop-out made plain; Chrome's
+   own centring is a device pixel left and half a device pixel high of the ink centre. Measured on 🏠, which fills the
+   emoji's em box (ink 38 × 40 of 42 raw px). The share sits half a line-box point off the Wrap's centre
+   (17 in 20) and Skia rounds that baseline down a device pixel where Chrome rounds it up */
+.scr-budget .bud-tip-badge .k-emoji { translate: 0.3333px 0.1667px; }
+.scr-budget .bud-tip-share { translate: 0 0.1667px; }

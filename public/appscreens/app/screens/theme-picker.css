@@ -1,0 +1,49 @@
+/* Color Theme picker — lib/ui/views/color_theme_view.dart. Geometry notes in app/screens/theme-picker.js. */
+
+/* AppBar: pinned, backgroundColor = page, above the grid */
+.scr-theme-picker .tp-bar { position: absolute; left: 0; top: 0; width: 440px; z-index: 3; background: var(--page); }
+.scr-theme-picker .tp-title { display: flex; justify-content: center; min-width: 0; max-width: 100%; }
+/* TextButton (M3): min 64 wide, 12 side padding; the actions Row stretches it to the toolbar's 56 */
+.scr-theme-picker .tp-reset { min-width: 64px; height: 56px; padding: 0 12px; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
+.scr-theme-picker .tp-reset-label { flex: none; }
+
+/* Padding(24, 8, 24, 20) → Container(height 56, radius 20, gradient, primary @ 30% blur 16 y 4) */
+.scr-theme-picker .tp-body { position: absolute; left: 0; top: 118px; width: 440px; padding: 8px 24px 20px; z-index: 1; }
+.scr-theme-picker .tp-banner {
+  height: 56px; border-radius: 20px; display: flex; align-items: center; justify-content: center; padding: 0 12px;
+  box-shadow: 0 4px 19.48px color-mix(in srgb, var(--primary) 30%, transparent);
+}
+.scr-theme-picker .tp-banner > .k-line { max-width: 100%; }
+
+/* Expanded(GridView): the viewport starts under the banner's bottom padding (y 202) and clips its content */
+.scr-theme-picker .tp-clip { position: absolute; left: 0; top: 202px; width: 440px; bottom: 0; overflow: hidden; z-index: 2; }
+/* GridView padding (24 · 0 · 24 · 24 + 34) on a wrapper, so the palette-grid anchor is the cards alone */
+.scr-theme-picker .tp-grid-pad { padding: 0 24px 58px; }
+.scr-theme-picker .tp-grid { display: grid; column-gap: 12px; row-gap: 12px; }
+
+/* _PaletteCard: AnimatedContainer(card, radius 20, border 1 / 2.5 accent) — the border pads the column */
+/* grid cell: the card fills it; the selected cell carries the palette-selected anchor (radius for BYBApp.layout) */
+.scr-theme-picker .tp-cell { min-width: 0; border-radius: 20px; display: flex; }
+.scr-theme-picker .tp-card {
+  position: relative; flex: 1 1 auto; min-width: 0; background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.scr-theme-picker .tp-card.tp-on {
+  /* the 2.5 border as an inset ring: a 2.5px CSS border snaps to whole device pixels (7 of 7.5 at 3x); the column is
+     centred, so the border's padding does not move it */
+  border: none; box-shadow: inset 0 0 0 2.5px var(--tp-glow), 0 4px 14.86px color-mix(in srgb, var(--tp-glow) 25%, transparent);
+}
+
+.scr-theme-picker .tp-dots { display: flex; justify-content: center; gap: 6px; }
+/* _circle: 28, 1.5 white @ 30% ring inside. The clip insets the edge 0.14pt: Impeller anti-aliases a circle's edge
+   about half a raw px inside where Chrome does (edge pixel ~59% vs ~98% covered), fitted on the dots and badges */
+.scr-theme-picker .tp-dot { display: block; width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid rgba(255, 255, 255, 0.3); clip-path: circle(calc(50% - 0.14px)); }
+.scr-theme-picker .tp-name { margin-top: 10px; max-width: 100%; min-width: 0; display: flex; justify-content: center; }
+.scr-theme-picker .tp-name > .k-line { min-width: 0; max-width: 100%; }
+.scr-theme-picker .tp-check { margin-top: 4px; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; }
+.scr-theme-picker .tp-check .ic { font-size: 16px; }
+
+/* 18 / w800 AppFont (synthetic bold): the capture's glyphs sit 1 raw px (⅓ pt) lower than k-line puts them — the
+   title and the banner alike (kit.js header lists the same residue for this title) */
+.scr-theme-picker .tp-title .k-line,
+.scr-theme-picker .tp-banner > .k-line { translate: 0 0.3333px; }

@@ -1,0 +1,263 @@
+/* Reports → Last vs Current Month (reports-compare) and Current Month Expenses (reports-month).
+   Sizes from lib/ui/widgets/Reports/** (see app/screens/reports.js). */
+
+:is(.scr-reports-compare, .scr-reports-month) {
+  /* ReportSectionCard / ReportMetricTile / _KPICard shadow: black 4% (dark 20%), blur 8 → 10.24, offset (0, 2) */
+  --rp-sec-shadow: 0 2px 10.24px rgba(0, 0, 0, 0.04);
+  --rp-kpi-shadow: 0 2px 10.24px rgba(0, 0, 0, 0.04);
+  --rp-kpi-bg: #FFFFFF;                  /* _KPICard: Colors.white (cardDark) */
+  --rp-export-surface: #F3F4F6;          /* AppColors.exportSurfaceLight */
+  --rp-export-border: #E5E7EB;           /* exportBorderLight */
+  --rp-field-fill: #F3F4F6;              /* fieldFillLight */
+  --rp-grey: #9E9E9E;                    /* Colors.grey */
+  /* compare_month_chart.dart */
+  --rp-prev: #C0B8A8;
+  --rp-good: #7BC67E;
+  --rp-bad: #E06B6B;
+  --rp-equal: #A8A098;
+  --rp-axis: #6B7280;
+  --rp-label: #111827;
+  --rp-grid: #F0ECE4;                    /* ChartTheme.gridLine */
+  --rp-sum-less: #16A34A;
+  --rp-sum-more: #E53935;
+  --rp-sum-same: #64748B;
+  --rp-value-prev-bg: rgba(0, 0, 0, 0.06);
+  /* compare_month_total_list.dart */
+  --rp-list-ink: #000000;
+  --rp-chip-bg: #F1F4F8;
+  --rp-hair: rgba(0, 0, 0, 0.12);        /* Colors.black12 */
+}
+.byb-app.mode-dark:is(.scr-reports-compare, .scr-reports-month) {
+  --rp-sec-shadow: 0 2px 10.24px rgba(0, 0, 0, 0.2);
+  --rp-kpi-shadow: none;
+  --rp-kpi-bg: var(--card);
+  --rp-export-surface: #0D0D12;
+  --rp-export-border: rgba(255, 255, 255, 0.10);
+  --rp-field-fill: rgba(255, 255, 255, 0.08);
+  --rp-prev: #A09888;
+  --rp-good: #8ED4A0;
+  --rp-bad: #E8A0A0;
+  --rp-equal: #C5C0B8;
+  --rp-axis: rgba(255, 255, 255, 0.70);
+  --rp-label: #FFFFFF;
+  --rp-grid: rgba(255, 255, 255, 0.06);
+  --rp-sum-less: #4ADE80;
+  --rp-sum-more: #FF8080;
+  --rp-sum-same: #BDBDBD;
+  --rp-value-prev-bg: rgba(255, 255, 255, 0.06);
+  --rp-list-ink: #FFFFFF;
+  --rp-chip-bg: rgba(255, 255, 255, 0.08);
+  --rp-hair: rgba(255, 255, 255, 0.12);
+}
+
+/* ------------------------------------------------------------------ scaffold */
+
+:is(.scr-reports-compare, .scr-reports-month) .rp-bar { position: absolute; left: 0; top: 0; width: 440px; height: 118px; z-index: 20; background: var(--page); }
+:is(.scr-reports-compare, .scr-reports-month) .rp-viewport { position: absolute; left: 0; top: 118px; width: 440px; bottom: 0; overflow: hidden; }
+:is(.scr-reports-compare, .scr-reports-month) .rp-scroll { padding: 12px 16px; }
+
+/* empty states: Center in the body; ReportEmptyState pads 32 × 48 */
+:is(.scr-reports-compare, .scr-reports-month) .rp-center { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+:is(.scr-reports-compare, .scr-reports-month) .rp-empty { padding: 48px 32px; display: flex; flex-direction: column; align-items: center; }
+
+/* Current Month: titleSpacing 12, a Column of month 13/600 over title 18/800 in the title slot */
+.scr-reports-month .rp-bar-month > .k-title { padding: 0 12px; }
+.scr-reports-month .rp-month-title { display: flex; flex-direction: column; min-width: 0; }
+
+.byb-app :is(.rp-gap2, .rp-gap4, .rp-gap8, .rp-gap10, .rp-gap12, .rp-gap16, .rp-gap20, .rp-gap24, .rp-gap32) { flex: none; }
+:is(.scr-reports-compare, .scr-reports-month) .rp-gap2 { height: 2px; }
+:is(.scr-reports-compare, .scr-reports-month) .rp-gap4 { height: 4px; }
+:is(.scr-reports-compare, .scr-reports-month) .rp-gap8 { height: 8px; }
+:is(.scr-reports-compare, .scr-reports-month) .rp-gap10 { height: 10px; }
+:is(.scr-reports-compare, .scr-reports-month) .rp-gap12 { height: 12px; }
+:is(.scr-reports-compare, .scr-reports-month) .rp-gap16 { height: 16px; }
+:is(.scr-reports-compare, .scr-reports-month) .rp-gap20 { height: 20px; }
+:is(.scr-reports-compare, .scr-reports-month) .rp-gap24 { height: 24px; }
+:is(.scr-reports-compare, .scr-reports-month) .rp-gap32 { height: 32px; }
+
+:is(.scr-reports-compare, .scr-reports-month) .rp-ink { color: var(--ink); }
+:is(.scr-reports-compare, .scr-reports-month) .rp-sub { color: var(--ink-sub); }
+:is(.scr-reports-compare, .scr-reports-month) .rp-accent { color: var(--fab); }
+:is(.scr-reports-compare, .scr-reports-month) .rp-flex1 { flex: 1 1 auto; min-width: 0; }
+
+/* ------------------------------------------------------------------ ReportSectionCard */
+
+:is(.scr-reports-compare, .scr-reports-month) .rp-sec {
+  margin-bottom: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+  box-shadow: var(--rp-sec-shadow);
+}
+:is(.scr-reports-compare, .scr-reports-month) .rp-sec-head { padding: 14px 16px 0; }
+:is(.scr-reports-compare, .scr-reports-month) .rp-sec-body { padding: 16px; }
+
+/* ReportInsight */
+:is(.scr-reports-compare, .scr-reports-month) .rp-insight { padding: 4px 0; display: flex; align-items: flex-start; }
+:is(.scr-reports-compare, .scr-reports-month) .rp-insight-ic { font-size: 18px; color: var(--fab); flex: none; }
+:is(.scr-reports-compare, .scr-reports-month) .rp-insight-text { margin-left: 10px; flex: 1 1 auto; min-width: 0; }
+
+/* ExportButtonsRow */
+:is(.scr-reports-compare, .scr-reports-month) .rp-export-row { display: flex; gap: 10px; }
+:is(.scr-reports-compare, .scr-reports-month) .rp-export-btn {
+  flex: 1 1 0; min-width: 0; padding: 14px 16px; display: flex; align-items: center; justify-content: center;
+  background: var(--rp-export-surface); border: 1px solid var(--rp-export-border); border-radius: 14px;
+}
+/* SizedBox(8) after the emoji Text; iOS gives an 18pt emoji Text a box 2.67pt wider than Chrome (fitted: 0.33 before, 2.33 after) */
+:is(.scr-reports-compare, .scr-reports-month) .rp-export-emoji { flex: none; display: block; margin-left: 0.33px; margin-right: 10.33px; }
+:is(.scr-reports-compare, .scr-reports-month) .rp-export-label { min-width: 0; }
+
+/* ------------------------------------------------------------------ compare: header card */
+
+.scr-reports-compare .rp-hdr-title { display: flex; align-items: center; }
+.scr-reports-compare .rp-hdr-ic { font-size: 24px; color: var(--ink); margin-right: 10px; flex: none; }
+/* fit-content: the Row's children are all fixed-size, so the pop-out rect hugs the pills (the layout is unchanged) */
+.scr-reports-compare .rp-pills { display: flex; align-items: center; width: fit-content; max-width: 100%; }
+.scr-reports-compare .rp-pill {
+  flex: none; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--rp-field-fill); color: var(--ink);
+}
+.scr-reports-compare .rp-pill.rp-pill-on { border-color: transparent; color: #FFFFFF; }
+.scr-reports-compare .rp-pill.rp-pill-good { background: var(--green); }
+.scr-reports-compare .rp-pill.rp-pill-accent { background: var(--fab); }
+.scr-reports-compare .rp-pill-arrow { font-size: 16px; color: var(--rp-grey); margin: 0 8px; flex: none; }
+
+.scr-reports-compare .rp-status {
+  --rp-tone: var(--green);
+  padding: 14px; border-radius: 14px; display: flex; align-items: center; color: var(--rp-tone);
+  background: color-mix(in srgb, var(--rp-tone) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--rp-tone) 25%, transparent);
+}
+.scr-reports-compare .rp-status.rp-tone-bad { --rp-tone: var(--red); }
+.scr-reports-compare .rp-status-dot {
+  flex: none; padding: 8px; border-radius: 50%; background: var(--rp-tone); color: #FFFFFF; display: flex;
+}
+.scr-reports-compare .rp-status-dot .ic { font-size: 20px; }
+.scr-reports-compare .rp-status-col { flex: 1 1 auto; min-width: 0; margin-left: 12px; display: flex; flex-direction: column; }
+.scr-reports-compare .rp-status-emoji { flex: none; }
+/* emojiTextStyle(32): kit.emojiSpan's proportional-leading offset leaves the glyph 4 raw px high and 1 left at this size
+   (fitted on 04_reports_compare, en + es-419) */
+.scr-reports-compare .rp-status-emoji > .k-emoji { translate: 0.3333px 1.3333px; }
+/* LOCAL FALLBACK (reports.js caseForms): Inter's raised .case minus / plus before a figure */
+:is(.scr-reports-compare, .scr-reports-month) .rp-case-minus { position: relative; top: -0.0556em; }
+:is(.scr-reports-compare, .scr-reports-month) .rp-case-plus { position: relative; top: -0.0741em; }
+
+/* ------------------------------------------------------------------ compare: KPI cards */
+
+.scr-reports-compare .rp-kpis { display: flex; gap: 12px; }
+.scr-reports-compare .rp-kpi {
+  flex: 1 1 0; min-width: 0; padding: 14px; border-radius: 16px; border: 1px solid var(--border);
+  background: var(--rp-kpi-bg); box-shadow: var(--rp-kpi-shadow); display: flex; flex-direction: column;
+}
+/* The highlighted card's fill is translucent, and Flutter paints the BoxShadow under the whole box, so the shadow shows
+   through it (CSS clips a box-shadow under its box): shadow, fill and border are layers here, in Flutter's order. */
+.scr-reports-compare .rp-kpi.rp-kpi-on {
+  position: relative; isolation: isolate; padding: 15px; border: 0; background: none; box-shadow: none;
+}
+.scr-reports-compare .rp-kpi.rp-kpi-on::before,
+.scr-reports-compare .rp-kpi.rp-kpi-on::after { content: ""; position: absolute; inset: 0; border-radius: 16px; z-index: -1; }
+.scr-reports-compare .rp-kpi.rp-kpi-on::before { top: 2px; bottom: -2px; background: rgba(0, 0, 0, 0.04); filter: blur(5.1188px); }
+.mode-dark.scr-reports-compare .rp-kpi.rp-kpi-on::before { display: none; }
+.scr-reports-compare .rp-kpi.rp-kpi-on::after {
+  background: color-mix(in srgb, var(--rp-c) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--rp-c) 25%, transparent);
+}
+.scr-reports-compare .rp-kpi-top { display: flex; align-items: center; justify-content: space-between; }
+.scr-reports-compare .rp-kpi-ic { flex: none; padding: 8px; border-radius: 10px; background: var(--rp-c); color: #FFFFFF; display: flex; }
+.scr-reports-compare .rp-kpi-ic .ic { font-size: 18px; }
+.scr-reports-compare .rp-kpi-badge { flex: none; padding: 4px 8px; border-radius: 999px; background: var(--rp-c); color: #FFFFFF; }
+/* the label sits 1 raw px lower in the capture (the pill is centred at a half point: Skia places the paragraph there
+   before rounding its baseline, Chrome snaps the box first) */
+.scr-reports-compare .rp-kpi-badge > .k-line { translate: 0 0.3333px; }
+.scr-reports-compare .rp-kpi-value { color: var(--ink); white-space: nowrap; }
+.scr-reports-compare .rp-kpi-on .rp-kpi-value { color: var(--rp-c); }
+
+/* ------------------------------------------------------------------ compare: chart */
+
+.scr-reports-compare .rp-cmp-card { height: 330px; }
+.scr-reports-compare .rp-cmp-stack { position: relative; width: 336px; height: 210px; }
+.scr-reports-compare .rp-cmp-svg { position: absolute; left: 0; top: 0; overflow: visible; }
+.scr-reports-compare .rp-grid { stroke: var(--rp-grid); }
+.scr-reports-compare .rp-g-prev { stop-color: var(--rp-prev); }
+.scr-reports-compare .rp-g-good { stop-color: var(--rp-good); }
+.scr-reports-compare .rp-g-bad { stop-color: var(--rp-bad); }
+.scr-reports-compare .rp-g-equal { stop-color: var(--rp-equal); }
+/* left titles: Padding(right 6) in a tight 44 slot, centred on the value */
+.scr-reports-compare .rp-axis-y { position: absolute; left: 0; width: 38px; translate: 0 -50%; color: var(--rp-axis); white-space: nowrap; }
+.scr-reports-compare .rp-axis-x { position: absolute; translate: -50% 0; color: var(--rp-axis); white-space: nowrap; }
+.scr-reports-compare .rp-badges { position: absolute; left: 8px; right: 8px; top: 0; display: flex; justify-content: space-around; align-items: flex-start; }
+.scr-reports-compare .rp-vbadge { margin-top: 6px; padding: 6px 10px; border-radius: 10px; white-space: nowrap; }
+.scr-reports-compare .rp-vbadge-prev { background: var(--rp-value-prev-bg); color: var(--rp-label); }
+.scr-reports-compare .rp-vbadge-good { background: color-mix(in srgb, var(--rp-good) 18%, transparent); color: var(--rp-good); }
+.scr-reports-compare .rp-vbadge-bad { background: color-mix(in srgb, var(--rp-bad) 18%, transparent); color: var(--rp-bad); }
+.scr-reports-compare .rp-vbadge-equal { background: color-mix(in srgb, var(--rp-equal) 18%, transparent); color: var(--rp-equal); }
+.scr-reports-compare .rp-cmp-sum { display: flex; align-items: flex-start; }
+.scr-reports-compare .rp-cmp-sum-ic { font-size: 18px; margin-right: 6px; flex: none; }
+.scr-reports-compare .rp-sum-less .rp-cmp-sum-ic { color: var(--rp-sum-less); }
+.scr-reports-compare .rp-sum-more .rp-cmp-sum-ic { color: var(--rp-sum-more); }
+.scr-reports-compare .rp-sum-same .rp-cmp-sum-ic { color: var(--rp-sum-same); }
+.scr-reports-compare .rp-cmp-sum-text { flex: 1 1 auto; min-width: 0; color: color-mix(in srgb, var(--rp-label) 95%, transparent); }
+
+/* ------------------------------------------------------------------ compare: category lists */
+
+.scr-reports-compare .rp-lists-div { margin: 12px 0; height: 1px; background: var(--border); }
+/* ListView.separated with padding null → SliverPadding(MediaQuery.padding): the Scaffold body keeps the 34pt bottom
+   inset (compare_month_total_list.dart; flutter scroll_view.dart BoxScrollView.buildSlivers) */
+.scr-reports-compare .rp-list { padding-bottom: 34px; }
+.scr-reports-compare .rp-list-head { display: flex; align-items: center; }
+.scr-reports-compare .rp-list-title { flex: 1 1 auto; min-width: 0; color: var(--rp-list-ink); }
+.scr-reports-compare .rp-list-chip { flex: none; padding: 6px 10px; border-radius: 999px; background: var(--rp-chip-bg); border: 1px solid var(--rp-hair); color: var(--rp-list-ink); }
+.scr-reports-compare .rp-list-row { padding: 10px 0; display: flex; align-items: center; }
+.scr-reports-compare .rp-list-div { height: 1px; background: var(--rp-hair); }
+.scr-reports-compare .rp-list-name { margin-left: 12px; flex: 1 1 auto; min-width: 0; color: var(--rp-list-ink); }
+.scr-reports-compare .rp-list-amount { flex: none; white-space: nowrap; color: color-mix(in srgb, var(--rp-list-ink) 90%, transparent); }
+.scr-reports-compare .rp-list-empty { white-space: pre-line; color: color-mix(in srgb, var(--rp-list-ink) 70%, transparent); }
+
+/* ------------------------------------------------------------------ current month: header */
+
+.scr-reports-month .rp-mh-row { display: flex; align-items: center; }
+.scr-reports-month .rp-mh-col { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; }
+/* the month-total anchor: the Column's start-aligned children at their own width */
+.scr-reports-month .rp-mh-ink { width: fit-content; max-width: 100%; display: flex; flex-direction: column; align-items: flex-start; }
+.scr-reports-month .rp-mh-pill { padding: 5px 10px; border-radius: 12px; background: var(--fab); color: #FFFFFF; }
+.scr-reports-month .rp-ring { position: relative; flex: none; width: 70px; height: 70px; }
+.scr-reports-month .rp-ring > svg { position: absolute; left: 0; top: 0; overflow: visible; }
+.scr-reports-month .rp-ring-track { stroke: color-mix(in srgb, var(--ink-sub) 15%, transparent); }
+.scr-reports-month .rp-ring-arc { stroke: var(--fab); }
+.scr-reports-month .rp-ring-hole { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+/* both labels sit 1 raw px lower in the capture (04_reports_current_month) */
+.scr-reports-month .rp-ring-hole > .k-line { translate: 0 0.3333px; }
+.scr-reports-month .rp-tip { padding: 12px; border-radius: 12px; background: color-mix(in srgb, var(--fab) 5%, transparent); display: flex; align-items: center; }
+/* 10 after the emojiTextStyle(18) Text, whose iOS box is wider (as the export buttons' 18pt emoji) and 0.33pt lower */
+.scr-reports-month .rp-tip-emoji { flex: none; margin-left: 0.33px; margin-right: 12.67px; translate: 0 0.33px; }
+
+/* ------------------------------------------------------------------ current month: metric tiles */
+
+.scr-reports-month .rp-metric-row { display: flex; gap: 12px; }
+.scr-reports-month .rp-metric {
+  flex: 1 1 0; min-width: 0; padding: 14px; border-radius: 12px; border: 1px solid var(--border);
+  background: var(--card); box-shadow: var(--rp-sec-shadow); display: flex; flex-direction: column;
+}
+.scr-reports-month .rp-metric-top { display: flex; align-items: center; }
+.scr-reports-month .rp-metric-label { margin-left: 10px; flex: 1 1 auto; }
+
+/* ------------------------------------------------------------------ current month: category breakdown */
+
+/* the pie's 170 square, centred in the 180-tall chart as PieChart centres it (102 either side, 5 above and below) */
+.scr-reports-month .rp-donut-box { height: 180px; display: flex; align-items: center; justify-content: center; }
+.scr-reports-month .rp-donut { display: block; flex: none; overflow: visible; }
+.scr-reports-month .rp-cat-div { height: 1px; background: color-mix(in srgb, var(--ink-sub) 20%, transparent); }
+.scr-reports-month .rp-cat-row { margin: 4px 0; padding: 10px 12px; border-radius: 10px; display: flex; align-items: center; }
+.scr-reports-month .rp-cat-col { margin-left: 12px; flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+.scr-reports-month .rp-cat-amount { flex: none; white-space: nowrap; }
+/* a column, so the rows' 4pt margins add up (Container margins never collapse in Flutter) */
+.scr-reports-month .rp-cat-list { display: flex; flex-direction: column; }
+
+/* An emoji-only Text (TextStyle(fontSize: s) on the theme's 1.5): iOS lays it on CoreText's Apple Color Emoji metrics
+   and a wider box — the glyph sits 0.074em lower than Chrome draws it on Inter's line, and 0.056em left when centred
+   (fitted at 18pt on 04_reports_export: the category badges and the export buttons). LOCAL: candidate for kit.emojiBadge. */
+:is(.scr-reports-compare, .scr-reports-month) .rp-emoji-ios > .k-emoji { translate: -0.0556em 0.0741em; }
+/* at 17pt (the metric tiles) the same fit lands 1 raw px right and high (04_reports_current_month) */
+.scr-reports-month .rp-metric .rp-emoji-ios > .k-emoji { translate: calc(-0.0556em - 0.3333px) calc(0.0741em + 0.3333px); }
+:is(.scr-reports-compare, .scr-reports-month) .rp-export-emoji > .k-emoji { translate: 0 0.0741em; }
+
+/* LOCAL (kit residue, see kit.js "Compare 20/800 … the capture's glyphs sit 1 raw px lower"): the w800 AppBar titles */
+.scr-reports-compare .rp-bar .k-title > .k-line,
+.scr-reports-month .rp-bar .rp-month-title > .k-line + .k-line { translate: 0 0.33px; }

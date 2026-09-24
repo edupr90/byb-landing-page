@@ -1,43 +1,31 @@
 import { Wallet, LayoutGrid, TrendingUp } from 'lucide-react';
 import AnimatedSection from './AnimatedSection';
 import { StaggerContainer, StaggerItem } from './AnimatedSection';
+import { useT } from '../i18n';
+import Eyebrow from './Eyebrow';
 
-const STEPS = [
-  {
-    number: '01',
-    icon: Wallet,
-    title: 'Set Your Income',
-    description:
-      'Add your income after taxes and let the app do the math. See instantly how much you have to allocate.',
-  },
-  {
-    number: '02',
-    icon: LayoutGrid,
-    title: 'Create Your Budget',
-    description:
-      'Set up categories with custom names and limits. Use emojis, colors, and recurring budgets to match your life.',
-  },
-  {
-    number: '03',
-    icon: TrendingUp,
-    title: 'Track & Thrive',
-    description:
-      'Log expenses in seconds. Watch your progress in real time. Stay motivated with daily affirmations and insights.',
-  },
-];
+const ICONS = [Wallet, LayoutGrid, TrendingUp];
 
 export default function HowItWorks() {
+  const { t } = useT();
+  const steps = (t('howItWorks.steps') || []).map((step, i) => ({
+    ...step,
+    number: String(i + 1).padStart(2, '0'),
+    icon: ICONS[i] || Wallet,
+  }));
+
   return (
     <section className="section-padding bg-white dark:bg-surface-950">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <AnimatedSection className="text-center max-w-3xl mx-auto mb-20">
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent-50 dark:bg-accent-950/40 text-accent-600 dark:text-accent-400 text-sm font-semibold mb-6 border border-accent-100 dark:border-accent-900/50">
-            How It Works
-          </span>
+          <Eyebrow className="mb-6">{t('howItWorks.eyebrow')}</Eyebrow>
           <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-surface-900 dark:text-white tracking-tight">
-            Start budgeting in{' '}
-            <span className="text-gradient-accent">3 simple steps</span>
+            {t('howItWorks.titleA')}{' '}
+            <span className="text-gradient-accent">{t('howItWorks.titleAccent')}</span>
           </h2>
+          <p className="mt-5 text-lg text-surface-500 dark:text-surface-400 leading-relaxed">
+            {t('howItWorks.subtitle')}
+          </p>
         </AnimatedSection>
 
         <StaggerContainer
@@ -47,7 +35,7 @@ export default function HowItWorks() {
           {/* Connecting line (desktop only) */}
           <div className="hidden md:block absolute top-24 left-[20%] right-[20%] h-px bg-gradient-to-r from-brand-200 via-accent-200 to-brand-200 dark:from-brand-900 dark:via-accent-900 dark:to-brand-900" />
 
-          {STEPS.map((step) => (
+          {steps.map((step) => (
             <StaggerItem key={step.number}>
               <div className="relative text-center group">
                 {/* Number badge */}
@@ -63,7 +51,7 @@ export default function HowItWorks() {
                   {step.title}
                 </h3>
                 <p className="text-surface-500 dark:text-surface-400 leading-relaxed max-w-sm mx-auto">
-                  {step.description}
+                  {step.body}
                 </p>
               </div>
             </StaggerItem>

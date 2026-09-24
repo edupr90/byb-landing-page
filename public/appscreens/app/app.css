@@ -1,0 +1,109 @@
+/* Runtime base for the HTML app screens (owned by app/app.js). Design tokens and components live in
+   app/kit.css; each screen's own styles in app/screens/<id>.css, scoped under .scr-<id>. */
+
+@font-face { font-family: "Inter"; font-weight: 400; src: url(../fonts/Inter-Regular.ttf) format("truetype"); }
+@font-face { font-family: "Inter"; font-weight: 500; src: url(../fonts/Inter-Medium.ttf) format("truetype"); }
+@font-face { font-family: "Inter"; font-weight: 600; src: url(../fonts/Inter-SemiBold.ttf) format("truetype"); }
+@font-face { font-family: "Inter"; font-weight: 700; src: url(../fonts/Inter-Bold.ttf) format("truetype"); }
+@font-face { font-family: "Inter"; font-weight: 800; src: url(../fonts/Inter-ExtraBold.ttf) format("truetype"); }
+@font-face { font-family: "MaterialIcons"; src: url(../fonts/MaterialIcons-Regular.otf) format("opentype"); }
+
+/* Japanese in the phones. Inter has no CJK glyphs, so on iOS the app falls back to Hiragino Sans
+   (lib/core/app_text_styles.dart fontFamilyFallback). These faces add Hiragino to the two Inter families for CJK
+   code points only (kana, kanji, CJK punctuation, full-width forms), so English and Spanish render exactly as before.
+   Weights follow iOS's Hiragino Sans (W3 regular, W6 semibold, W7 bold). "Inter AppFont" has only a regular face
+   (its bold is synthesized), so its CJK face is regular too: a bold must not get its own face, or the Latin text of
+   that weight would lose its synthesized bold. A zh-Hant phone puts PingFang TC in front of both families instead
+   (kit.css, "BYB PingFang TC"): only what PingFang lacks — kana, some CJK punctuation — falls through to these. */
+@font-face { font-family: "Inter"; font-weight: 400; src: local("HiraginoSans-W3"); unicode-range: U+3000-30FF, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+FF00-FFEF; }
+@font-face { font-family: "Inter"; font-weight: 500; src: local("HiraginoSans-W3"); unicode-range: U+3000-30FF, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+FF00-FFEF; }
+@font-face { font-family: "Inter"; font-weight: 600; src: local("HiraginoSans-W6"); unicode-range: U+3000-30FF, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+FF00-FFEF; }
+@font-face { font-family: "Inter"; font-weight: 700; src: local("HiraginoSans-W7"); unicode-range: U+3000-30FF, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+FF00-FFEF; }
+@font-face { font-family: "Inter"; font-weight: 800; src: local("HiraginoSans-W7"); unicode-range: U+3000-30FF, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+FF00-FFEF; }
+
+/* Korean in the phones. Same story as the Hiragino faces above: Inter has no Hangul, so on iOS the app falls back
+   to Apple SD Gothic Neo (lib/core/app_text_styles.dart _koFaces, which the "ko" branch of fontFamilyFallback puts
+   first). These faces add it to the two Inter families for Hangul code points only, so Latin still comes from Inter.
+     U+1100-11FF  Hangul Jamo                conjoining jamo, i.e. NFD-decomposed Korean
+     U+3130-318F  Hangul Compatibility Jamo  the standalone letters (ㄱ ㅏ)
+     U+AC00-D7A3  Hangul Syllables           the 11,172 precomposed syllables — all real Korean text
+   DECLARATION ORDER IS WHY THESE THREE RANGES ARE SO NARROW. These faces come after the Hiragino ones on the same
+   family and weights, and for a code point claimed by two faces of one family+weight the LAST declaration wins —
+   so any range shared with Japanese would hand Japanese text to a Korean face. That is not hypothetical: Apple SD
+   Gothic Neo itself covers 4,620 of the CJK ideographs, 204 of U+3000-30FF and 100 of the full-width forms (read
+   from its cmap), so an overlap would silently redraw Japanese kanji in Korean-regional shapes — app_text_styles
+   .dart calls picking the wrong face "the difference between localized and obviously machine-translated". The three
+   ranges above are disjoint from all five Hiragino ranges; the nearest miss is Compatibility Jamo starting at
+   U+3130, 49 code points past U+30FF.
+   U+1100-11FF IS CLAIMED WHOLE ON PURPOSE, although the face serves only 71 of its 256 code points (cmap, read
+   from the ttc). That looks like the same mistake the next paragraph refuses, and it is not: the 185 it lacks are
+   the ARCHAIC jamo, while all 67 modern conjoining jamo (L U+1100-1112, V U+1161-1175, T U+11A8-11C2) are among
+   the 71 it has. Nothing in this set is NFD anyway — across all nine ARBs, all nine demo tables and every slide
+   caption there is not one code point in U+1100-11FF — so the range is claimed for decomposed Korean a user could
+   type, at the one weight it could ever matter, and a caption writer must not hand-type an archaic jamo.
+   Jamo Extended-A (U+A960-A97F) and Extended-B (U+D7B0-D7FF) are deliberately NOT claimed: Apple SD Gothic Neo has
+   0 glyphs in either (cmap, measured), and claiming a range a face cannot serve replaces the system fallback's real
+   glyph with this face's .notdef box — it turns a rendered character into tofu. Halfwidth jamo (U+FFA0-FFDC) is
+   likewise unclaimed: the face has none, and the range sits inside the U+FF00-FFEF the Hiragino faces own, so taking
+   it back would drag full-width Latin off Hiragino. The won sign ₩ U+20A9 is not claimed either — Inter has it,
+   and the amounts must keep Inter's tabular figures beside the Latin digits.
+   local() needs the POSTSCRIPT name: local("Apple SD Gothic Neo"), the family name used in the Dart, does not
+   resolve in Chrome, and it fails silently because macOS's own Hangul fallback is this same font — the text still
+   appears, at the wrong weight.
+   800 MAPS TO BOLD, NOT ExtraBold. This Mac has nine faces, but the iOS runtimes ship seven and stop at Bold (I
+   parsed the name tables of RuntimeRoot/System/Library/Fonts/Core/AppleSDGothicNeo.ttc: no ExtraBold, no Heavy), so
+   a Korean user's w800 text is drawn Bold. Mapping 800 to a face that exists only on this Mac would export a
+   screenshot heavier than the shipping app. The Hiragino block above collapses 800 onto W7 for the same reason. */
+@font-face { font-family: "Inter"; font-weight: 400; src: local("AppleSDGothicNeo-Regular");  unicode-range: U+1100-11FF, U+3130-318F, U+AC00-D7A3; }
+@font-face { font-family: "Inter"; font-weight: 500; src: local("AppleSDGothicNeo-Medium");   unicode-range: U+1100-11FF, U+3130-318F, U+AC00-D7A3; }
+@font-face { font-family: "Inter"; font-weight: 600; src: local("AppleSDGothicNeo-SemiBold"); unicode-range: U+1100-11FF, U+3130-318F, U+AC00-D7A3; }
+@font-face { font-family: "Inter"; font-weight: 700; src: local("AppleSDGothicNeo-Bold");     unicode-range: U+1100-11FF, U+3130-318F, U+AC00-D7A3; }
+@font-face { font-family: "Inter"; font-weight: 800; src: local("AppleSDGothicNeo-Bold");     unicode-range: U+1100-11FF, U+3130-318F, U+AC00-D7A3; }
+@font-face { font-family: "CupertinoIcons"; src: url(../fonts/CupertinoIcons.ttf) format("truetype"); }
+
+.byb-app {
+  position: relative;
+  box-sizing: border-box;
+  overflow: visible;
+  font-family: "Inter", "Apple Color Emoji", sans-serif;
+  font-size: 14px;
+  line-height: normal;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+  font-kerning: normal;
+  text-align: left;
+  letter-spacing: 0;
+  /* the phone must not inherit the page's typography: composer.css gives captions "tnum" + "cv11", which widened
+     digits in the phones and wrapped a Spanish Reports line (2026-09-17). Screens set their own features. */
+  font-feature-settings: normal;
+  font-variant: normal;
+  word-spacing: normal;
+  text-transform: none;
+  background: var(--app-page, #fff);
+  color: var(--app-ink, #111);
+}
+.byb-app *, .byb-app *::before, .byb-app *::after { box-sizing: border-box; }
+.byb-app .app-scroll { position: relative; will-change: auto; }
+
+/* icon fonts (glyphs from app/icons.js) */
+.byb-app .ic { font-style: normal; font-weight: normal; line-height: 1; display: inline-block; font-size: 24px;
+  -webkit-font-smoothing: antialiased; font-feature-settings: "liga"; user-select: none; }
+.byb-app .ic-m { font-family: "MaterialIcons"; }
+.byb-app .ic-c { font-family: "CupertinoIcons"; }
+.byb-app .ic-missing { font-family: "Inter"; font-weight: 800; color: #e11d48; outline: 1px dashed #e11d48; }
+
+/* a pop-out's copy of the screen: only the chosen element paints */
+.byb-app.isolate { background: transparent !important; }
+.byb-app.isolate * { visibility: hidden; }
+.byb-app.isolate .isolate-keep,
+.byb-app.isolate .isolate-keep * { visibility: visible; }
+/* Safari / WebKit (26.5): under a hidden ancestor that clips (overflow hidden or clip, e.g. the k-group-body card),
+   the visible element's text paints but no background does — the Insights breakdown rows lost their category tile
+   and meter. Its own stacking context gets it painted on its own. Chrome (the export) paints it either way. */
+.byb-app.isolate .isolate-keep { isolation: isolate; }
+
+.byb-app .app-placeholder {
+  position: absolute; inset: 0; display: grid; place-items: center; padding: 40px; text-align: center;
+  font: 600 18px/1.3 Inter, sans-serif; color: #64748b;
+  background: repeating-linear-gradient(45deg, #f1f5f9 0 14px, #e2e8f0 14px 28px);
+}

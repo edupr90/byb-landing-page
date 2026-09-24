@@ -1,0 +1,90 @@
+/* Expenses (app/screens/expenses.js) — lib/ui/views/expenses_view.dart and lib/ui/widgets/Expenses/*.
+   Scaffold background AppColors.backgroundLight/Dark = --page (the root's default). */
+
+.scr-expenses {
+  /* ExpenseSearchBar: border #E7EDF3 / #3A3A3A, hint + icon textLight / textDark at 50% */
+  --xp-search-border: #E7EDF3;
+  --xp-search-muted: rgba(17, 17, 17, 0.5);
+  /* SpendingComparisonChart: previous month blue-400 (light) / blue-800 (dark), fill 22% / 45%, stroke 40% / 60% */
+  --xp-prev-fill: rgba(96, 165, 250, 0.22);
+  --xp-prev-stroke: rgba(96, 165, 250, 0.40);
+}
+.scr-expenses.mode-dark {
+  --xp-search-border: #3A3A3A;
+  --xp-search-muted: rgba(240, 240, 242, 0.5);
+  --xp-prev-fill: rgba(30, 64, 175, 0.45);
+  --xp-prev-stroke: rgba(30, 64, 175, 0.60);
+}
+
+/* the body is the Scaffold body under the 62 + 56 app bar; the bar is pinned over it with the page ground */
+.scr-expenses .xp-viewport { position: absolute; inset: 0; overflow: hidden; }
+.scr-expenses .app-scroll { padding-top: 118px; padding-bottom: 34px; }
+.scr-expenses .xp-bar { position: absolute; left: 0; top: 0; width: 440px; padding-top: 62px; background: var(--page); z-index: 20; }
+/* buildModernAppBar(titleSpacing: 8): the title slot starts 8 after the 56 leading slot and ends 8 before the actions */
+.scr-expenses .xp-bar .k-appbar > .k-title { padding: 0 8px; }
+
+/* ExpenseSearchBar: Material(card, pill) > Container(height 46, 16 side padding, 1px border — the border pads by 1)
+   > Row[search_rounded 20 · 10 · hint 14/500 ellipsis]. Material resets the text style to the theme's bodyMedium. */
+.scr-expenses .xp-search {
+  flex: 1 1 auto; min-width: 0; height: 46px; padding: 0 17px; border-radius: 23px; /* 999 clamps to half the height */
+  display: flex; align-items: center;
+  background: var(--card); box-shadow: inset 0 0 0 1px var(--xp-search-border);
+}
+.scr-expenses .xp-search .xp-search-ic { font-size: 20px; color: var(--xp-search-muted); flex: none; }
+.scr-expenses .xp-search .xp-search-hint { flex: 1 1 auto; margin-left: 10px; color: var(--xp-search-muted); }
+
+/* _buildHero inside Padding(20, 8, 20, 8) */
+.scr-expenses .xp-hero-pad { padding: 8px 20px; }
+.scr-expenses .xp-hero { display: flex; flex-direction: column; align-items: stretch; }
+/* MonthPickerButton(child:): ConstrainedBox(minHeight 44) + Align(centerLeft) */
+.scr-expenses .xp-month { min-height: 44px; display: flex; align-items: center; }
+.scr-expenses .xp-month > .k-label { flex: none; }
+/* Row[Expanded(FittedBox(scaleDown, centerLeft) amount) · 14 · badge], cross-axis centre */
+.scr-expenses .xp-amount-row { margin-top: 6px; display: flex; align-items: center; }
+.scr-expenses .xp-fit { flex: 1 1 0; min-width: 0; container-type: inline-size; }
+/* FittedBox(scaleDown): --xp-w is the Text's (ceiled) natural width, measured in expenses.js; the box is 48 · s tall
+   and the text is painted scaled by s about the top-left, s = min(1, column / --xp-w) */
+.scr-expenses .xp-fit-box { --xp-s: min(1, 100cqi / var(--xp-w, 1px)); height: calc(48px * var(--xp-s)); width: calc(var(--xp-w, 0px) * var(--xp-s)); max-width: 100%; }
+.scr-expenses .xp-fit:not([style]) .xp-fit-box { --xp-s: 1; width: auto; }
+.scr-expenses .xp-amount-text { color: var(--ink); white-space: nowrap; width: var(--xp-w, max-content); text-align: center; transform-origin: 0 0; scale: var(--xp-s); }
+.scr-expenses .xp-badge { margin-left: 14px; }
+/* the caption Text sits in Column(crossAxisAlignment: start), which loosens its width: its box is the text, not the
+   column (matters only for the month-caption anchor; the glyphs do not move) */
+.scr-expenses .xp-caption { margin-top: 6px; align-self: flex-start; }
+
+/* Padding(20, 4, 0, 0) SizedBox(height: 130), clipped (FlClipData.all) */
+.scr-expenses .xp-chart-pad { padding: 4px 0 0 20px; }
+.scr-expenses .xp-chart { width: 420px; height: 130px; overflow: hidden; }
+.scr-expenses .xp-chart svg { display: block; overflow: hidden; }
+.scr-expenses .xp-prev-fill { fill: var(--xp-prev-fill); stroke: none; }
+.scr-expenses .xp-prev-line { fill: none; stroke: var(--xp-prev-stroke); stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: miter; }
+.scr-expenses .xp-cur-line { fill: none; stroke: var(--fab); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: miter; }
+.scr-expenses .xp-cur-dot { fill: var(--fab); }
+
+/* Padding(top 20, bottom 4) CategoryFilterStrip */
+.scr-expenses .xp-chips { padding: 20px 0 4px; }
+
+/* Padding(10, 4, 10, 0) TransList: ListView.separated, 8 between every header and row */
+.scr-expenses .xp-list { padding: 4px 10px 0; }
+.scr-expenses .xp-list > * + * { margin-top: 8px; }
+/* LOCAL FALLBACK (requested for kit.dayHeader o.rowPop): the header's Row, the day-header-<iso> anchor, inside the
+   padded .k-dayhead. These repeat kit.css's `.k-dayhead > span` rules one level down; drop them once the kit's
+   selectors reach the inner row. */
+.scr-expenses .k-dayhead > .xp-dayrow { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; }
+.scr-expenses .xp-dayrow > span { --lh: 1.2; }
+.scr-expenses .xp-dayrow > .k-d-label { flex: 1 1 auto; --ls: 0.4px; }
+.scr-expenses .xp-dayrow > .k-d-total { margin-left: 12px; --ls: 0px; font-variant-numeric: tabular-nums; }
+
+/* LOCAL FALLBACK (requested for kit.expenseTile) — both fitted on the captures, the same values category-detail.css uses
+   for the same tile:
+   · the badge's emoji (Text 22, height 1): Impeller draws it 2 raw px (2/3 pt) lower than Chrome — every row of
+     raw/en/07_expenses_top, _restaurants, _utilities and raw/es-419/07_expenses_restaurants (residual 0.00 once moved);
+   · the name, the "Category · date" caption and the amount sit 1 raw px (1/3 pt) above the capture when the list lies on
+     whole points (_restaurants, _utilities, es-419: list mean |Δ| 0.96 → 0.53, 0.59 → 0.34, 1.33 → 0.64). In the
+     unfiltered state the FittedBox'd hero is 46.9 pt tall, the list sits 0.9 pt lower and this 1/3 pt is then 1 raw px
+     too much — a glyph-snapping phase, not a layout error (card edges match to the raw px in every state).
+   `translate`, not `top`: .k-line already spends `top` on Skia's baseline rounding. */
+.scr-expenses .k-xtile > .k-badge > .k-emoji { translate: 0 0.6667px; }
+.scr-expenses .k-xtile .k-x-title,
+.scr-expenses .k-xtile .k-x-cap,
+.scr-expenses .k-xtile .k-x-amount { translate: 0 0.3334px; }

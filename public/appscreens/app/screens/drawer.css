@@ -1,0 +1,75 @@
+/* App drawer — lib/ui/widgets/navigation/app_drawer.dart. Geometry notes in app/screens/drawer.js. */
+
+/* the screen behind (an embedded .byb-app, rendered in the same mode / palette) and Scaffold's black54 scrim */
+.scr-drawer .dr-behind { position: absolute; left: 0; top: 0; width: 440px; height: 956px; overflow: hidden; z-index: 0; }
+.scr-drawer .dr-behind > .byb-app { position: absolute; left: 0; top: 0; }
+/* the empty .app-scroll the runtime's scroll lookup finds first (the drawer does not scroll; see behindHtml) */
+.scr-drawer .dr-scroll-stub { display: none; }
+.scr-drawer .dr-scrim { position: absolute; left: 0; top: 0; width: 440px; height: 956px; z-index: 10; background: var(--scrim); }
+
+/* Material 3 Drawer: 304 wide, card fill, radius 16 on the end corners, no shadow; SafeArea 62 / 34 */
+.scr-drawer .dr-panel {
+  position: absolute; left: 0; top: 0; z-index: 20; width: 304px; height: 956px; overflow: hidden;
+  display: flex; flex-direction: column; align-items: stretch; padding: 62px 0 34px;
+  background: var(--card); border-radius: 0 16px 16px 0; color: var(--ink);
+}
+
+/* _ProfileHeader: Padding(16, 16, 16, 0) · Row(centre) avatar 52 · 12 · name / badge · 8 · sync 38 */
+.scr-drawer .dr-head { flex: none; padding: 16px 16px 0; }
+.scr-drawer .dr-profile { display: flex; align-items: center; min-width: 0; }
+.scr-drawer .dr-profile > .k-avatar { flex: none; }
+/* The name / badge column is 49 tall in a 52 row, so it starts at y 79.5 and every baseline in it falls on a half point
+   (1.5 raw px): Skia rounds those glyphs down the screen, Chrome up it. top 1/6 pt (half a raw px) lands both lines on
+   the capture's rows (fitted on 05_drawer_signed_in with the capture's own name: name 5.8 → 1.4, badge 4.4 → 2.4). */
+.scr-drawer .dr-id { position: relative; top: 0.1667px; flex: 1 1 auto; min-width: 0; margin-left: 12px; display: flex; flex-direction: column; align-items: flex-start; }
+.scr-drawer .dr-name { max-width: 100%; }
+/* _TierBadge: padding 8 × 2, radius 6, primary (Free: textTertiaryLight in both modes) */
+.scr-drawer .dr-tier { flex: none; margin-top: 4px; padding: 2px 8px; border-radius: 6px; background: var(--primary); }
+.scr-drawer .dr-tier.dr-free { background: #6B7280; }
+.scr-drawer .dr-case { position: relative; top: -0.0741em; }
+/* _SyncButton: 38 circle, backgroundLight / Dark, 0.5 border, icon 18 */
+.scr-drawer .dr-sync {
+  flex: none; width: 38px; height: 38px; margin-left: 8px; border-radius: 50%;
+  background: var(--page); border: 0.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+}
+.scr-drawer .dr-sync .ic { font-size: 18px; width: 18px; height: 18px; line-height: 18px; text-align: center; }
+.scr-drawer .dr-sync.dr-spin .ic { transform: rotate(35deg); }
+/* the signed-out _Avatar: 52 circle, accent @ 14% / 24%, person_outline_rounded 26 */
+.scr-drawer .dr-guest {
+  flex: none; width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  background: color-mix(in srgb, var(--primary) 14%, transparent); color: var(--primary);
+}
+.scr-drawer.mode-dark .dr-guest { background: color-mix(in srgb, var(--primary) 24%, transparent); }
+.scr-drawer .dr-guest .ic { font-size: 26px; }
+
+/* _UpgradePill: 10 below the header, 16 in; padding 11 × 6, radius 14, primary; star 14 · 5 · label */
+.scr-drawer .dr-upgrade-wrap { flex: none; padding: 10px 16px 0; display: flex; }
+.scr-drawer .dr-upgrade { display: flex; align-items: center; padding: 6px 11px; border-radius: 14px; background: var(--primary); color: #FFFFFF; }
+.scr-drawer .dr-upgrade .ic { font-size: 14px; width: 14px; height: 14px; margin-right: 5px; }
+
+/* SizedBox(spaceMD) · _DrawerDivider: 1 tall, 0.5 border-coloured rule centred in it, 16 in on both sides */
+.scr-drawer .dr-gap { flex: none; height: 16px; }
+.scr-drawer .dr-divider { flex: none; position: relative; height: 1px; margin: 0 16px; }
+.scr-drawer .dr-divider::after { content: ""; position: absolute; left: 0; right: 0; top: 0.25px; height: 0.5px; background: var(--border); }
+
+/* Expanded(ListView(padding vertical 8)): .dr-list is the Expanded box; .dr-rows is the list's content (the nav-list
+   anchor), a flex column so the rows' 2pt margins add up as in Flutter instead of collapsing */
+.scr-drawer .dr-list { flex: 1 1 auto; min-height: 0; overflow: hidden; }
+.scr-drawer .dr-rows { padding: 8px 0; display: flex; flex-direction: column; }
+
+/* _DrawerItem: margin 8 × 2, padding 12, radius 12; icon 22 · 14 · label 16 (w600, w700 selected) */
+.scr-drawer .dr-item { flex: none; display: flex; align-items: center; margin: 2px 8px; padding: 12px; border-radius: 12px; color: var(--ink); }
+.scr-drawer .dr-item.dr-on { background: var(--primary); color: #FFFFFF; }
+.scr-drawer .dr-item.dr-danger { color: var(--error); }
+.scr-drawer .dr-icon { flex: none; width: 22px; height: 22px; color: var(--primary); }
+.scr-drawer .dr-item.dr-on .dr-icon { color: #FFFFFF; }
+.scr-drawer .dr-item.dr-danger .dr-icon { color: var(--error); }
+.scr-drawer .dr-icon .ic { display: block; font-size: 22px; width: 22px; height: 22px; line-height: 22px; text-align: center; }
+.scr-drawer .dr-label { flex: 1 1 auto; min-width: 0; margin-left: 14px; }
+/* _NewBadge: 10 after the label; padding 8 × 3, pill, accent @ 14%; 11/w800 +0.6 accent */
+.scr-drawer .dr-new { flex: none; margin-left: 10px; padding: 3px 8px; border-radius: 999px; background: color-mix(in srgb, var(--primary) 14%, transparent); color: var(--primary); }
+
+/* Padding(vertical 12): the footer line, centred, ink @ 40% */
+.scr-drawer .dr-footer { flex: none; padding: 12px 0; display: flex; justify-content: center; }
+.scr-drawer .dr-footer-text { white-space: pre; color: color-mix(in srgb, var(--ink) 40%, transparent); }

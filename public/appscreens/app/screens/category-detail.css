@@ -1,0 +1,83 @@
+/* Screen "category-detail" (app/screens/category-detail.js) — lib/ui/views/category_detail_view.dart.
+   Scaffold(backgroundColor: AppColors.backgroundLight/Dark) → SafeArea(bottom: false) → Column(header, Expanded(ListView)). */
+
+/* SafeArea(bottom: false): the 62 pt top inset belongs to the page, not to the header, so the detail-header anchor
+   starts at y 62 like the Dart _header's Padding does */
+.scr-category-detail .cd-page { position: absolute; inset: 0; display: flex; flex-direction: column; padding-top: 62px; background: var(--page); }
+
+/* _header: Padding(12, 8, 16, 8); opaque, so the list never shows above it */
+.scr-category-detail .cd-head { flex: none; position: relative; z-index: 2; padding: 8px 16px 8px 12px; background: var(--page); }
+.scr-category-detail .cd-bar { display: flex; align-items: center; height: 48px; }
+/* IconButton: 48 × 48, Icon close_rounded 24 (text colour) */
+.scr-category-detail .cd-close { width: 48px; height: 48px; flex: none; display: flex; align-items: center; justify-content: center; color: var(--ink); }
+.scr-category-detail .cd-close .ic { font-size: 24px; }
+/* Expanded(Text(17 / w700, centred, one line)); the glyphs sit 1 pt below where the 26 pt line box centred in the
+   48 pt row puts them (fitted on 02_housing_detail, en + es-419) */
+.scr-category-detail .cd-title { flex: 1 1 auto; min-width: 0; transform: translateY(1px); }
+/* category-title hugs the name: a fit-content box centred in the slot puts the glyphs where text-align: center
+   across the slot does; max-width keeps the one-line ellipsis when the name is wider than the slot */
+.scr-category-detail .cd-title > .cd-fit { margin: 0 auto; }
+.scr-category-detail .cd-title > .cd-fit > .k-line { width: 100%; }
+/* TextButton (M3): padding 12 × 8, min 64 × 40, padded to a 48 tap target; label AppFont 15 / w600 over the
+   theme's labelLarge (letterSpacing 0.3, no height) */
+.scr-category-detail .cd-edit { flex: none; min-width: 64px; height: 48px; padding: 0 12px; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
+
+/* Padding(8, 4, 8, 4): label · 6 · amount (moneyStyle 34) · 4 · "of $X planned" (13 subText). In the header's
+   Column(crossAxisAlignment: start) each Text, and the Padding around them, is as wide as its content — so are the
+   pop-out anchors (cd-fit / fit-content) */
+.scr-category-detail .cd-spent { width: fit-content; max-width: 100%; padding: 4px 8px; }
+.scr-category-detail .cd-spent > div { width: fit-content; max-width: 100%; }
+.scr-category-detail .cd-fit { width: fit-content; max-width: 100%; }
+.scr-category-detail .cd-spent > .cd-amount { margin-top: 6px; }
+.scr-category-detail .cd-spent > .cd-planned { margin-top: 4px; }
+
+/* the ListView below the header: clips like Flutter's viewport */
+.scr-category-detail .cd-viewport { flex: 1 1 auto; min-height: 0; position: relative; overflow: hidden; }
+/* ListView padding: bottom 24 + the home-indicator inset (34) */
+.scr-category-detail .cd-viewport > .app-scroll { padding-bottom: 58px; }
+
+/* MemberSharesSection: label Padding(20, 4, 20, 12); rows Padding(16, 0, 16, 10); SizedBox(10) after */
+.scr-category-detail .cd-members { padding-bottom: 10px; }
+.scr-category-detail .cd-members-label { padding: 4px 20px 12px; }
+.scr-category-detail .cd-pair-row { padding: 0 16px 10px; }
+
+/* _splitAction: Padding(16, 8, 16, 12): [tip · 10] · button · 10 · note (12, centred) */
+.scr-category-detail .cd-split { padding: 8px 16px 12px; display: flex; flex-direction: column; }
+.scr-category-detail .cd-note { margin-top: 10px; }
+/* covered-note: the anchor hugs the centred line (a fit-content box centred in the column puts the glyphs where
+   text-align: center across the full 408 pt does) */
+.scr-category-detail .cd-note > .cd-fit { margin: 0 auto; }
+/* _splitTip: card fill, radius 16, padding 14, 10 below; title 13 / w700 · 6 · body 12.5 height 1.45 */
+.scr-category-detail .cd-tip { margin-bottom: 10px; padding: 14px; border-radius: 16px; background: var(--card); }
+.scr-category-detail .cd-tip-body { margin-top: 6px; }
+
+/* TransList (not lazy): no side padding, 8 between every header and row */
+.scr-category-detail .cd-list { display: flex; flex-direction: column; gap: 8px; }
+/* _ProfileStyleDayHeader: Padding(12, 16, 12, 8) moves from kit.dayHeader's .k-dayhead to this slot, so the
+   date-header-<iso> anchor on .k-dayhead is the content row alone (the slot keeps the padded box) */
+.scr-category-detail .cd-day { padding: 16px 12px 8px; }
+.scr-category-detail .cd-day > .k-dayhead { padding: 0; }
+/* _ExpenseTileModern's margin (0 4) moves to this wrapper, so the semantic expense-<name>-<member> anchor has the
+   tile's own rect and radius */
+.scr-category-detail .cd-xrow { margin: 0 4px; border-radius: 16px; }
+.scr-category-detail .cd-xrow > .k-xtile { margin: 0; }
+
+/* _empty: Padding(24, 48, 24, 24): 🗓️ 34 · 12 · title 16 / w700 */
+.scr-category-detail .cd-empty { padding: 48px 24px 24px; display: flex; flex-direction: column; align-items: center; }
+.scr-category-detail .cd-empty-emoji { margin-bottom: 12px; }
+
+/* LOCAL FALLBACK (requested for kit.ring): ProgressRing's 6 pt stroke comes out 17 raw px, not 18, in the
+   captures — Impeller's stroked circle ends ~0.5 raw px inside each geometric edge (02_housing_detail: outer edge
+   x 233 / y 792.45, inner x 250 / y 809.55 around a 105 raw px radius). */
+.scr-category-detail .k-ring > svg circle { stroke-width: 5.667px; }
+
+/* LOCAL FALLBACK (requested for kit.expenseTile): the tile's name, its "Category · date" caption and its amount
+   sit 1 raw px (1/3 pt) above the capture, and the 22 pt emoji in the 44 badge 2 raw px (2/3 pt) above it; the
+   card, the badge square and the author line are exact. The same offsets show on raw/en/07_expenses_utilities
+   (the expenses screen, same kit.expenseTile), so this is kit residue, not this screen. Fitted on
+   02_housing_detail en + es-419 and 02_groceries_detail (best integer shift 0 after; the owner's Rent row mean |Δ|
+   1.99 → 0.89, names included). `translate`, not `top`: .k-line already spends `top` on Skia's baseline rounding. */
+.scr-category-detail .k-xtile .k-x-title,
+.scr-category-detail .k-xtile .k-x-cap,
+.scr-category-detail .k-xtile .k-x-amount { translate: 0 0.3334px; }
+.scr-category-detail .k-xtile > .k-badge > .k-emoji { translate: 0 0.6667px; }

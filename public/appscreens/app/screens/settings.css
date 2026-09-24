@@ -1,0 +1,123 @@
+/* Tools & Settings — lib/ui/views/profile_view.dart. Geometry notes in app/screens/settings.js. */
+
+.scr-settings { --st-inline-ink: #000000; }
+.scr-settings.mode-dark { --st-inline-ink: #FFFFFF; }
+
+/* buildModernAppBar: transparent over the page ground, pinned above the list */
+.scr-settings .st-bar { position: absolute; left: 0; top: 0; width: 440px; z-index: 3; background: var(--page); }
+.scr-settings .st-title { min-width: 0; max-width: 100%; color: var(--ink); }
+
+/* ListView viewport: y 118 → bottom, clips its content */
+.scr-settings .st-clip { position: absolute; left: 0; top: 118px; width: 440px; bottom: 0; overflow: hidden; z-index: 2; }
+.scr-settings .st-list { padding: 12px 16px 106px; }
+
+/* _PremiumHeroCard (isPro): padding 20 + the 1px border, radius 20, accent wash, accentGlow(accent, 0.12) blur 14 y 4 */
+.scr-settings .st-hero {
+  position: relative; display: flex; align-items: center; padding: 20px; border-radius: 20px; margin-bottom: 20px;
+  border: 1px solid color-mix(in srgb, var(--fab) 35%, transparent);
+  background: linear-gradient(102.97deg, color-mix(in srgb, var(--fab) 12%, transparent), color-mix(in srgb, var(--fab) 5%, transparent));
+}
+/* accentGlow: Flutter paints a BoxShadow under the whole box, so it shows THROUGH the translucent fill (CSS clips a
+   box-shadow out of the border box). A blurred copy of the rounded box, y 4, σ = 0.57735 · 14 + 0.5, below the card. */
+.scr-settings .st-hero::before {
+  content: ""; position: absolute; left: -1px; right: -1px; top: 3px; bottom: -5px; border-radius: 20px; z-index: -1;
+  background: color-mix(in srgb, var(--fab) 12%, transparent); filter: blur(8.583px); pointer-events: none;
+}
+.scr-settings.mode-dark .st-hero {
+  background: linear-gradient(102.97deg, color-mix(in srgb, var(--fab) 18%, transparent), color-mix(in srgb, var(--fab) 8%, transparent));
+}
+.scr-settings .st-hero-gem { width: 48px; height: 48px; flex: none; }
+.scr-settings .st-hero-gem > svg { display: block; width: 48px; height: 48px; }
+.scr-settings .st-hero-text { flex: 1 1 auto; min-width: 0; margin-left: 16px; display: flex; flex-direction: column; }
+.scr-settings .st-hero-sub { margin-top: 4px; }
+.scr-settings .st-verified { width: 28px; height: 28px; flex: none; display: flex; align-items: center; justify-content: center; color: var(--fab); }
+.scr-settings .st-verified .ic { font-size: 28px; }
+
+/* _SectionHeader: 8 below; 16 above after a card. The anchor (st-section-text) is the text's own width. */
+.scr-settings .st-section { padding-bottom: 8px; }
+.scr-settings .st-section-text { width: fit-content; max-width: 100%; }
+.scr-settings .st-card + .st-section { margin-top: 16px; }
+.scr-settings .st-card { overflow: visible; }
+
+/* _TileDivider: Divider(height 1, indent / endIndent 14), dividerColor (border) @ 20% */
+.scr-settings .st-divider { height: 1px; margin: 0 14px; background: color-mix(in srgb, var(--border) 20%, transparent); }
+
+/* _EmojiBadge: 36 solid disc, emoji 18 height 1. The capture's emoji sits exactly 1pt left and 1pt lower than
+   Chrome centres it (all eight badges on 06_settings_dark_sunset: mean |Δ| 11–24 → 0.1 after the shift). The clip
+   insets the disc's edge 0.14pt: Impeller anti-aliases a circle about half a raw px inside where Chrome does. */
+.scr-settings .st-badge { flex: none; clip-path: circle(calc(50% - 0.14px)); }
+.scr-settings .st-badge > .k-emoji { translate: -1px 1px; }
+
+/* _SegmentedSettingTile: padding 14 × 10; head row · 10 · the control */
+.scr-settings .st-seg-tile { padding: 10px 14px; }
+.scr-settings .st-seg-head { display: flex; align-items: center; }
+.scr-settings .st-seg-title { margin-left: 12px; min-width: 0; }
+.scr-settings .st-seg { margin-top: 10px; }
+
+/* _NavTile: padding 16; badge · 12 · title (Expanded) · trailing (8 left, 24 right without chevron) · chevron 24 */
+.scr-settings .st-nav { display: flex; align-items: center; padding: 16px; }
+.scr-settings .st-nav-title { flex: 1 1 auto; min-width: 0; margin-left: 12px; }
+.scr-settings .st-trail { flex: none; display: flex; align-items: center; margin-left: 8px; }
+.scr-settings .st-trail.st-nochev { margin-right: 24px; }
+.scr-settings .st-flag { font-size: 16px; margin-right: 6px; white-space: nowrap; }
+/* the flag glyph's offset from Chrome's box is per flag (settings.js FLAG_NUDGE), set inline */
+.scr-settings .st-chev { width: 24px; height: 24px; flex: none; display: flex; align-items: center; justify-content: center; color: color-mix(in srgb, var(--ink) 50%, transparent); }
+.scr-settings .st-chev .ic { font-size: 24px; }
+
+/* _GatedNavTile (unlocked): padding 14; badge · 12 · title (Expanded) · 28 box with chevron_right 22 subText */
+.scr-settings .st-gated { display: flex; align-items: center; padding: 14px; }
+.scr-settings .st-gated-chev { width: 28px; height: 28px; flex: none; display: flex; align-items: center; justify-content: center; color: var(--ink-sub); }
+.scr-settings .st-gated-chev .ic { font-size: 22px; }
+
+/* _SyncAccountTile: padding 16; 👤 badge · 12 · Column(email · 2 · status) · 8 · SyncStatusIndicator 18 */
+.scr-settings .st-account { display: flex; align-items: center; padding: 16px; }
+.scr-settings .st-account-text { flex: 1 1 auto; min-width: 0; margin-left: 12px; display: flex; flex-direction: column; }
+.scr-settings .st-account-sub { margin-top: 2px; }
+.scr-settings .st-sync-ind { width: 18px; height: 18px; flex: none; margin-left: 8px; display: flex; align-items: center; justify-content: center; color: #3DA573; }
+.scr-settings .st-sync-ind .ic { font-size: 18px; }
+
+/* 24 · _VersionAndLock: centred version; IOSPrimaryButton (padding 13 × 24, radius 30, fab) 8 in from each side */
+.scr-settings .st-card + .st-footer { margin-top: 24px; }
+.scr-settings .st-footer { display: flex; flex-direction: column; align-items: center; }
+.scr-settings .st-lock {
+  align-self: stretch; margin: 10px 8px 0; padding: 13px 24px; border-radius: 30px; background: var(--fab);
+  display: flex; align-items: center; justify-content: center; color: #FFFFFF;
+}
+.scr-settings .st-lock > .ic { font-size: 20px; width: 20px; height: 20px; flex: none; margin-right: 8px; }
+.scr-settings .st-lock-label { min-width: 0; }
+
+/* _PinLockToggleTile: padding 16 × 6; 38 tile (teal @ 12% / 18%, radius 10) · 12 · text column · CupertinoSwitch */
+.scr-settings .st-pin { display: flex; align-items: center; padding: 6px 16px; }
+.scr-settings .st-pin-tile { width: 38px; height: 38px; flex: none; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: rgba(0, 150, 136, 0.12); }
+.scr-settings.mode-dark .st-pin-tile { background: rgba(0, 150, 136, 0.18); }
+/* _BiometricToggleTile: Colors.blueAccent @ 12% / 18%, FaceIdIcon 22 (its strokes overhang the box by half a stroke) */
+.scr-settings .st-pin-tile.st-faceid-tile { background: rgba(68, 138, 255, 0.12); }
+.scr-settings.mode-dark .st-pin-tile.st-faceid-tile { background: rgba(68, 138, 255, 0.18); }
+.scr-settings .st-faceid { display: block; overflow: visible; }
+.scr-settings .st-pin-text { flex: 1 1 auto; min-width: 0; margin-left: 12px; display: flex; flex-direction: column; }
+.scr-settings .st-pin-desc { margin-top: 2px; }
+/* Switch.adaptive on iOS (Flutter 3.41 material/switch.dart): _getSwitchSize uses the M3 config — 52 + 4 padding
+   each side = 60 wide, 40 + 8 (MaterialTapTargetSize.padded) = 48 tall; _SwitchConfigCupertino paints a 51 × 31 track
+   centred in it (secondarySystemFill off / accent on) and a 28 thumb 1.5 inside the track, 20 of travel. Thumb
+   shadows blur 8 and 1 → CSS blur 1.1547·r + 1. */
+.scr-settings .st-cswitch { position: relative; width: 60px; height: 48px; flex: none; }
+.scr-settings .st-cswitch::before { content: ""; position: absolute; left: 4.5px; top: 8.5px; width: 51px; height: 31px; border-radius: 15.5px; background: rgba(120, 120, 128, 0.16); }
+.scr-settings.mode-dark .st-cswitch::before { background: rgba(120, 120, 128, 0.32); }
+.scr-settings .st-cswitch.st-on::before { background: var(--fab); }
+.scr-settings .st-cswitch > i { position: absolute; left: 6px; top: 10px; width: 28px; height: 28px; border-radius: 50%; background: #FFFFFF; box-shadow: 0 3px 10.24px rgba(0, 0, 0, 0.15), 0 3px 2.15px rgba(0, 0, 0, 0.06); }
+.scr-settings .st-cswitch.st-on > i { left: 26px; }
+
+/* "BYB+": the app's Inter (GoogleFonts, downloaded at runtime) raises a "+" that follows capitals — its calt applies the
+   case-sensitive form. fonts/Inter-*.ttf (the static Google Fonts cut) has no such glyph, so the raise is drawn here:
+   0.074em up, fitted on 06_settings_dark_sunset (4 raw px at 18pt). See LOCAL_CASE_PLUS in settings.js. */
+.scr-settings .st-case { position: relative; top: -0.0741em; }
+
+/* LOCAL FALLBACK (requestedChanges: kit.segmented) — the segment emoji Text sits OUTSIDE the AnimatedDefaultTextStyle,
+   so it takes the theme's bodyMedium colour (ink), not the segment's white / black54 / white70: a glyph Inter draws
+   itself (☀) is black on the selected Royal pill, and Chrome, which applies a translucent text colour's alpha to
+   colour emoji, stops dimming 🌓 / 🌙 */
+.scr-settings .st-seg .k-seg-item > .k-emoji { color: var(--ink); }
+/* LOCAL FALLBACK (requestedChanges: kit.segmented) — measured on 06_settings_dark_sunset + 06_settings_light_royal:
+   every label sits 1 raw px (⅓pt) lower in the capture, and each colour emoji 1 raw px further left */
+.scr-settings .st-seg .k-seg-item > .k-seg-label { translate: 0 0.3333px; }
+.scr-settings .st-seg .k-seg-item > .k-emoji:not(.k-emoji-text) { translate: -0.3333px 0.107em; }

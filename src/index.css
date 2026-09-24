@@ -23,25 +23,25 @@
 @layer utilities {
   .text-gradient {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #3b56f6 0%, #10b981 100%);
+    background-image: linear-gradient(135deg, #2f5bbd 0%, #5c86e0 55%, #f59e0b 100%);
   }
 
   .text-gradient-accent {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+    background-image: linear-gradient(135deg, #f59e0b 0%, #fcd34d 100%);
   }
 
   .text-gradient-hero {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #fff 0%, #d1fae5 50%, #bdcfff 100%);
+    background-image: linear-gradient(135deg, #ffffff 0%, #dae6f8 45%, #fcd34d 100%);
   }
 
   .bg-hero {
-    background: linear-gradient(135deg, #1e258a 0%, #2538eb 40%, #3b56f6 60%, #10b981 100%);
+    background: linear-gradient(140deg, #13244a 0%, #1e3a75 28%, #2f5bbd 62%, #3e6bcd 100%);
   }
 
   .bg-hero-dark {
-    background: linear-gradient(135deg, #0a0a0a 0%, #161954 30%, #1e258a 60%, #022c22 100%);
+    background: linear-gradient(140deg, #050608 0%, #13244a 34%, #1e3a75 70%, #23458f 100%);
   }
 
   .glass {
@@ -53,11 +53,11 @@
   }
 
   .shadow-glow {
-    box-shadow: 0 0 60px -15px rgba(59, 86, 246, 0.2);
+    box-shadow: 0 0 60px -15px rgba(47, 91, 189, 0.28);
   }
 
   .shadow-glow-accent {
-    box-shadow: 0 0 60px -15px rgba(16, 185, 129, 0.2);
+    box-shadow: 0 0 60px -15px rgba(245, 158, 11, 0.25);
   }
 
   .section-padding {

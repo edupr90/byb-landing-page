@@ -1,0 +1,106 @@
+/* Insights (app/screens/insights.js) — lib/ui/views/dashboard.dart on RevampTabScaffold, lib/ui/widgets/Insights/*.
+   Every size below is named after its Dart source; units are pt. */
+
+/* the revamp ground (RevampTokens.page / text) */
+.byb-app.scr-insights { --app-page: var(--r-page); --app-ink: var(--r-text); }
+
+/* LOCAL FIX (requested for .byb-app in kit.css): Blink switches Inter's contextual alternates off on any text with
+   letter-spacing ≠ 0 (the theme's 0.25 is everywhere); Skia keeps them. Without "calt" the Net row's "+$4,529.64"
+   draws Inter's low "+" instead of the raised one the capture shows before the "$". */
+.byb-app.scr-insights { font-feature-settings: "calt" 1; }
+
+/* LOCAL FIX (requested for kit.css k-line and the icon / emoji helpers) — vertical glyph snapping, fitted on both
+   captures at once. The breakdown state scrolls 513.5pt = 1540.5 raw px, so a baseline the kit puts on a whole point
+   lands exactly on a device-pixel half there, where Chrome and Skia round opposite ways; and the kit places 14.5pt
+   text 0.27pt high in any state. Mean |Δ| below the app bar, before → after: en top 0.67 → 0.22, en breakdown
+   0.46 → 0.25, es-419 top 0.69 → 0.23, es-419 breakdown at its capture’s own scroll (514.4pt) 0.93 → 0.27.
+   · 14.5pt text (RevampTokens.rowSize: class ins-rt, kit.row labels): the capture's baseline is the unrounded
+     half-leading one, 16.2727pt down the 22pt line where the kit rounds 16.1477 to 16 — so shift back by 0.2727pt,
+     as a transform (the same shift as `top: 0` lands 1 raw px low at the breakdown scroll: layout offsets snap
+     differently under the scroll transform).
+   · every other line and icon in the feed: the capture's baseline sits a hair above the whole point, so at the .5 raw
+     px scroll it rounds up where Chrome rounds down (11–12pt text −0.05pt, chevrons −0.12pt). The tile emoji: see
+     .ins-tile below. */
+.scr-insights .ins-feed .k-line { translate: 0 -0.05px; }
+.scr-insights .ins-feed .ins-rt,
+.scr-insights .ins-feed .k-row-label > .k-t { translate: 0 0.2727px; }
+.scr-insights .ins-feed .ic { translate: 0 -0.12px; }
+
+/* ------------------------------------------------------------------ pinned bar + scrolling feed */
+
+/* RevampTabScaffold: Column(SafeArea(bar 52), Expanded(feed)) — the bar never scrolls; the page ground fills the
+   safe area above it */
+.scr-insights .ins-bar { position: absolute; left: 0; top: 0; width: 440px; padding-top: 62px; background: var(--r-page); z-index: 20; }
+.scr-insights .ins-viewport { position: absolute; left: 0; right: 0; top: 114px; bottom: 0; overflow: hidden; }
+
+/* RevampHeaderBlock: page ground, 20 all round, bottom hairline; label · 10 · amount (moneyStyle 44) · 8 · line */
+.scr-insights .ins-header { padding: 20px; background: var(--r-page); border-bottom: 1px solid var(--r-hairline); }
+/* both sit at their own width in the start-aligned Column (FittedBox(scaleDown, centerLeft) / Text), so their pop-out
+   rects hug the text */
+.scr-insights .ins-hero { margin-top: 10px; width: fit-content; max-width: 100%; }
+.scr-insights .ins-hero-line { margin-top: 8px; width: fit-content; max-width: 100%; }
+
+/* SliverPadding(20, 12, 20, 12 + bottom inset 34) */
+.scr-insights .ins-feed { padding: 12px 20px 46px; }
+
+/* ------------------------------------------------------------------ rows (insights_shared.dart) */
+
+/* LOCAL FIX (requested for kit.identityTile): the 13.2pt emoji in a 24pt RevampIdentityTile lands exactly 1pt (3 raw px)
+   right of the capture's in every tile of 03_insights_top / 03_insights_breakdown, en and es-419 (ink centroids), and
+   0.2pt above it (1 raw px at scroll 0; 0.2 keeps both scrolled captures on their pixel — the snapping fix above) */
+.scr-insights .ins-tile > .k-emoji { translate: -1px 0.2px; }
+
+/* InsightsListRow / CategoryBreakdownRow: min 48, padding 16 × 14 */
+.scr-insights .ins-row { min-height: 48px; padding: 14px 16px; }
+.scr-insights .ins-list-row,
+.scr-insights .ins-bd-line { display: flex; align-items: center; }
+.scr-insights .ins-list-text { flex: 1 1 0; min-width: 0; margin-left: 10px; display: flex; flex-direction: column; }
+.scr-insights .ins-list-text > .ins-sub { margin-top: 2px; }
+/* ConstrainedBox(maxWidth: width × k) around a one-line Text: natural width, capped */
+.scr-insights .ins-cap { flex: none; min-width: 0; margin-left: 10px; display: flex; }
+.scr-insights .ins-cap > .k-line { min-width: 0; }
+/* Icon(chevron_right_rounded, 19, placeholder), 4 after the amount */
+.scr-insights .ins-chev { flex: none; width: 19px; height: 19px; margin-left: 4px; font-size: 19px; color: var(--r-placeholder); }
+
+/* CategoryBreakdownRow: tile · 10 · name · 8 · share (≤ 20%) · 10 · amount (≤ 40%) · 4 · chevron, 9, meter 4 at 34 */
+.scr-insights .ins-bd-row { display: flex; flex-direction: column; }
+.scr-insights .ins-bd-name { flex: 1 1 0; min-width: 0; margin-left: 10px; }
+.scr-insights .ins-bd-pct { margin-left: 8px; }
+.scr-insights .ins-bd-amt { margin-left: 10px; }
+.scr-insights .ins-bd-meter { margin-top: 9px; margin-left: 34px; }
+
+/* InsightsMeter: ClipRRect(999) over a divider-coloured track; the fill is square-ended (a hard gradient stop, see insights.js) */
+.scr-insights .ins-meter { border-radius: 999px; }
+
+/* _StatRow: RevampRow trailing = Column(end): amount · 7 · meter 104 × 3 */
+.scr-insights .ins-stat { min-width: 0; display: flex; flex-direction: column; align-items: flex-end; }
+.scr-insights .ins-stat > .k-line { max-width: 100%; }
+.scr-insights .ins-stat-meter { width: 104px; margin-top: 7px; }
+
+/* RevampNoticeRow */
+.scr-insights .ins-notice { padding: 12px 16px; background: var(--r-notice-bg); }
+
+/* ------------------------------------------------------------------ trend (spending_income.dart) */
+
+/* ListView(horizontal, reverse) 16 × 12 padding, items 10 apart: the current month at the right edge, the older ones
+   running off the left */
+.scr-insights .ins-strip { position: relative; overflow: hidden; }
+.scr-insights .ins-strip-row { position: absolute; left: 0; right: 16px; top: 12px; display: flex; justify-content: flex-end; gap: 10px; }
+/* _MonthBars: 64 wide, padding 8 × 6, radius 10, selected = accentFill @ 10% (dark 20%) */
+.scr-insights .ins-month { flex: none; width: 64px; padding: 6px 8px; border-radius: 10px; display: flex; flex-direction: column; align-items: center; }
+.scr-insights .ins-month.ins-on { background: color-mix(in srgb, var(--accent-fill) 10%, transparent); }
+.byb-app.mode-dark.scr-insights .ins-month.ins-on { background: color-mix(in srgb, var(--accent-fill) 20%, transparent); }
+/* SizedBox(68) → Align(bottom) → Row(end): income Expanded · 6 · spend Expanded */
+.scr-insights .ins-bars { width: 48px; height: 68px; flex: none; display: flex; align-items: flex-end; gap: 6px; }
+.scr-insights .ins-income-bar { flex: 1 1 0; min-width: 0; background: var(--green); border-radius: 3px 3px 0 0; }
+.scr-insights .ins-spend-bar { flex: 1 1 0; min-width: 0; display: flex; }
+.scr-insights .ins-dots { position: relative; flex: none; }
+.scr-insights .ins-dots > i { position: absolute; left: 0; right: 0; height: 4px; border-radius: 2px; background: var(--dot); }
+.scr-insights .ins-month-label { margin-top: 8px; max-width: 48px; }
+
+/* legend: padding 16 × 12, two Expanded 12 apart; mark 8 at top 3 · 8 · label 11/500/+0.3 · 3 · amount */
+.scr-insights .ins-legend { display: flex; gap: 12px; padding: 12px 16px; }
+.scr-insights .ins-legend-item { flex: 1 1 0; min-width: 0; display: flex; align-items: flex-start; }
+.scr-insights .ins-mark { flex: none; width: 8px; height: 8px; margin-top: 3px; margin-right: 8px; }
+.scr-insights .ins-legend-text { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; }
+.scr-insights .ins-legend-value { margin-top: 3px; }

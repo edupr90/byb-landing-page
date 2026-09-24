@@ -1,0 +1,612 @@
+/* BYB design kit — tokens and shared components for the HTML app screens (functions in app/kit.js).
+ *
+ * Units are points: 1 CSS px = 1 pt (the phone is 440 × 956). Every value is taken from the Dart source and
+ * named after it, so a screen can be checked against the widget it recreates:
+ *   AppColorPalette            lib/core/models/app_color_palette.dart     --primary … --secondary-dark, per .pal-<id>
+ *   AppColors                  lib/core/constants.dart                    --page --card --border --ink --ink-sub …
+ *   RevampTokens               lib/ui/widgets/common/revamp_form.dart     --r-* (forms, Insights, the revamp groups)
+ *   spend_level.dart           the four-band ring/bar ramp                --spend-low … --spend-max
+ *
+ * The root is <div class="byb-app mode-light|mode-dark pal-<id> scr-<screen>">. app.css paints it with
+ * --app-page / --app-ink; a screen on the revamp ground (Insights, forms) sets
+ *   .scr-insights { --app-page: var(--r-page); --app-ink: var(--r-text); }
+ * in its own CSS.
+ *
+ * Typography — how the app's text really renders (fitted against the captures, mean error ≈ 2.5/255):
+ *   1. Every Text inside a Scaffold/Material inherits the theme's bodyMedium: AppTextStyles.bodyMedium (height
+ *      1.5) merged over Material's englishLike2021 geometry (letterSpacing 0.25, leadingDistribution EVEN). So
+ *      unless a style sets them, text has line-height 1.5 and 0.25pt tracking, and EVEN leading is exactly CSS's
+ *      half-leading — `line-height: h` needs no correction. .byb-app sets both defaults below.
+ *   2. AppFont.style(…) (and every style that inherits the theme family) uses GoogleFonts.inter().fontFamily =
+ *      "Inter_regular": ONE face. w500 renders as Regular; w600/w700/w800 render as Regular + Skia fake bold.
+ *      .byb-app's default family "Inter AppFont" is that single Regular face, so Chrome synthesises the same
+ *      bold for font-weight ≥ 600. Nothing to do: write the Dart weight.
+ *      THAT IS THE LATIN HALF OF THE STORY. AppFont.style also carries fontFamilyFallback (constants.dart:33),
+ *      and Flutter matches a fallback FAMILY at the requested weight, so a CJK run inside the same Text gets a
+ *      real face off the system font's ladder while the Latin beside it gets the fake bold. This family has one
+ *      CJK face per script, so it fakes the CJK bold too — wrong, measured, and not yet fixable here: the ko
+ *      block below has the numbers and the two fixes that failed.
+ *   3. GoogleFonts.inter(fontWeight: w) — the expense tile, the day header, RevampTokens.moneyStyle,
+ *      AppTextStyles.monoAmount — loads the real face. Add class "k-gf" (the multi-weight "Inter" family).
+ *      A copyWith(fontWeight:) less than 200 heavier keeps the loaded face: monoAmount (w700) copied to w800 —
+ *      the budget hero and stat tiles — renders Bold 700; write font-weight 700.
+ *   4. Skia rounds every LINE's height to a whole point (InternalLineMetrics::height): 13pt × 1.5 is a 20pt line,
+ *      not 19.5 — without it a card of three text lines comes out a point short. The baseline inside the line
+ *      lands on a whole point too, and the glyphs start letterSpacing / 2 to the right of where CSS puts them
+ *      (both fitted on the captures). Class "k-line" does all three: set --lh to the Dart height and --ls to the
+ *      Dart letterSpacing (NOT letter-spacing — k-line derives it from --ls). kit.text() writes it for you.
+ *   5. inherit: false styles (emojiTextStyle, Icon) get no tracking and PROPORTIONAL leading; the emoji helpers
+ *      in kit.js correct for that. So does a DefaultTextStyle that REPLACES the theme's style instead of merging
+ *      with it: AppBar's title slot (headlineMedium: height 1.35, −0.2, proportional → .k-appbar > .k-title sets
+ *      --k-prop: 1) and AnimatedDefaultTextStyle (the segmented labels: no height, no tracking). k-line takes
+ *      --k-prop: 1 for proportional leading (the extra leading splits by Inter's ascent : descent, 80 : 20, where
+ *      CSS splits it 50 : 50).
+ *   6. A family is part of the style: AppFont.style(…) sets "Inter_regular" even inside a DefaultTextStyle with
+ *      another family (the AppBar title's GoogleFonts SemiBold). kit.text() writes k-af (AppFont) or k-gf
+ *      (GoogleFonts) on every Text; o.inherit keeps the surrounding family (a TextStyle without a family).
+ *   7. Inter has glyphs for a few emoji (☀ ❤ ⚠ ▶ ◀ ↩ ™ © ® …). A Text in the app's family draws them from Inter,
+ *      monochrome, even with U+FE0F after them; Chrome honours the selector and draws the colour emoji. kit.js's
+ *      text helpers drop that U+FE0F (kit.skiaText) — do the same for text you write by hand.
+ *
+ * Shadows: Flutter's BoxShadow blurRadius r is a Gaussian of σ = 0.57735·r + 0.5; CSS's blur b is σ = b / 2. So a
+ * Dart blurRadius r is CSS blur 1.1547·r + 1 (16 → 19.48px). Convert every BoxShadow you copy from Dart.
+ */
+
+/* ------------------------------------------------------------------ typography defaults (see header) */
+
+@font-face { font-family: "Inter AppFont"; font-weight: 400; font-style: normal; src: url(../fonts/Inter-Regular.ttf) format("truetype"); }
+/* Japanese glyphs for the AppFont family: Hiragino Sans W3, CJK code points only (see app/app.css) */
+@font-face { font-family: "Inter AppFont"; font-weight: 400; font-style: normal; src: local("HiraginoSans-W3"); unicode-range: U+3000-30FF, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+FF00-FFEF; }
+/* Korean glyphs for the AppFont family: Apple SD Gothic Neo Regular, Hangul code points only (see app/app.css).
+   Regular only — and the reason given here until 2026-09-17 was wrong, so it is replaced by what was measured.
+   THE OLD REASON: "Inter AppFont" is the app's one-face "Inter_regular" (header rule 2), whose bold Skia fakes,
+   so a real Bold face here would make Korean the only text in the family with a drawn bold. That is not what the
+   app does. AppFont.style carries fontFamilyFallback (constants.dart:33) and Flutter resolves a fallback FAMILY
+   at the REQUESTED weight, so a Hangul run really does get a drawn bold while the Latin beside it gets the fake
+   one. Measured by running the app: a throwaway probe on the iOS 26.5 simulator drew 지출 through AppFont.style
+   and summed the row's ink (iPhone 17 Pro Max, @3x) —
+       w400 450,586 · w500 518,956 · w600 601,099 · w700 675,842 · w800 675,842
+   four distinct weights off Apple SD Gothic Neo's ladder (Regular, Medium, SemiBold, Bold), with 800 == 700
+   because the iOS runtime's AppleSDGothicNeo.ttc stops at Bold — 7 public faces, read from its name table.
+   The single face below therefore exports Korean bold as Chrome's synthetic embolden of Regular: over 지출 저장
+   at 100px it gives the same 3,059,339 of ink at w600 AND w700 (one fixed embolden), where the real faces
+   measure 3,012,396 (SemiBold) and 3,349,971 (Bold). Every Korean screen carries it. Japanese has the identical
+   gap on the Hiragino face above, and worse: the same simulator probe answers w400–w800 with FIVE distinct
+   weights (439,112 · 529,954 · 626,786 · 758,167 · 896,561), because the iOS runtime's HiraginoKakuGothic.ttc
+   ships W3 W4 W5 W6 W7 W8, not the W3/W6/W7 this file and app/app.css both assume.
+   IT IS STILL ONE FACE BECAUSE BOTH OBVIOUS FIXES FAIL IN THE PAGE. Both were tried and exported; the yardstick
+   below is the ink of the Budget month label "2026년 9월" (w700) in export/ko/appstore/iphone-6.9/06_sync.png,
+   which is 131,993 as this file stands, against 128,293 with no Korean face declared at all — so the one face
+   below IS being used, it is only the WEIGHT that is faked.
+     1. Adding 500/600/700/800 Hangul faces to THIS family breaks the render outright. In an isolated document
+        it is clean, and the Latin is untouched there ("Save Total" 1,994,186 at w400/500 and 2,879,421 at
+        w600/700/800, advance 423.44 / 443.60, with the faces and without). In the real phone it is not: the
+        month label measures 322.3 px instead of 194, loses its bold, and its ink drops to 123,363. The digits
+        stop coming from Inter and escape the family altogether — a character the best-weight-matched face does
+        not cover does not fall back to this family's 400 face, it leaves for the next family in the stack, and
+        "Apple Color Emoji" has the ASCII digits (for keycaps) at emoji widths. The hero subtitle goes the same
+        way. That is the failure mode the single face has been quietly avoiding.
+     2. Moving the ladder into its own family ("Inter AppFont KR"), declared in front of this one in .byb-app,
+        renders correctly — and measures 128,293, the no-Korean-face number. The new family is silently never
+        used, even with its faces preloaded through kit.js's document.fonts.load, and even though
+        getComputedStyle confirms it is first in the element's font-family. Why is not established.
+   So the weight is wrong here, knowingly, and neither two-line fix is the fix. Closing it means first finding
+   out which face the phone iframe actually resolves each local() to — app/app.css already records that
+   local("Apple SD Gothic Neo") "fails silently because macOS's own Hangul fallback is this same font, the text
+   still appears, at the wrong weight", and that is the shape of what is happening here. It lands on Japanese as
+   well, a shipped language, so it is its own pass and not a rider on Korean's. */
+@font-face { font-family: "Inter AppFont"; font-weight: 400; font-style: normal; src: local("AppleSDGothicNeo-Regular"); unicode-range: U+1100-11FF, U+3130-318F, U+AC00-D7A3; }
+
+.byb-app {
+  font-family: "Inter AppFont", "Apple Color Emoji", sans-serif;
+  line-height: 1.5;
+  --ls: 0.25px;              /* the theme's letterSpacing; set --ls (not letter-spacing) on k-line text */
+  letter-spacing: var(--ls);
+  font-synthesis: weight;
+}
+/* GoogleFonts.inter(fontWeight: …): the real weights (app.css registers 400–800 as "Inter") */
+.byb-app .k-gf { font-family: "Inter", "Apple Color Emoji", sans-serif; }
+/* AppFont.style(…): the one-face "Inter_regular" family, whatever family surrounds it (header, rule 6) */
+.byb-app .k-af { font-family: "Inter AppFont", "Apple Color Emoji", sans-serif; }
+/* Icon glyphs carry no inherited tracking */
+.byb-app .ic { letter-spacing: 0; }
+
+/* Traditional Chinese in the phones: PingFang TC, for a zh-Hant phone only (app.js sets root.lang = "zh-Hant").
+   The app's fallback for Locale('zh') is PingFang TC, PingFang SC, Noto Sans CJK TC, Noto Sans TC, then the JA and
+   KO faces (app_text_styles.dart:39 _zhFaces first). Without this block a zh phone's Han come off the Hiragino faces
+   both Inter families carry for every language: Japanese glyph shapes, the "obviously machine-translated" look
+   app_text_styles.dart warns about. An @font-face cannot depend on :lang, so the faces live in a family of their
+   own that is put IN FRONT of the phone's families under :lang(zh-Hant).
+   WHY A FRONT FAMILY IS FAITHFUL: Flutter tries Inter first and PingFang TC second; here PingFang TC is tried first,
+   but only for the code points below, and Inter has 0 of them (cmap of fonts/Inter-Regular.ttf) — so every
+   character lands on the face it lands on in the app. Nothing Latin is claimed, so digits, "BYB+" and "NT$" stay
+   Inter, and the family's faces do not cover U+0020, so the primary font — line boxes, baselines, k-line's metrics
+   — is still Inter. The ranges are the CJK blocks PingFang TC has glyphs in (its cmap): radicals U+2E80-2FDF,
+   CJK punctuation U+3000-303F, Bopomofo U+3100-312F, strokes U+31C0-31EF, enclosed/compat U+3200-33FF, Ext A,
+   the URO, compatibility ideographs, vertical and compatibility forms, full-width forms U+FF00-FFEF, Ext B-F, plus
+   U+22EF ⋯, the one other character it has and Inter lacks. Kana is NOT claimed (PingFang has none), and a code
+   point claimed here that PingFang TC lacks (half of U+3000-303F, the half-width katakana) falls through to the next
+   family's Hiragino face — measured in headless Chrome, and the app's order too (Hiragino Sans after PingFang SC).
+   THE FACES. PingFang is a variable font (PingFangUI.ttc in FontServices, byte-identical in the iOS 26.5 runtime and
+   on this Mac: md5 69d91851…): wght 100–600, named instances Ultralight … Semibold. There is NO Bold — CoreText
+   answers a w700/w800/w900 request with the Semibold instance, and Skia draws it unemboldened (a 600 face counts
+   as bold), so 700 and 800 map to Semibold here, as the Korean block maps 800 to AppleSDGothicNeo-Bold, and 900
+   takes the 800 face. local() needs the PostScript instance names; each one resolves to its own weight in Chrome
+   (CSS.getPlatformFontsForNode: PingFangTC-Regular / -Medium / -Semibold). Weights under 400 are not declared (no
+   phone text uses one); they would take the 400 face where iOS has Light.
+   WHY EVERY SELECTOR IS LISTED: the family must come first on the element that holds the text. kit.text writes k-af
+   or k-gf on every Text and several components set "Inter" themselves, so putting it on .byb-app alone is silently
+   overridden on those nodes. Measured 2026-09-18 on the zh Budget screen with only the .byb-app rule kept: the
+   inheriting text drew PingFang TC and every k-af / k-gf run still drew Hiragino — the likely reason the
+   "Inter AppFont KR" attempt above was "never used" (it was declared "in .byb-app"). A new rule that sets "Inter" or "Inter AppFont" on text must be added to one of the two lists below (the
+   emoji-only rules — k-emoji, k-emoji-inter, k-emoji-ios — and the status bar hold no Han and are left alone). */
+@font-face { font-family: "BYB PingFang TC"; font-weight: 400; src: local("PingFangTC-Regular");  unicode-range: U+22EF, U+2E80-2FDF, U+3000-303F, U+3100-312F, U+31C0-31EF, U+3200-33FF, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+FE10-FE1F, U+FE30-FE4F, U+FF00-FFEF, U+20000-2FA1F; }
+@font-face { font-family: "BYB PingFang TC"; font-weight: 500; src: local("PingFangTC-Medium");   unicode-range: U+22EF, U+2E80-2FDF, U+3000-303F, U+3100-312F, U+31C0-31EF, U+3200-33FF, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+FE10-FE1F, U+FE30-FE4F, U+FF00-FFEF, U+20000-2FA1F; }
+@font-face { font-family: "BYB PingFang TC"; font-weight: 600; src: local("PingFangTC-Semibold"); unicode-range: U+22EF, U+2E80-2FDF, U+3000-303F, U+3100-312F, U+31C0-31EF, U+3200-33FF, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+FE10-FE1F, U+FE30-FE4F, U+FF00-FFEF, U+20000-2FA1F; }
+@font-face { font-family: "BYB PingFang TC"; font-weight: 700; src: local("PingFangTC-Semibold"); unicode-range: U+22EF, U+2E80-2FDF, U+3000-303F, U+3100-312F, U+31C0-31EF, U+3200-33FF, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+FE10-FE1F, U+FE30-FE4F, U+FF00-FFEF, U+20000-2FA1F; }
+@font-face { font-family: "BYB PingFang TC"; font-weight: 800; src: local("PingFangTC-Semibold"); unicode-range: U+22EF, U+2E80-2FDF, U+3000-303F, U+3100-312F, U+31C0-31EF, U+3200-33FF, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+FE10-FE1F, U+FE30-FE4F, U+FF00-FFEF, U+20000-2FA1F; }
+/* AppFont.style(…) text: "Inter AppFont" (one face, bold synthesized for the Latin) behind PingFang TC. The CJK
+   run gets PingFang's real weight at the requested weight, as Flutter's fallback does — NOT the one-face fake bold
+   the ja and ko phones still carry (header above) — because the weight ladder sits in its own family: the Latin's
+   "Inter AppFont" has no 500–800 face for a digit to be stranded on (the failure of fix 1 above). */
+.byb-app:lang(zh-Hant),
+.byb-app:lang(zh-Hant) .k-af {
+  font-family: "BYB PingFang TC", "Inter AppFont", "Apple Color Emoji", sans-serif;
+}
+/* GoogleFonts.inter(…) text: the multi-weight "Inter" (app.css) behind PingFang TC */
+.byb-app:lang(zh-Hant) .k-gf,
+.byb-app:lang(zh-Hant) .k-money,
+.byb-app:lang(zh-Hant) .k-appbar > .k-title,
+.byb-app:lang(zh-Hant) .k-xtile .k-x-title,
+.byb-app:lang(zh-Hant) .k-xtile .k-x-cap,
+.byb-app:lang(zh-Hant) .k-xtile .k-x-author,
+.byb-app:lang(zh-Hant) .k-xtile .k-x-amount,
+.byb-app:lang(zh-Hant) .k-dayhead {
+  font-family: "BYB PingFang TC", "Inter", "Apple Color Emoji", sans-serif;
+}
+
+/* ------------------------------------------------------------------ tokens: mode */
+
+.byb-app {
+  /* AppColors — the app's white page / grey card recipe */
+  --page: #FFFFFF;             /* AppColorPalette.surfaceLight (backgroundLight) */
+  --card: #F3F4F6;             /* cardTintLight (gray-100) */
+  --border: #E5E7EB;           /* borderTintLight (gray-200) */
+  --ink: #111111;              /* AppColors.textLight */
+  --ink-sub: #374151;          /* AppColors.subTextLight (gray-700) */
+  --ink-tertiary: #6B7280;     /* AppColors.textTertiaryLight */
+  --icon-bg: #F3F4F6;          /* AppColors.iconBackgroundLight */
+  --chart-track: #F3F4F6;      /* AppColors.chartBarTrackLight (hero bar track) */
+  --ring-track-petal: #E5E7EB; /* AppColors.chartRingTrackLight (empty petals) */
+  --progress-track: rgba(0, 0, 0, 0.08); /* ProgressRing track: black 8% */
+  /* BoxShadow blurRadius r → CSS blur 1.1547·r + 1 (header): 16 → 19.48, 24 → 28.71, 6 → 7.93 */
+  --card-shadow: 0 3px 19.48px rgba(0, 0, 0, 0.07);                                        /* AppColors.cardShadow */
+  --elevated-shadow: 0 6px 28.71px -4px rgba(0, 0, 0, 0.10), 0 2px 7.93px rgba(0, 0, 0, 0.04); /* elevatedShadow */
+  --error: #DC2626;            /* AppColors.errorLight (colorScheme.error) */
+  --scrim: rgba(0, 0, 0, 0.54);
+
+  /* semantic — AppColors alerts (same in both modes) */
+  --red: #E85D5D;              /* primaryRed: spent / over */
+  --green: #3DA573;            /* successGreen: under / received */
+  --amber: #D9932B;            /* warningAmber */
+  --orange: #E2703A;           /* cautionOrange */
+  --money-green: #00A878;      /* the expense tile's amount (trans_list.dart) */
+  --compare-up: #B8860B;       /* "vs last month" badge, spending more */
+  --compare-down: #3DA573;     /* … spending less (successGreen) */
+  --compare-same: var(--ink-sub);
+
+  /* spend_level.dart — ring / bar colour by band */
+  --spend-low: #3DA573;
+  --spend-mid: #D9932B;
+  --spend-high: #E2703A;
+  --spend-max: #E85D5D;
+
+  /* RevampTokens — forms, Insights, groups (white group on a near-white page) */
+  --r-page: #FBFBFA;
+  --r-group: #FFFFFF;
+  --r-hairline: #D2D0C9;
+  --r-divider: #E0DED8;
+  --r-text: #15181D;
+  --r-secondary: #63686F;
+  --r-row-label: #33383F;
+  --r-placeholder: #83878F;
+  --r-danger: #C0392F;
+  --r-notice-bg: #FCFAF4;
+  --r-notice-fg: #5E5A4D;
+  --r-track-off: #DEDCD6;
+  --r-chip-fill: #F7F6F3;
+  --r-dashed: #D8D6D0;
+
+  /* translucent ink washes used by the round buttons and the segmented control */
+  --close-wash: rgba(17, 17, 17, 0.07);   /* _CircleCloseBtn: #111111 @ 7% */
+  --close-ink: #111111;
+  --info-wash: rgba(0, 0, 0, 0.04);       /* "Where it goes" info button */
+  --seg-track: rgba(0, 0, 0, 0.04);       /* _SlidingSegmentedControl */
+  --seg-ink: rgba(0, 0, 0, 0.54);         /* Colors.black54 */
+  --day-header-ink: rgba(0, 0, 0, 0.54);  /* _ProfileStyleDayHeader: Colors.black54 */
+  --chip-ink: rgba(17, 17, 17, 0.75);     /* _Chip unselected: text @ 75% */
+
+  /* accent — fills stay on primary in both modes; accent TEXT brightens in dark (royal-default memo) */
+  --accent-fill: var(--primary);
+  --accent-text: var(--primary);
+  --on-accent: #FFFFFF;
+  /* a label on a colorScheme.primary fill picked by ThemeData.estimateBrightnessForColor (the "All" chip):
+     white, black87 on aurora — set per palette below */
+  --on-primary: #FFFFFF;
+  --fab: var(--primary);                  /* AppColors.fabLight/fabDark → primary */
+
+  /* status bar content (iOS): black on light screens */
+  --sb-ink: #000000;
+  --avatar-alpha: 15%;         /* MemberAvatar tint: 15% light, 20% dark */
+
+  /* what app.css paints the root with */
+  --app-page: var(--page);
+  --app-ink: var(--ink);
+}
+
+.byb-app.mode-dark {
+  --page: #000000;             /* surfaceDark: OLED black */
+  --card: #0D0D12;             /* cardTintDark */
+  --border: #1E1E2A;           /* borderTintDark */
+  --ink: #F0F0F2;              /* AppColors.textDark */
+  --ink-sub: #9D9DB0;          /* AppColors.subTextDark */
+  --ink-tertiary: #717185;
+  --icon-bg: #141418;
+  --chart-track: #1E1E2A;      /* chartBarTrackDark */
+  --ring-track-petal: #2A2A34;
+  --progress-track: rgba(255, 255, 255, 0.10);
+  --card-shadow: none;         /* shadows are light-mode only */
+  --elevated-shadow: none;
+  --error: #F87171;
+  --compare-up: #E0B84C;
+
+  --spend-low: #3ED18A;        /* AppColors.spendLowDark */
+  --spend-mid: #DD9E3C;        /* spendMidDark */
+  --spend-high: #E2703A;       /* cautionOrange has no twin */
+  --spend-max: #E84A46;        /* spendMaxDark */
+
+  --r-page: #000000;           /* RevampTokens.page(dark) = backgroundDark */
+  --r-group: #0D0D12;          /* group(dark) = cardDark */
+  --r-hairline: #31343C;
+  --r-divider: #282B32;
+  --r-text: #F2F3F5;
+  --r-secondary: #9BA0A9;
+  --r-row-label: #BFC4CC;
+  --r-placeholder: #7E828B;
+  --r-danger: #E8695C;
+  --r-notice-bg: #1B1A15;
+  --r-notice-fg: #C7BFA6;
+  --r-track-off: #35383F;
+  --r-chip-fill: #1B1D22;
+  --r-dashed: #33363D;
+
+  --close-wash: rgba(255, 255, 255, 0.10);
+  --close-ink: #FFFFFF;
+  --info-wash: rgba(255, 255, 255, 0.06);
+  --seg-track: rgba(255, 255, 255, 0.06);
+  --seg-ink: rgba(255, 255, 255, 0.70);   /* Colors.white70 */
+  --day-header-ink: rgba(255, 255, 255, 0.68);
+  --chip-ink: rgba(240, 240, 242, 0.75);
+
+  --accent-text: var(--primary-light);    /* RevampTokens.accentText(dark) */
+  --sb-ink: #FFFFFF;
+  --avatar-alpha: 20%;
+}
+
+/* ------------------------------------------------------------------ tokens: palettes (AppColorPalette.all) */
+
+.byb-app, .byb-app.pal-royal {
+  --primary: #2F5BBD; --primary-light: #5C86E0; --primary-dark: #23458F;
+  --secondary: #D97706; --secondary-light: #F59E0B; --secondary-dark: #B45309;
+}
+.byb-app.pal-teal     { --primary: #00A878; --primary-light: #00C896; --primary-dark: #007A58; --secondary: #1A1A2E; --secondary-light: #F0F0F5; --secondary-dark: #0F0F1A; }
+.byb-app.pal-ocean    { --primary: #0891B2; --primary-light: #22D3EE; --primary-dark: #155E75; --secondary: #F97316; --secondary-light: #FB923C; --secondary-dark: #C2410C; }
+.byb-app.pal-lavender { --primary: #8B5CF6; --primary-light: #A78BFA; --primary-dark: #6D28D9; --secondary: #F43F5E; --secondary-light: #FB7185; --secondary-dark: #BE123C; }
+.byb-app.pal-sunset   { --primary: #EA580C; --primary-light: #FB923C; --primary-dark: #C2410C; --secondary: #DC2626; --secondary-light: #EF4444; --secondary-dark: #B91C1C; }
+.byb-app.pal-midnight { --primary: #2563EB; --primary-light: #60A5FA; --primary-dark: #1D4ED8; --secondary: #06B6D4; --secondary-light: #22D3EE; --secondary-dark: #0E7490; }
+.byb-app.pal-rose     { --primary: #E11D48; --primary-light: #FB7185; --primary-dark: #BE123C; --secondary: #14B8A6; --secondary-light: #2DD4BF; --secondary-dark: #0F766E; }
+.byb-app.pal-forest   { --primary: #15803D; --primary-light: #22C55E; --primary-dark: #14532D; --secondary: #EAB308; --secondary-light: #FACC15; --secondary-dark: #A16207; }
+.byb-app.pal-berry    { --primary: #BE185D; --primary-light: #EC4899; --primary-dark: #9D174D; --secondary: #84CC16; --secondary-light: #A3E635; --secondary-dark: #4D7C0F; }
+.byb-app.pal-slate    { --primary: #475569; --primary-light: #64748B; --primary-dark: #334155; --secondary: #EA580C; --secondary-light: #FB923C; --secondary-dark: #C2410C; }
+.byb-app.pal-candy    { --primary: #EC4899; --primary-light: #F472B6; --primary-dark: #DB2777; --secondary: #14B8A6; --secondary-light: #2DD4BF; --secondary-dark: #0F766E; }
+.byb-app.pal-mocha    { --primary: #92400E; --primary-light: #D97706; --primary-dark: #78350F; --secondary: #F59E0B; --secondary-light: #FBBF24; --secondary-dark: #B45309; }
+.byb-app.pal-aurora   { --primary: #06B6D4; --primary-light: #67E8F9; --primary-dark: #0E7490; --secondary: #A855F7; --secondary-light: #C084FC; --secondary-dark: #7E22CE; --on-primary: rgba(0, 0, 0, 0.87); }
+.byb-app.pal-indigo   { --primary: #4F46E5; --primary-light: #818CF8; --primary-dark: #3730A3; --secondary: #F59E0B; --secondary-light: #FBBF24; --secondary-dark: #D97706; }
+.byb-app.pal-sky      { --primary: #0284C7; --primary-light: #38BDF8; --primary-dark: #075985; --secondary: #F97316; --secondary-light: #FB923C; --secondary-dark: #EA580C; }
+.byb-app.pal-sage     { --primary: #65A30D; --primary-light: #84CC16; --primary-dark: #4D7C0F; --secondary: #A855F7; --secondary-light: #C084FC; --secondary-dark: #7E22CE; }
+
+/* ------------------------------------------------------------------ text helpers */
+
+/* One Flutter text line: rounded line box, glyphs where the unrounded box puts them (header, rule 4).
+   --lh is the Dart `height` (default 1.5, the theme's; 1.210227 = Inter's own, for a style with no height).
+   --k-prop: 1 is PROPORTIONAL leading (header, rule 5): Skia's baseline is ascent · h / (ascent + descent), i.e.
+   the half-leading baseline + 0.300469 · (h − 1.210227)em on Inter (hhea 2728 / 680 of 2816). */
+.byb-app .k-line {
+  --k-lh: calc(1em * var(--lh, 1.5));
+  --k-lhr: round(nearest, var(--k-lh), 1px);
+  line-height: var(--k-lhr);
+  letter-spacing: var(--ls, 0.25px);
+  position: relative;
+  top: calc(round(nearest, calc(var(--k-lh) / 2 + 4em / 11 + var(--k-prop, 0) * 0.300469 * (var(--k-lh) - 1.210227em)), 1px) - (var(--k-lhr) / 2 + 4em / 11));
+  left: calc(var(--ls, 0.25px) / 2);
+}
+.byb-app .k-block { display: block; }
+
+/* RevampTokens.moneyStyle(size): GoogleFonts Inter w800 (real ExtraBold), height 1.0, tracking −1/44 em, tabular */
+.byb-app .k-money {
+  font-family: "Inter", "Apple Color Emoji", sans-serif; font-weight: 800; --lh: 1;
+  --ls: calc(-1em / 44); letter-spacing: var(--ls); font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.byb-app .k-tnum { font-variant-numeric: tabular-nums; }
+.byb-app .k-upper { text-transform: uppercase; }
+.byb-app .k-nowrap { white-space: nowrap; }
+/* Flutter never clips glyphs to the line box, so the clip gets a margin: descenders and accents survive a
+   height below 1.21 (overflow: clip + overflow-clip-margin; hidden would cut them) */
+.byb-app .k-ellipsis { white-space: nowrap; overflow: clip; overflow-clip-margin: 0.5em; text-overflow: ellipsis; min-width: 0; }
+/* maxLines: 2 — Flutter never paints a third line, and Chrome's line clamp still paints it below the box. The clip
+   keeps 0.5em at the top and sides; at the bottom it keeps only what line 2's descenders need (Inter's descent
+   0.2415em below a half-leading baseline: 0.6035em − half a line, + 0.5px for the baseline rounding), which stops
+   short of line 3's ascenders at any height ≥ 1.2. --k-lhr is k-line's rounded line box (1.5em without k-line). */
+.byb-app .k-clamp2 {
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: visible;
+  overflow-wrap: break-word; /* a word wider than the box breaks, as Flutter's line breaker does */
+  clip-path: inset(-0.5em -0.5em min(0px, calc(var(--k-lhr, 1.5em) / 2 - 0.6035em - 0.5px)) -0.5em);
+}
+
+/* an emoji Text (see kit.js emojiSpan). k-emoji-inter: a Text that inherits the theme family — the line is laid
+   out on Inter's metrics, the glyph falls back to Apple Color Emoji. Plain k-emoji: emojiTextStyle (the emoji face
+   is the family). */
+.byb-app .k-emoji {
+  font-family: "Apple Color Emoji", "Noto Color Emoji", "Segoe UI Emoji", sans-serif;
+  font-weight: 400; font-style: normal; display: block; text-align: center; white-space: nowrap;
+}
+.byb-app .k-emoji.k-emoji-inter { font-family: "Inter AppFont", "Apple Color Emoji", "Noto Color Emoji", "Segoe UI Emoji", sans-serif; }
+/* An emoji followed by text in the same Row / Text. On iOS the emoji's box is wider than Chrome's 1em: measured
+   +0.046em before the glyph and +0.245em after it at 13–14pt (Reports insights, the Dark Mode segments). Centred
+   emoji in a badge are not affected (checked at 22pt). */
+.byb-app .k-emoji-ios { margin-left: 0.046em; margin-right: 0.245em; }
+span.k-emoji-ios { display: inline-block; font-family: "Inter AppFont", "Apple Color Emoji", sans-serif; }
+/* an emoji Inter has a glyph for (kit.js skiaText): drawn as text, so no emoji box */
+.byb-app .k-emoji-ios.k-emoji-text { margin-left: 0; margin-right: 0; }
+
+/* ------------------------------------------------------------------ status bar */
+
+.byb-app .k-statusbar {
+  position: absolute; left: 0; top: 0; width: 440px; height: 62px; z-index: 60; pointer-events: none;
+  color: var(--sb-ink); letter-spacing: 0; line-height: normal;
+}
+.byb-app .k-statusbar.k-sb-dark { color: #000000; }
+.byb-app .k-statusbar.k-sb-light { color: #FFFFFF; }
+.byb-app .k-statusbar svg { position: absolute; left: 0; top: 0; width: 440px; height: 62px; overflow: visible; }
+.byb-app .k-statusbar text { font-family: system-ui, -apple-system, "SF Pro Text", "Helvetica Neue", sans-serif; font-weight: 600; letter-spacing: 0; }
+
+/* ------------------------------------------------------------------ app bars */
+
+/* buildModernAppBar: transparent AppBar, toolbar 56 under the 62pt safe area; leading slot 56 wide,
+   title 16 after it (NavigationToolbar middle spacing), actions flush right */
+.byb-app .k-appbar-safe { padding-top: 62px; }
+.byb-app .k-appbar { position: relative; height: 56px; display: flex; align-items: center; }
+.byb-app .k-appbar > .k-lead { width: 56px; height: 56px; flex: none; display: flex; align-items: center; justify-content: center; }
+/* The title slot is DefaultTextStyle(appBarTheme.titleTextStyle) — it REPLACES the theme's body style:
+   AppTextStyles.headlineMedium = GoogleFonts Inter SemiBold 18, height 1.35, letterSpacing −0.2, no
+   leadingDistribution (proportional). A screen's Text style merges over it: AppFont.style(fontSize: 24, bold)
+   brings its size, weight, family and colour and keeps the 1.35 / −0.2 / proportional leading, so build the title
+   with kit.text(str, { size, weight }) and no lh / ls (they inherit from here), or pass o.titleText. */
+.byb-app .k-appbar > .k-title {
+  flex: 1 1 auto; min-width: 0; padding: 0 16px; display: flex; align-items: center; color: var(--ink);
+  font-family: "Inter", "Apple Color Emoji", sans-serif; font-size: 18px; font-weight: 600;
+  --lh: 1.35; --ls: -0.2px; --k-prop: 1; line-height: 1.35; letter-spacing: var(--ls);
+}
+.byb-app .k-appbar > .k-title.k-center { position: absolute; left: 72px; right: 72px; justify-content: center; padding: 0; }
+.byb-app .k-appbar > .k-actions { margin-left: auto; height: 56px; flex: none; display: flex; align-items: center; }
+
+/* RevampScaffold / RevampTabScaffold bar: Container(height 52, border-bottom 1) — the hairline is inside the 52 */
+.byb-app .k-rbar {
+  position: relative; height: 52px; padding: 0 8px; display: flex; align-items: center;
+  background: var(--r-page); border-bottom: 1px solid var(--r-hairline);
+}
+.byb-app .k-rbar > .k-slot { width: 44px; height: 100%; flex: none; display: flex; align-items: center; justify-content: center; }
+.byb-app .k-rbar > .k-rtitle { flex: 1 1 auto; min-width: 0; color: var(--r-text); white-space: nowrap; overflow: clip; overflow-clip-margin: 0.5em; text-overflow: ellipsis; }
+.byb-app .k-rbar.k-rbar-form > .k-rtitle { text-align: center; font-size: 15px; font-weight: 600; --ls: -0.15px; }
+.byb-app .k-rbar.k-rbar-tab > .k-rtitle { margin-left: 4px; font-size: 22px; font-weight: 600; --ls: -0.4px; }
+
+/* ------------------------------------------------------------------ round buttons */
+
+/* HamburgerMenuButton: 40 circle, card fill, 0.5 border, menu_rounded 22 ink */
+.byb-app .k-menu {
+  width: 40px; height: 40px; border-radius: 50%; flex: none; display: flex; align-items: center; justify-content: center;
+  background: var(--card); box-shadow: inset 0 0 0 0.5px var(--border); color: var(--ink);
+}
+.byb-app .k-menu .ic { font-size: 22px; }
+
+/* RevealAddButton / buildCircleAddButton: 44 circle, fab (primary), add_rounded 26 white */
+.byb-app .k-add {
+  width: 44px; height: 44px; border-radius: 50%; flex: none; display: flex; align-items: center; justify-content: center;
+  background: var(--fab); color: #FFFFFF;
+}
+.byb-app .k-add .ic { font-size: 26px; }
+
+/* _CircleCloseBtn: 38 circle, #111 @ 7% (white @ 10%), close_rounded 20 */
+.byb-app .k-close {
+  width: 38px; height: 38px; border-radius: 50%; flex: none; display: flex; align-items: center; justify-content: center;
+  background: var(--close-wash); color: var(--close-ink);
+}
+.byb-app .k-close .ic { font-size: 20px; }
+
+/* "Where it goes" info: 30 circle, black 4% (white 6%), info_outline_rounded 16 subText */
+.byb-app .k-info {
+  width: 30px; height: 30px; border-radius: 50%; flex: none; display: flex; align-items: center; justify-content: center;
+  background: var(--info-wash); color: var(--ink-sub);
+}
+.byb-app .k-info .ic { font-size: 16px; }
+
+/* ------------------------------------------------------------------ section labels (all k-line, theme height 1.5) */
+
+.byb-app .k-label { display: block; text-transform: uppercase; white-space: nowrap; }
+/* RevampSectionLabel: 11 / w600 / +1.1, RevampTokens.secondary */
+.byb-app .k-label-revamp { font-size: 11px; font-weight: 600; --ls: 1.1px; color: var(--r-secondary); }
+/* PlannerPage._sectionLabel: 13 / w700 / +1.4, subText (WHERE IT GOES, BUDGET BY CATEGORY) */
+.byb-app .k-label-planner { font-size: 13px; font-weight: 700; --ls: 1.4px; color: var(--ink-sub); }
+/* MemberSharesSection: 12 / w700 / +0.8, subText (WHO'S SPENDING WHAT) */
+.byb-app .k-label-members { font-size: 12px; font-weight: 700; --ls: 0.8px; color: var(--ink-sub); }
+/* hero month: 13 / w700 / +1.6, subText (SEPTEMBER 2026) */
+.byb-app .k-label-month { font-size: 13px; font-weight: 700; --ls: 1.6px; color: var(--ink-sub); }
+
+/* ------------------------------------------------------------------ surfaces */
+
+/* AppColors.cardDecoration: card fill, radius 20 (radiusLG), 1px border (inside, and it pads the child by 1),
+   light-only shadow */
+.byb-app .k-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--card-shadow); }
+/* Material(color: card, borderRadius: 16) — no border, no shadow */
+.byb-app .k-tile { background: var(--card); border-radius: 16px; }
+
+/* RevampGroup: label (8 below), one group surface (radius 12, 1px hairline) of rows with 16-inset dividers, 22 below */
+.byb-app .k-group { margin-bottom: 22px; }
+.byb-app .k-group > .k-label { margin-bottom: 8px; }
+.byb-app .k-group-body { background: var(--r-group); border: 1px solid var(--r-hairline); border-radius: 12px; overflow: hidden; }
+.byb-app .k-group-body > .k-divider { height: 1px; margin-left: 16px; background: var(--r-divider); }
+.byb-app .k-group-helper { margin-top: 8px; padding: 0 2px; font-size: 12px; color: var(--r-secondary); }
+
+/* RevampRow: min 48, 16 × 14 padding; label 14.5 rowLabel (max 160 unless fixed); value 14.5/600;
+   chevron_right_rounded 19 placeholder, 8 after the value */
+.byb-app .k-row { min-height: 48px; padding: 14px 16px; display: flex; align-items: center; }
+.byb-app .k-row-label { flex: none; max-width: 160px; display: flex; flex-direction: column; }
+.byb-app .k-row.k-fixed .k-row-label { flex: 1 1 auto; max-width: none; }
+.byb-app .k-row-label > .k-t { font-size: 14.5px; font-weight: 400; color: var(--r-row-label); }
+.byb-app .k-row-label > .k-t.k-action { font-weight: 600; color: var(--accent-text); }
+.byb-app .k-row-label > .k-s { margin-top: 2px; font-size: 12px; --lh: 1.35; color: var(--r-secondary); }
+.byb-app .k-row-gap { width: 12px; flex: none; }
+.byb-app .k-row-trail { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; justify-content: flex-end; }
+.byb-app .k-row.k-fixed .k-row-trail { flex: none; }
+.byb-app .k-row-value { font-size: 14.5px; font-weight: 600; color: var(--r-text); text-align: right; white-space: nowrap; overflow: clip; overflow-clip-margin: 0.5em; text-overflow: ellipsis; min-width: 0; }
+.byb-app .k-row-value.k-muted { color: var(--r-secondary); }
+.byb-app .k-row-value.k-empty { font-weight: 400; color: var(--r-placeholder); }
+.byb-app .k-row-lead { margin-right: 8px; flex: none; }
+.byb-app .k-chevron { margin-left: 8px; flex: none; font-size: 19px; color: var(--r-placeholder); }
+
+/* _RevampSwitch: 44 × 27, 3 padding, 21 knob */
+.byb-app .k-switch { width: 44px; height: 27px; padding: 3px; border-radius: 999px; flex: none; background: var(--r-track-off); display: flex; justify-content: flex-start; }
+.byb-app .k-switch.k-on { background: var(--accent-fill); justify-content: flex-end; }
+.byb-app .k-switch::after { content: ""; width: 21px; height: 21px; border-radius: 50%; background: #FFFFFF; }
+
+/* RevampPrimaryButton: full width, 52 tall, radius 12, accent fill, 16/600 −0.15 white */
+.byb-app .k-primary {
+  height: 52px; border-radius: 12px; background: var(--accent-fill); color: var(--on-accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 600; --ls: -0.15px; white-space: nowrap;
+}
+/* RevampTextButton: 44 tall, 15/600, danger (or accent text) */
+.byb-app .k-textbtn { height: 44px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; color: var(--r-danger); }
+.byb-app .k-textbtn.k-accent { color: var(--accent-text); }
+
+/* ------------------------------------------------------------------ badges, bars, rings */
+
+/* solid category badge — flat-solid rule: the fill is the category colour, never a tint */
+.byb-app .k-badge { flex: none; display: flex; align-items: center; justify-content: center; }
+
+.byb-app .k-bar { position: relative; overflow: hidden; border-radius: 999px; background: var(--chart-track); }
+.byb-app .k-bar > i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; }
+
+.byb-app .k-ring { position: relative; flex: none; }
+.byb-app .k-ring > svg { position: absolute; left: 0; top: 0; overflow: visible; }
+.byb-app .k-ring > .k-hole { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+
+/* MemberAvatar: a circle tinted with the identity colour (15% light / 20% dark), the picture on top (cover) */
+.byb-app .k-avatar { position: relative; flex: none; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.byb-app .k-avatar > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.byb-app .k-avatar > b { font-weight: 800; line-height: 1; letter-spacing: 0; }
+
+/* ------------------------------------------------------------------ ring cards (member + category) */
+
+/* _MemberShareDonut / CategoryRingCard: card, radius 16, padding 14 · 12, ring 76 / stroke 6, centred column */
+.byb-app .k-ringcard { background: var(--card); border-radius: 16px; padding: 14px 12px; display: flex; flex-direction: column; align-items: center; text-align: center; min-width: 0; }
+/* (not scoped under .k-ringcard: kit.js measures these lines outside the card) */
+.byb-app .k-rc-title { margin-top: 10px; max-width: 100%; font-size: 13px; font-weight: 700; color: var(--ink); }
+.byb-app .k-rc-title.k-rc-cat { --lh: 1.2; }
+.byb-app .k-rc-amount { max-width: 100%; font-size: 16px; color: var(--ink); }
+.byb-app .k-rc-line { max-width: 100%; font-size: 11px; font-weight: 400; color: var(--ink-sub); white-space: nowrap; }
+.byb-app .k-rc-line.k-em { font-size: 12px; font-weight: 600; }
+/* member caption: maxLines 2, centred, ellipsis */
+.byb-app .k-rc-line.k-rc-wrap { white-space: normal; }
+/* FittedBox(fit: BoxFit.scaleDown) — the category card's amount and lines. The box spans the column (a size
+   container, so 100cqi is the column's width); kit.js measures the text's natural width W0 and writes the line's
+   font-size as min(S, 100cqi · S / W0): the whole line shrinks only when it is wider than the column. */
+.byb-app .k-fit { align-self: stretch; min-width: 0; container-type: inline-size; }
+.byb-app .k-recurrent { position: absolute; right: -3px; bottom: -3px; width: 20px; height: 20px; border-radius: 50%; background: var(--card); color: var(--ink-sub); display: flex; align-items: center; justify-content: center; }
+.byb-app .k-recurrent .ic { font-size: 13px; }
+.byb-app .k-pair { display: flex; gap: 10px; align-items: stretch; }
+.byb-app .k-pair > * { flex: 1 1 0; }
+
+/* ------------------------------------------------------------------ expense list */
+
+/* _ExpenseTileModern: card, radius 16, 0.5 border @ 60% (inside, and it pads the content by 0.5) */
+.byb-app .k-xtile {
+  margin: 0 4px; padding: 10.5px 16.5px; display: flex; align-items: center;
+  background: var(--card); border-radius: 16px;
+  box-shadow: inset 0 0 0 0.5px color-mix(in srgb, var(--border) 60%, transparent);
+}
+.byb-app .k-xtile .k-x-title,
+.byb-app .k-xtile .k-x-cap,
+.byb-app .k-xtile .k-x-author,
+.byb-app .k-xtile .k-x-amount,
+.byb-app .k-dayhead { font-family: "Inter", "Apple Color Emoji", sans-serif; } /* GoogleFonts.inter(…) styles */
+.byb-app .k-xtile > .k-x-body { flex: 1 1 auto; min-width: 0; margin-left: 16px; display: flex; flex-direction: column; }
+.byb-app .k-x-title { font-size: 16px; font-weight: 600; --ls: -0.1px; --lh: 1.15; color: var(--ink); }
+.byb-app .k-x-cap { margin-top: 4px; display: flex; align-items: center; font-size: 12px; font-weight: 400; color: var(--ink-sub); white-space: nowrap; }
+.byb-app .k-x-cap > span { --lh: 1.4; }
+.byb-app .k-x-cap > .k-x-dot { color: color-mix(in srgb, var(--ink-sub) 50%, transparent); white-space: pre; }
+.byb-app .k-x-cap .ic { font-size: 12px; margin-right: 4px; }
+.byb-app .k-x-author { margin-top: 4px; display: flex; align-items: center; font-size: 12px; font-weight: 400; color: var(--ink-sub); white-space: nowrap; }
+.byb-app .k-x-author > span { --lh: 1.4; }
+.byb-app .k-x-author > .k-avatar { margin-right: 6px; }
+.byb-app .k-x-amount { margin-left: 8px; flex: none; font-size: 16px; font-weight: 700; --lh: 1; color: var(--money-green); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* _ProfileStyleDayHeader: padding 16 12 8, GoogleFonts 11/600 +0.4 height 1.2, black54; total tabular, no tracking */
+.byb-app .k-dayhead { padding: 16px 12px 8px; display: flex; align-items: center; font-size: 11px; font-weight: 600; color: var(--day-header-ink); }
+.byb-app .k-dayhead > span { --lh: 1.2; }
+.byb-app .k-dayhead > .k-d-label { flex: 1 1 auto; --ls: 0.4px; }
+.byb-app .k-dayhead > .k-d-total { margin-left: 12px; --ls: 0px; font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------------ chips, compare badge, segmented */
+
+/* CategoryFilterStrip: a 36-tall horizontal ListView, 16 side padding, 8 apart — the list stretches each chip to
+   36, its label stays at the top of the padding. _Chip: pill, 1px border (pads by 1), 14 × 6, 13 w500 at ink 75%
+   (height 1.2); selected: the category fill, w600, white or black87 */
+.byb-app .k-chips { height: 36px; overflow: hidden; }
+/* the scrolled content: kit.chips' o.offset moves this row, not the clipping strip, so chips fill to the edge */
+.byb-app .k-chips > .k-chips-row { height: 36px; display: flex; gap: 8px; padding: 0 16px; }
+.byb-app .k-chip {
+  flex: none; align-self: stretch; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--border);
+  font-size: 13px; font-weight: 500; --lh: 1.2; color: var(--chip-ink); white-space: nowrap;
+}
+.byb-app .k-chip.k-on { border-color: transparent; font-weight: 600; }
+
+/* _comparisonBadge: 34 circle (tone @ 10% / 16%, 1.5 ring @ 45%, 18 arrow) + 8 + 12/600 label (height 1.2), max 140 */
+.byb-app .k-compare { max-width: 140px; display: flex; align-items: center; flex: none; }
+.byb-app .k-compare > .k-cmp-dot {
+  width: 34px; height: 34px; border-radius: 50%; flex: none; display: flex; align-items: center; justify-content: center;
+  background: color-mix(in srgb, var(--cmp) 10%, transparent); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--cmp) 45%, transparent);
+  color: var(--cmp);
+}
+.byb-app.mode-dark .k-compare > .k-cmp-dot { background: color-mix(in srgb, var(--cmp) 16%, transparent); }
+.byb-app .k-compare > .k-cmp-dot .ic { font-size: 18px; }
+.byb-app .k-compare > .k-cmp-text { margin-left: 8px; min-width: 0; font-size: 12px; font-weight: 600; --lh: 1.2; color: var(--cmp); }
+
+/* _SlidingSegmentedControl: pill track 4% / 6% with a 1px border of the same (pads by 1), 3 padding; selected =
+   fab pill with a 35% glow (blur 8 → 10.24); items 8 × 4 padding, emoji 14 (×1.15 when selected) + 4 + label.
+   The label sits in an AnimatedDefaultTextStyle, which REPLACES the theme's style: AppFont 13 w700 / w600 with no
+   height (Inter's own 1.210227) and no tracking. The emoji Text is outside it: the theme's 1.5 / 0.25, Inter's
+   metrics (k-emoji-inter). */
+.byb-app .k-seg { position: relative; display: flex; padding: 4px; border-radius: 999px; background: var(--seg-track); box-shadow: inset 0 0 0 1px var(--seg-track); }
+.byb-app .k-seg > .k-seg-item {
+  position: relative; flex: 1 1 0; min-width: 0; padding: 8px 4px; display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600; color: var(--seg-ink); white-space: nowrap; border-radius: 999px;
+}
+.byb-app .k-seg > .k-seg-item.k-on { background: var(--fab); color: #FFFFFF; font-weight: 700; box-shadow: 0 2px 10.24px color-mix(in srgb, var(--fab) 35%, transparent); }
+.byb-app .k-seg > .k-seg-item > .k-seg-label { --lh: 1.210227; --ls: 0px; }
+/* a colour emoji: iOS's wider emoji box (k-emoji-ios) and 1.5pt lower than Chrome draws it at 14pt (fitted on
+   06_settings_dark_sunset, en + es-419: the ink boxes land on the capture's). An emoji Inter draws (☀, class
+   k-emoji-text) is an ordinary glyph: no extra box, no offset. */
+.byb-app .k-seg > .k-seg-item > .k-emoji { font-size: 14px; margin-left: 0.046em; margin-right: calc(4px + 0.245em); translate: 0 0.107em; }
+.byb-app .k-seg > .k-seg-item > .k-emoji.k-emoji-text { margin-left: 0; margin-right: 4px; translate: none; }
+.byb-app .k-seg > .k-seg-item.k-on > .k-emoji { transform: scale(1.15); }

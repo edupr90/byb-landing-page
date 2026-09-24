@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BYB app screen</title>
+<!--
+  One app screen, rendered from the SAME engine the App Store screenshots use
+  (byb_project/store_screenshots/app). It lives in an iframe on purpose: app.css
+  redefines the `Inter` @font-face against local .ttf files, which would collide
+  with the site's Google-Fonts Inter if it were loaded into the main document.
+
+  Query params:
+    screen=budget          a key of BYBApp.screens          (required)
+    state=ring             a state of that screen           (optional)
+    mode=light|dark        colour scheme                    (default light)
+    palette=royal          AppColorPalette id               (default royal)
+    lang=en                a language in BYB_LANGS          (default en)
+    pops=member-owner,split-button   elements to measure and report to the parent
+  The phone is 440 x 956 pt and is scaled to whatever box the parent gives it.
+-->
+<style>
+  html, body { margin: 0; height: 100%; background: transparent; overflow: hidden; }
+  #stage { position: absolute; inset: 0; }
+  #stage > .byb-app { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+  /* Until the engine has painted, show nothing rather than a flash of unstyled phone. */
+  body:not([data-ready]) #stage { opacity: 0; }
+  #stage { transition: opacity .35s ease; }
+</style>
+<script>window.BYB_LANGS = ["en"];</script>
+<script src="app/load.js"></script>
+</head>
+<body>
+<div id="stage"></div>
+<script>
+(async function () {
+  const P = new URLSearchParams(location.search);
+  const W = 440, H = 956;
+  const stage = document.getElementById("stage");
+  const lang = P.get("lang") || "en";
+
+  await window.BYBApp.ready();
+
+  const spec = { app: P.get("screen") || "budget" };
+  if (P.get("state")) spec.state = P.get("state");
+  spec.mode = P.get("mode") === "dark" ? "dark" : "light";
+  spec.palette = P.get("palette") || "royal";
+  if (P.get("scroll")) spec.scroll = isNaN(+P.get("scroll")) ? P.get("scroll") : +P.get("scroll");
+
+  let node;
+  try {
+    node = window.BYBApp.render(spec, lang);
+  } catch (e) {
+    // A bad screen/state must not leave a broken black box on the marketing site.
+    document.body.dataset.ready = "1";
+    parent.postMessage({ type: "byb-screen-error", spec, message: String(e) }, "*");
+    return;
+  }
+  document.documentElement.lang = lang;
+  stage.appendChild(node);
+
+  // Fill the box the parent gave us, preserving the phone's aspect ratio.
+  const fit = () => {
+    const k = Math.min(stage.clientWidth / W, stage.clientHeight / H);
+    node.style.transform = `scale(${k})`;
+    node.style.left = `${(stage.clientWidth - W * k) / 2}px`;
+    node.style.top = `${(stage.clientHeight - H * k) / 2}px`;
+  };
+  fit();
+  new ResizeObserver(fit).observe(stage);
+
+  if (document.fonts && document.fonts.ready) { try { await document.fonts.ready; } catch (e) {} }
+  fit();
+  document.body.dataset.ready = "1";
+
+  // Report where the requested [data-pop] elements sit, as fractions of the phone, so the parent can
+  // hang callouts on them at any rendered size without knowing anything about the phone's scale.
+  const wanted = (P.get("pops") || "").split(",").map((s) => s.trim()).filter(Boolean);
+  const measure = () => {
+    const rects = {};
+    for (const name of wanted) {
+      const el = node.querySelector(`[data-pop="${name}"]`);
+      if (!el) continue;
+      // offset* walks the phone's own 440 x 956 coordinate space, so it is immune to the CSS
+      // transform that scales the phone into whatever box the parent gave it.
+      let x = 0, y = 0, n = el;
+      while (n && n !== node) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; }
+      rects[name] = { x: x / W, y: y / H, w: el.offsetWidth / W, h: el.offsetHeight / H };
+    }
+    return rects;
+  };
+  const report = () => parent.postMessage(
+    { type: "byb-screen-ready", screen: spec.app, state: spec.state || null, rects: measure() }, "*");
+  report();
+  // The parent may mount before this frame finishes; answer a late ask too.
+  window.addEventListener("message", (e) => { if (e.data && e.data.type === "byb-screen-remeasure") report(); });
+})();
+</script>
+</body>
+</html>
