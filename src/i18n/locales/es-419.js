@@ -30,6 +30,7 @@ export default {
     titleAccent: 'dinero',
     subtitle:
       'Planifica el mes, registra lo que gastas y mira cada categoría de un vistazo. Budget Your Budget lo hace tan simple que de verdad lo sigues haciendo.',
+    rating: '4.8',
     statRating: 'en App Store',
     statPrivate: 'Funciona sin conexión',
     statFree: 'Gratis para empezar',

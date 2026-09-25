@@ -104,7 +104,7 @@ export default function Hero() {
             >
               <span className="flex items-center gap-1.5">
                 <Star size={15} className="fill-accent-400 text-accent-400" />
-                4.8 {t('hero.statRating')}
+                {t('hero.rating')} {t('hero.statRating')}
               </span>
               <span className="w-px h-4 bg-white/15" />
               <span className="flex items-center gap-1.5">

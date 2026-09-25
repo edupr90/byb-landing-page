@@ -43,6 +43,7 @@ export default {
     titleB: '自分の',
     titleAccent: '手に',
     subtitle: '1か月の計画を立てて、支出を記録すれば、すべてのカテゴリがひと目でわかります。Budget Your Budgetは、ちゃんと続けられるくらいシンプルです。',
+    rating: '4.8',
     statRating: 'App Storeの評価',
     statPrivate: 'オフラインで使えます',
     statFree: '無料で始められます',

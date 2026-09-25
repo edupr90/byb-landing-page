@@ -28,6 +28,10 @@ export default {
     titleAccent: 'money',
     subtitle:
       'Plan the month, log what you spend, and watch every category in one glance. Budget Your Budget keeps it simple enough that you actually keep doing it.',
+    /* The numeral is a locale's own, not a constant: CLDR writes this 4.8 in
+       en, es-419 and ja but 4,8 in pt-BR — and in fr, de, it and tr when they
+       land. Hero.jsx renders `{rating} {statRating}`. */
+    rating: '4.8',
     statRating: 'App Store rating',
     statPrivate: 'Works offline',
     statFree: 'Free to start',
