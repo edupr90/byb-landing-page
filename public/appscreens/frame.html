@@ -37,7 +37,7 @@
     either list. An unknown ?lang= simply stays English instead of 404-ing.
   */
   (function () {
-    var SHIPPED = ["en", "es-419", "ja", "pt-BR"];
+    var SHIPPED = ["en", "es-419", "ja", "pt-BR", "fr-FR"];
     var want = new URLSearchParams(location.search).get("lang");
     window.BYB_LANGS = want && want !== "en" && SHIPPED.indexOf(want) !== -1 ? ["en", want] : ["en"];
   })();

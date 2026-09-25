@@ -3,6 +3,7 @@ import en from './locales/en';
 import es419 from './locales/es-419';
 import ja from './locales/ja';
 import ptBR from './locales/pt-BR';
+import frFR from './locales/fr-FR';
 
 /*
  * ============================================================
@@ -33,7 +34,7 @@ export const LANGUAGES = [
 ];
 
 /** Add a locale here once ./locales/<code>.js exists. */
-const TRANSLATIONS = { en, 'es-419': es419, ja, 'pt-BR': ptBR };
+const TRANSLATIONS = { en, 'es-419': es419, ja, 'pt-BR': ptBR, 'fr-FR': frFR };
 
 /*
  * Languages the phone screens can actually render. Each one costs a ~130 KB ARB
@@ -41,7 +42,7 @@ const TRANSLATIONS = { en, 'es-419': es419, ja, 'pt-BR': ptBR };
  * set and the SHIPPED list in public/appscreens/frame.html identical, or a
  * language will silently fall back to English screens on a translated page.
  */
-const SCREEN_LANGS = new Set(['en', 'es-419', 'ja', 'pt-BR']);
+const SCREEN_LANGS = new Set(['en', 'es-419', 'ja', 'pt-BR', 'fr-FR']);
 
 export const AVAILABLE = LANGUAGES.filter((l) => TRANSLATIONS[l.code]);
 
