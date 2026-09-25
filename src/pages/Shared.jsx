@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Check, Lock, Users, ArrowRight, Info } from 'lucide-react';
@@ -17,20 +16,40 @@ import Eyebrow from '../components/Eyebrow';
  * Everything claimed here is also in /terms section 6.
  */
 
+const CATEGORY_POPS = [
+  { el: 'member-owner', side: 'left' },
+  { el: 'member-partner', side: 'right' },
+  { el: 'split-button', side: 'left' },
+  { el: 'expense-rent-partner', side: 'right' },
+];
+
+const BUDGET_POPS = [
+  { el: 'total-income', side: 'left' },
+  { el: 'who-spending', side: 'right' },
+  { el: 'petal-ring', side: 'left' },
+];
+
+/* Pair each anchor with its copy. A locale short of an entry simply drops that
+   card rather than rendering an empty one. */
+function withCopy(anchors, copy) {
+  const list = Array.isArray(copy) ? copy : [];
+  return anchors
+    .map((a, i) => (list[i] ? { ...a, title: list[i].title, body: list[i].body } : null))
+    .filter(Boolean);
+}
+
 export default function Shared() {
   const { t } = useT();
-
-  useEffect(() => {
-    const prev = document.title;
-    document.title = t('sharedPage.metaTitle');
-    return () => {
-      document.title = prev;
-    };
-  }, [t]);
 
   const steps = t('sharedPage.steps');
   const sharedItems = t('sharedPage.sharedItems');
   const privateItems = t('sharedPage.privateItems');
+
+  // Which [data-pop] element each callout points at, and which gutter it sits
+  // in, stay here next to the screen; the copy comes from the locale table in
+  // the same order, so a translation can never re-point a card.
+  const categoryPops = withCopy(CATEGORY_POPS, t('sharedPage.popsCategory'));
+  const budgetPops = withCopy(BUDGET_POPS, t('sharedPage.popsBudget'));
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
@@ -69,32 +88,7 @@ export default function Shared() {
             state="housing"
             eager
             phoneClass="w-[250px] sm:w-[290px] xl:w-[310px]"
-            pops={[
-              {
-                el: 'member-owner',
-                side: 'left',
-                title: 'Your share, at a glance',
-                body: 'What you agreed to cover in this category, and what you have actually spent against it.',
-              },
-              {
-                el: 'member-partner',
-                side: 'right',
-                title: "And your partner's",
-                body: 'The same card for them. Nobody has to ask how the other one is doing.',
-              },
-              {
-                el: 'split-button',
-                side: 'left',
-                title: 'Split it however you like',
-                body: 'Change who covers what at any time. It is your agreement — the app just keeps score.',
-              },
-              {
-                el: 'expense-rent-partner',
-                side: 'right',
-                title: 'Who logged it',
-                body: 'Every expense carries the name and photo of whoever added it, on both phones.',
-              },
-            ]}
+            pops={categoryPops}
           />
 
           <p className="mt-14 text-center text-sm text-surface-400 dark:text-surface-500">
@@ -147,26 +141,7 @@ export default function Shared() {
             screen="budget"
             state="top"
             phoneClass="w-[250px] sm:w-[290px] xl:w-[310px]"
-            pops={[
-              {
-                el: 'total-income',
-                side: 'left',
-                title: 'Both incomes, one plan',
-                body: 'The household total is what the month is planned against, not just yours.',
-              },
-              {
-                el: 'who-spending',
-                side: 'right',
-                title: "Who's spending what",
-                body: 'A card each, side by side, so the split is never a conversation you have to have twice.',
-              },
-              {
-                el: 'petal-ring',
-                side: 'left',
-                title: 'One ring for the household',
-                body: 'Every category you both spend from, in one picture of the month.',
-              },
-            ]}
+            pops={budgetPops}
           />
         </div>
       </section>

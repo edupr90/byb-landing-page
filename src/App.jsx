@@ -7,7 +7,25 @@ import Home from './pages/Home';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import Terms from './pages/Terms';
 import Shared from './pages/Shared';
-import { LanguageProvider } from './i18n';
+import { LanguageProvider, useT } from './i18n';
+
+/*
+ * The tab title and the meta description, in the active language. One owner for
+ * both, so a route change and a language change cannot fight over them — which
+ * is what happens the moment a page sets its own title in an effect of its own.
+ */
+function PageMeta() {
+  const { pathname } = useLocation();
+  const { t, lang } = useT();
+
+  useEffect(() => {
+    document.title = pathname.startsWith('/shared') ? t('sharedPage.metaTitle') : t('meta.title');
+    const desc = document.querySelector('meta[name="description"]');
+    if (desc) desc.setAttribute('content', t('meta.description'));
+  }, [pathname, t, lang]);
+
+  return null;
+}
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -37,6 +55,7 @@ export default function App() {
     <LanguageProvider>
     <div className="min-h-screen flex flex-col">
       <Navbar dark={dark} setDark={setDark} />
+      <PageMeta />
       <ScrollToTop />
       <main className="flex-1">
         <AnimatePresence mode="wait">

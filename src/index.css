@@ -17,6 +17,39 @@
   ::selection {
     @apply bg-brand-500/20 text-brand-700 dark:bg-brand-400/25 dark:text-brand-300;
   }
+
+  /*
+   * CJK line breaking. Japanese may break between almost any two characters,
+   * so nothing ever overflows — what goes wrong instead is WHERE it breaks.
+   *   line-break: strict  the kinsoku ruleset Japanese typesetting actually
+   *                       uses; `auto` still allows a break before small kana
+   *                       (ゃゅょっ) and the長音符, which reads as a typo.
+   *   word-break:
+   *     auto-phrase       breaks on phrase boundaries instead of between any
+   *                       two characters. Without it, measured headings split
+   *                       カメ/ラ and ラ/イト — a katakana word cut in half,
+   *                       which reads like a typo. With it the same headings
+   *                       break after を and after 、 and the words survive.
+   *                       Chrome-only for now; everywhere else it is ignored
+   *                       and the breaking is exactly what it is today.
+   *   text-wrap: balance  evens the lines out. `pretty` is the usual choice for
+   *                       a widow, but it works by moving the last WORD down,
+   *                       and a Japanese sentence is one unbroken word to it —
+   *                       measured on the hero caption, `pretty` still split
+   *                       ...ありま / せん。 while `balance` broke it at the
+   *                       sentence boundary. Browsers ignore balance past a few
+   *                       lines, so long prose is unaffected either way.
+   * Scoped to the CJK languages so the measured English and Spanish layouts
+   * are not touched.
+   */
+  html:lang(ja) body,
+  html:lang(ko) body,
+  html:lang(zh) body,
+  html[lang^='zh-'] body {
+    line-break: strict;
+    word-break: auto-phrase;
+    text-wrap: balance;
+  }
 }
 
 /* ── Custom Utilities ────────────────────────────────────── */

@@ -7,7 +7,7 @@ import Eyebrow from './Eyebrow';
 const ICONS = [Wallet, LayoutGrid, TrendingUp];
 
 export default function HowItWorks() {
-  const { t } = useT();
+  const { t, wordSpace } = useT();
   const steps = (t('howItWorks.steps') || []).map((step, i) => ({
     ...step,
     number: String(i + 1).padStart(2, '0'),
@@ -20,7 +20,7 @@ export default function HowItWorks() {
         <AnimatedSection className="text-center max-w-3xl mx-auto mb-20">
           <Eyebrow className="mb-6">{t('howItWorks.eyebrow')}</Eyebrow>
           <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-surface-900 dark:text-white tracking-tight">
-            {t('howItWorks.titleA')}{' '}
+            {t('howItWorks.titleA')}{wordSpace}
             <span className="text-gradient-accent">{t('howItWorks.titleAccent')}</span>
           </h2>
           <p className="mt-5 text-lg text-surface-500 dark:text-surface-400 leading-relaxed">

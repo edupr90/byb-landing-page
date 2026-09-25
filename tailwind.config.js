@@ -4,9 +4,14 @@ export default {
   darkMode: 'class',
   theme: {
     extend: {
+      /* "Noto Sans JP" sits behind the Latin faces, never in front: Inter and
+         Plus Jakarta Sans have every Latin glyph, so an English or Spanish page
+         never reaches it, and a Japanese one has a designed face instead of
+         whatever sans-serif the OS defaults to. The stylesheet itself is only
+         fetched for a CJK locale — see needsCjkFont() in src/i18n/index.jsx. */
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        display: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+        sans: ['Inter', '"Noto Sans JP"', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['"Plus Jakarta Sans"', 'Inter', '"Noto Sans JP"', 'system-ui', 'sans-serif'],
       },
       colors: {
         brand: {

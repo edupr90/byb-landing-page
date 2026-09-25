@@ -211,7 +211,7 @@ export default {
       },
       {
         q: 'What does my partner see in a shared budget?',
-        a: 'A shared budget is for two people. You both become equal editors of one budget: each of you can see and change every expense in it — including its notes and any receipt photo — plus the categories, the plan, and both of your income amounts. Every expense shows who logged it. Your debts, your PIN, your settings and your reports are never shared. Joining merges your data into that budget and cannot be undone, so read the Terms of Use before you accept an invite.',
+        a: 'A shared budget is for two people. You both become equal editors of one budget: each of you can see and change every expense in it — including its notes and any receipt photo — plus the categories and the plan. You both see both income amounts and the household total, but your own income stays yours to edit. Every expense shows who logged it. Your debts, your PIN, your settings and your reports are never shared. Joining merges your data into that budget and cannot be undone, so read the Terms of Use before you accept an invite.',
       },
       {
         q: 'Does it work offline?',
@@ -290,6 +290,42 @@ export default {
       'Your email address',
     ],
 
+    /* Pop-out callouts on the two phones. Order matches the `el` list in
+       pages/Shared.jsx — the element each card points at stays in code, the
+       copy lives here. */
+    popsCategory: [
+      {
+        title: 'Your share, at a glance',
+        body: 'What you agreed to cover in this category, and what you have actually spent against it.',
+      },
+      {
+        title: "And your partner's",
+        body: 'The same card for them. Nobody has to ask how the other one is doing.',
+      },
+      {
+        title: 'Split it however you like',
+        body: 'Change who covers what at any time. It is your agreement — the app just keeps score.',
+      },
+      {
+        title: 'Who logged it',
+        body: 'Every expense carries the name and photo of whoever added it, on both phones.',
+      },
+    ],
+    popsBudget: [
+      {
+        title: 'Both incomes, one plan',
+        body: 'The household total is what the month is planned against, not just yours.',
+      },
+      {
+        title: "Who's spending what",
+        body: 'A card each, side by side, so the split is never a conversation you have to have twice.',
+      },
+      {
+        title: 'One ring for the household',
+        body: 'Every category you both spend from, in one picture of the month.',
+      },
+    ],
+
     honestTitle: 'Before you invite someone',
     honestBody:
       'Two people sharing money need to be able to trust the tool, so here is the plain version: your partner will see the expenses, notes and receipts in the budget, and joining merges your data into it in a way that cannot be undone. Only the budget owner can remove a member; a member can leave whenever they want.',
@@ -313,6 +349,17 @@ export default {
     terms: 'Terms of Use',
     privacy: 'Privacy Policy',
     madeWith: 'Made with',
+  },
+
+  /* Document <title> and the meta description, swapped per language. */
+  meta: {
+    title: 'Budget Your Budget — Smart Budgeting Made Simple',
+    description:
+      'A friendly daily budgeting app that helps you track spending, plan monthly expenses, and stay on top of your goals. Available on iOS and Android.',
+  },
+
+  legal: {
+    docLanguage: 'Document language',
   },
 
   common: {

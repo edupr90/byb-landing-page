@@ -6,7 +6,7 @@ import { APP_STORE_URL, PLAY_STORE_URL } from '../constants';
 import Eyebrow from './Eyebrow';
 
 export default function Hero() {
-  const { t } = useT();
+  const { t, wordSpace } = useT();
 
   return (
     <section className="relative min-h-[100svh] flex items-center overflow-hidden bg-hero dark:bg-hero-dark">
@@ -48,9 +48,9 @@ export default function Hero() {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="font-display text-[2.75rem] sm:text-6xl lg:text-7xl font-extrabold text-white leading-[1.04] tracking-tight"
             >
-              {t('hero.titleA')}{' '}
+              {t('hero.titleA')}{wordSpace}
               <span className="block">
-                {t('hero.titleB')}{' '}
+                {t('hero.titleB')}{wordSpace}
                 <span className="relative inline-block">
                   <span className="relative z-10 text-gradient-hero">{t('hero.titleAccent')}</span>
                   <motion.span

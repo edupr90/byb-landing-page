@@ -15,6 +15,8 @@
  * ============================================================
  */
 
+import { useT } from '../i18n';
+
 /* Five teardrops around a centre, the shape the Planning ring draws.
    Colours are the brand blues with two amber petals for warmth; all
    mid-tones, so the mark holds on a white page and on the dark hero. */
@@ -41,17 +43,24 @@ function PetalMark({ className = '' }) {
 }
 
 export default function Eyebrow({ children, tone = 'light', mark = true, className = '' }) {
+  const { isCjk } = useT();
   const text =
     tone === 'dark'
       ? 'text-white/75' // on the hero / brand grounds
       : 'text-brand-700 dark:text-brand-300';
 
+  /* Kana and kanji have no case, so `uppercase` does nothing for them — but it
+     does reach the Latin a Japanese kicker embeds, turning "iOSとAndroid" into
+     "IOSとANDROID". Wide tracking is also a Latin small-caps device; CJK is
+     already airy at this size, so it gets half of it. */
+  const type = isCjk
+    ? 'text-[11px] sm:text-xs font-bold tracking-[0.08em]'
+    : 'text-[11px] sm:text-xs font-bold uppercase tracking-[0.18em]';
+
   return (
     <span className={`inline-flex items-center gap-2.5 ${className}`}>
       {mark && <PetalMark />}
-      <span className={`font-display text-[11px] sm:text-xs font-bold uppercase tracking-[0.18em] ${text}`}>
-        {children}
-      </span>
+      <span className={`font-display ${type} ${text}`}>{children}</span>
     </span>
   );
 }

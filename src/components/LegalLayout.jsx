@@ -1,13 +1,20 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import { useT } from '../i18n';
 
 /*
  * ============================================================
  *  LEGAL PAGE LAYOUT
  *  Shared chrome for the Terms of Use and Privacy Policy pages:
  *  back link, EN/ES switch, and the prose wrapper.
+ *
+ *  The documents themselves exist in two languages only, so the
+ *  switch stays EN/ES no matter what the site language is — but a
+ *  Spanish-speaking visitor opens on the Spanish text rather than
+ *  having to find the switch. Both documents keep the formal
+ *  "usted" of legal register; only this chrome follows the site.
  * ============================================================
  */
 
@@ -17,8 +24,18 @@ const PROSE =
   'prose-h1:text-3xl prose-h1:sm:text-4xl prose-h2:mt-12 prose-h2:text-xl ' +
   'prose-h3:text-lg prose-li:my-1';
 
+const forSite = (siteLang) => (siteLang.startsWith('es') ? 'es' : 'en');
+
 export default function LegalLayout({ en, es, updatedEn, updatedEs }) {
-  const [lang, setLang] = useState('en');
+  const { t, lang: siteLang } = useT();
+  const [lang, setLang] = useState(() => forSite(siteLang));
+  // The document follows the site language until the reader picks a language
+  // here — after that, this switch is theirs and nothing else moves it.
+  const chosen = useRef(false);
+
+  useEffect(() => {
+    if (!chosen.current) setLang(forSite(siteLang));
+  }, [siteLang]);
 
   return (
     <motion.div
@@ -36,13 +53,13 @@ export default function LegalLayout({ en, es, updatedEn, updatedEs }) {
             className="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 text-sm font-medium transition-colors"
           >
             <ArrowLeft size={16} />
-            Back to Home
+            {t('common.backHome')}
           </Link>
 
           <div
             className="inline-flex rounded-xl border border-surface-200 dark:border-surface-700 p-0.5"
             role="group"
-            aria-label="Document language"
+            aria-label={t('legal.docLanguage')}
           >
             {[
               { id: 'en', label: 'English' },
@@ -51,7 +68,10 @@ export default function LegalLayout({ en, es, updatedEn, updatedEs }) {
               <button
                 key={opt.id}
                 type="button"
-                onClick={() => setLang(opt.id)}
+                onClick={() => {
+                  chosen.current = true;
+                  setLang(opt.id);
+                }}
                 aria-pressed={lang === opt.id}
                 className={`px-3 py-1.5 rounded-[10px] text-xs font-semibold transition-colors duration-200 ${
                   lang === opt.id
