@@ -84,10 +84,41 @@
       ":wght@400..800&display=swap";
     document.head.appendChild(link);
     var css = document.createElement("style");
-    css.textContent =
+    var rules =
       '.byb-app { font-family: "Inter AppFont", "' + face + '", "Apple Color Emoji", sans-serif; }' +
       '.byb-app .k-gf { font-family: "Inter", "' + face + '", "Apple Color Emoji", sans-serif; }' +
       '.byb-app .k-af { font-family: "Inter AppFont", "' + face + '", "Apple Color Emoji", sans-serif; }';
+
+    /*
+      zh-Hant already has a front family of its own. kit.css puts
+      "BYB PingFang TC" — local("PingFangTC-*"), i.e. Apple only — ahead of the
+      Latin faces under `.byb-app:lang(zh-Hant)`, to match what the shipping
+      Flutter app draws on iOS. That selector is more specific than the plain
+      `.byb-app` above, so the rules we just built would lose to it and the Noto
+      floor would never be reached: off Apple, PingFang is absent, "Inter
+      AppFont" has no Han, and the phone lands on the OS default — exactly the
+      lottery this block exists to end.
+
+      So for zh we restate kit.css's own two groups with the floor appended
+      BEHIND PingFang. Same selectors, same specificity, and this style element
+      is added after load.js writes kit.css, so it wins on order while leaving
+      Apple byte-identical to the app.
+    */
+    if (face === "Noto Sans TC") {
+      var AF = '.byb-app:lang(zh-Hant), .byb-app:lang(zh-Hant) .k-af';
+      var GF =
+        '.byb-app:lang(zh-Hant) .k-gf, .byb-app:lang(zh-Hant) .k-money,' +
+        '.byb-app:lang(zh-Hant) .k-appbar > .k-title,' +
+        '.byb-app:lang(zh-Hant) .k-xtile .k-x-title,' +
+        '.byb-app:lang(zh-Hant) .k-xtile .k-x-cap,' +
+        '.byb-app:lang(zh-Hant) .k-xtile .k-x-author,' +
+        '.byb-app:lang(zh-Hant) .k-xtile .k-x-amount,' +
+        '.byb-app:lang(zh-Hant) .k-dayhead';
+      rules +=
+        AF + '{ font-family: "BYB PingFang TC", "Inter AppFont", "Noto Sans TC", "Apple Color Emoji", sans-serif; }' +
+        GF + '{ font-family: "BYB PingFang TC", "Inter", "Noto Sans TC", "Apple Color Emoji", sans-serif; }';
+    }
+    css.textContent = rules;
     document.head.appendChild(css);
   })();
 </script>

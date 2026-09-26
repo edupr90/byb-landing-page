@@ -79,11 +79,23 @@ const CJK_FONT = { ja: 'Noto+Sans+JP', ko: 'Noto+Sans+KR', zh: 'Noto+Sans+TC' };
  */
 const NO_WORD_SPACE = /^(ja|zh)/;
 
+/*
+ * ONE CJK FACE AT A TIME. The Tailwind stacks list all three Noto families, and
+ * fallback picks the FIRST one that has the glyph — so if a visitor switches
+ * ja → zh-Hant in the picker and both stylesheets are live, every Han glyph
+ * draws from Noto Sans JP, in Japanese shapes, because JP covers those
+ * codepoints and is listed first. (Korean never showed this: JP declares no
+ * Hangul, so ko falls through to KR whatever the order.) Dropping the previous
+ * sheet keeps exactly one CJK face loaded, which makes the stack order moot.
+ */
 function ensureCjkFont(lang) {
   if (typeof document === 'undefined') return;
   const family = CJK_FONT[lang.slice(0, 2)];
   if (!family) return;
   const id = `byb-cjk-font-${family}`;
+  for (const link of document.querySelectorAll('link[id^="byb-cjk-font-"]')) {
+    if (link.id !== id) link.remove();
+  }
   if (document.getElementById(id)) return;
   const link = document.createElement('link');
   link.id = id;
