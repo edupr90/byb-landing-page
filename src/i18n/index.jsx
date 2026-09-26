@@ -54,22 +54,40 @@ const STORAGE_KEY = 'byb-lang';
 
 /*
  * Inter and Plus Jakarta Sans carry no CJK, so a Japanese page would otherwise
- * be drawn in whatever the OS calls sans-serif. Noto Sans JP is last in both
- * Tailwind stacks (tailwind.config.js), and its stylesheet is fetched only when
- * a CJK language is actually selected — Google serves it split by unicode-range,
- * so the page pulls only the few subsets its own text touches.
+ * be drawn in whatever the OS calls sans-serif. The Noto families are last in
+ * both Tailwind stacks (tailwind.config.js), and a stylesheet is fetched only
+ * when a CJK language is actually selected — Google serves them split by
+ * unicode-range, so the page pulls only the few subsets its own text touches.
+ *
+ * THE FACE IS PER LANGUAGE, and this is not a nicety. Checked against the
+ * unicode-range blocks Google actually serves: Noto Sans JP declares NO range
+ * covering the Hangul syllables (U+AC00–D7A3), so loading it for Korean
+ * supplies nothing and the page falls through to the OS default — the exact
+ * failure this whole mechanism exists to prevent, one script over. Noto Sans KR
+ * covers Hangul; Noto Sans TC covers the traditional Han that zh-Hant needs
+ * (JP covers those codepoints too, but draws them with Japanese glyph shapes).
  */
 const CJK = /^(ja|ko|zh)/;
-const CJK_FONT_HREF =
-  'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400..800&display=swap';
+const CJK_FONT = { ja: 'Noto+Sans+JP', ko: 'Noto+Sans+KR', zh: 'Noto+Sans+TC' };
 
-function ensureCjkFont() {
+/*
+ * Japanese and Chinese are written with no space between words, so a hard-coded
+ * one shows up as a gap in the middle of a 72px headline. KOREAN IS NOT LIKE
+ * THEM — it is space-separated, and dropping the space runs the two halves of a
+ * split headline together.
+ */
+const NO_WORD_SPACE = /^(ja|zh)/;
+
+function ensureCjkFont(lang) {
   if (typeof document === 'undefined') return;
-  if (document.getElementById('byb-cjk-font')) return;
+  const family = CJK_FONT[lang.slice(0, 2)];
+  if (!family) return;
+  const id = `byb-cjk-font-${family}`;
+  if (document.getElementById(id)) return;
   const link = document.createElement('link');
-  link.id = 'byb-cjk-font';
+  link.id = id;
   link.rel = 'stylesheet';
-  link.href = CJK_FONT_HREF;
+  link.href = `https://fonts.googleapis.com/css2?family=${family}:wght@400..800&display=swap`;
   document.head.appendChild(link);
 }
 
@@ -104,7 +122,7 @@ export function LanguageProvider({ children }) {
 
   useEffect(() => {
     document.documentElement.lang = lang;
-    if (CJK.test(lang)) ensureCjkFont();
+    if (CJK.test(lang)) ensureCjkFont(lang);
     try {
       localStorage.setItem(STORAGE_KEY, lang);
     } catch (e) {
@@ -132,10 +150,10 @@ export function LanguageProvider({ children }) {
       /*
        * The separator between two halves of a split headline (hero.titleA /
        * titleB / titleAccent, howItWorks.titleA / titleAccent). Latin needs the
-       * space; Japanese writes no space between words, and a hard-coded one
-       * shows up as a gap in the middle of a 72px headline.
+       * space, and so does Korean — only Japanese and Chinese drop it. See
+       * NO_WORD_SPACE above.
        */
-      wordSpace: CJK.test(lang) ? '' : ' ',
+      wordSpace: NO_WORD_SPACE.test(lang) ? '' : ' ',
       /** True for a language written without a Latin case distinction. */
       isCjk: CJK.test(lang),
     };

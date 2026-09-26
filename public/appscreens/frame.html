@@ -45,36 +45,49 @@
 <script src="app/load.js"></script>
 <script>
   /*
-    JAPANESE GLYPHS OUTSIDE APPLE.
+    CJK GLYPHS OUTSIDE APPLE.
 
     app.css and kit.css give the "Inter" and "Inter AppFont" families a CJK face
     of `local("HiraginoSans-W3|W6|W7")` — the same fallback the shipping app gets
     on iOS, and what the App Store screenshots were exported with. `local()`
     resolves on macOS and iOS and nowhere else, so on Windows, Android and Linux
     both families run out of glyphs and the phone falls through to the generic
-    `sans-serif`, i.e. Yu Gothic or whatever the OS happens to have.
+    `sans-serif`, i.e. Yu Gothic or whatever the OS happens to have. (Hiragino
+    does carry Hangul, checked on macOS, so Apple is covered for Korean too.)
 
-    Noto Sans JP, appended AFTER those two families, is the floor: Apple still
+    A Noto face, appended AFTER those two families, is the floor: Apple still
     gets Hiragino (byte-identical to the app), everyone else gets one designed
-    face instead of a lottery. Google serves it split by unicode-range, so a
+    face instead of a lottery. Google serves them split by unicode-range, so a
     phone downloads only the few subsets its own strings touch. Latin is
     untouched — "Inter" is still first and has every glyph the screens need.
+
+    THE FACE IS PER LANGUAGE. Noto Sans JP declares no unicode-range covering
+    the Hangul syllables, so serving it to a Korean phone supplies nothing and
+    hands the screens back to the OS default — the very thing this block exists
+    to stop. ko takes Noto Sans KR, zh-Hant takes TC (JP has those codepoints
+    but draws them with Japanese glyph shapes).
 
     This override has to come after load.js, which document.writes app.css and
     kit.css at its own position; it is a site concern, so it lives here rather
     than in the files copied from store_screenshots/app.
   */
   (function () {
-    if (!/^(ja|ko|zh)/.test(window.BYB_LANGS[window.BYB_LANGS.length - 1])) return;
+    var lang = window.BYB_LANGS[window.BYB_LANGS.length - 1];
+    var FACE = { ja: "Noto Sans JP", ko: "Noto Sans KR", zh: "Noto Sans TC" };
+    var face = FACE[lang.slice(0, 2)];
+    if (!face) return;
     var link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400..800&display=swap";
+    link.href =
+      "https://fonts.googleapis.com/css2?family=" +
+      face.replace(/ /g, "+") +
+      ":wght@400..800&display=swap";
     document.head.appendChild(link);
     var css = document.createElement("style");
     css.textContent =
-      '.byb-app { font-family: "Inter AppFont", "Noto Sans JP", "Apple Color Emoji", sans-serif; }' +
-      '.byb-app .k-gf { font-family: "Inter", "Noto Sans JP", "Apple Color Emoji", sans-serif; }' +
-      '.byb-app .k-af { font-family: "Inter AppFont", "Noto Sans JP", "Apple Color Emoji", sans-serif; }';
+      '.byb-app { font-family: "Inter AppFont", "' + face + '", "Apple Color Emoji", sans-serif; }' +
+      '.byb-app .k-gf { font-family: "Inter", "' + face + '", "Apple Color Emoji", sans-serif; }' +
+      '.byb-app .k-af { font-family: "Inter AppFont", "' + face + '", "Apple Color Emoji", sans-serif; }';
     document.head.appendChild(css);
   })();
 </script>

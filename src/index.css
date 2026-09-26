@@ -50,6 +50,20 @@
     word-break: auto-phrase;
     text-wrap: balance;
   }
+
+  /*
+   * Korean is the odd one out: it puts SPACES between words, so it can overflow
+   * and it can break mid-word the way Japanese cannot. Measured in a 260px box,
+   * `word-break: normal` split 두 사/람이 and 계획/을 — a word cut in half.
+   * `auto-phrase` happens to break correctly here, but it is a Chrome-only
+   * Japanese phrase model, and where it is unsupported the whole declaration is
+   * dropped and Korean silently falls back to `normal`. `keep-all` is the
+   * standard Korean rule, is supported everywhere, and says exactly this:
+   * break at the spaces, never inside a word.
+   */
+  html:lang(ko) body {
+    word-break: keep-all;
+  }
 }
 
 /* ── Custom Utilities ────────────────────────────────────── */
